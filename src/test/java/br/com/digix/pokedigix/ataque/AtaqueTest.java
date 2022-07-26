@@ -30,15 +30,8 @@ public class AtaqueTest {
 
     @Test
     public void deve_ser_obrigatorio_informar_um_tipo() {
-        int forca = 40;
-        int acuracia = 100;
-        int pontosDePoder = 35;
-        Categoria categoria = Categoria.FISICO;
-        String nome = "Ataque Rapido";
-        String descricao = "O usuario ataque antes do oponente.";
         Tipo tipoEsperado = new Tipo("Normal");
-
-        Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
+        Ataque ataque = new AtaqueBuilder().comTipo(tipoEsperado).construir();
 
         assertEquals(tipoEsperado, ataque.getTipo());
     }
