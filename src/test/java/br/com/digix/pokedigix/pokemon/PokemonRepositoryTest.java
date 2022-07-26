@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.fasterxml.jackson.databind.util.ArrayBuilders;
-
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
