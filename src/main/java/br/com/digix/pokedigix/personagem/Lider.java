@@ -3,7 +3,6 @@ package br.com.digix.pokedigix.personagem;
 import java.util.Collection;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

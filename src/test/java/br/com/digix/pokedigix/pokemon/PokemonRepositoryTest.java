@@ -45,7 +45,7 @@ public class PokemonRepositoryTest {
     }
     
     @Test
-    public void deve_salvar_um_pokemon_com_ataque() {
+    public void deve_salvar_um_pokemon_com_ataque() throws Exception {
         Ataque ataque = new AtaqueBuilder().construir(); 
         Pokemon pokemon = new PokemonBuilder().comAtaque(ataque).construir();
         

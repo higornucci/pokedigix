@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import br.com.digix.pokedigix.ataque.Ataque;
@@ -15,7 +14,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
 
 public class PokemonTest {
     @Test
-    public void deve_criar_um_pokemon() {
+    public void deve_criar_um_pokemon() throws Exception {
         String nome = "Gastly";
         double altura = 0.8;
         double peso = 0.1;

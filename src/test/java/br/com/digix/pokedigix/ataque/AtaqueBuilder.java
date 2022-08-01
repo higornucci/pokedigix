@@ -27,8 +27,31 @@ public class AtaqueBuilder {
         return this;
     }
     
-    public Ataque construir() {
-        return new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
+    public AtaqueBuilder comAcuracia(int acuracia) {
+        this.acuracia = acuracia;
+        return this;
+    }
+
+    public Ataque construir() throws Exception {
+        if(this.categoria.equals(Categoria.EFEITO)) {
+            return new Ataque(acuracia, pontosDePoder, nome, descricao);
+        } else {
+            return new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
+        }
+    }
+
+    public AtaqueBuilder comCategoriaEfeito() {
+        this.categoria = Categoria.EFEITO;
+        return this;
+    }
+
+    public AtaqueBuilder comForca(int forca) {
+        this.forca = forca;
+        return this;
     }
     
+    public AtaqueBuilder comCategoria(Categoria categoria) {
+        this.categoria = categoria;
+        return this;
+    } 
 }

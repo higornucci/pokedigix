@@ -52,7 +52,10 @@ public class Ataque {
                 Categoria categoria, 
                 String nome, 
                 String descricao,
-                Tipo tipo) {
+                Tipo tipo) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+        validarAcuracia(acuracia);
+        validarForca(categoria, forca);
+        validarTipo(categoria, tipo);
         this.forca = forca;
         this.acuracia = acuracia;
         this.pontosDePoder = pontosDePoder;
@@ -60,6 +63,33 @@ public class Ataque {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
+    }
+    
+    private void validarTipo(Categoria categoria, Tipo tipo) throws TipoInvalidoParaCategoriaException {
+        if(!categoria.equals(Categoria.EFEITO) && tipo == null) {
+            throw new TipoInvalidoParaCategoriaException(categoria);
+        }
+    }
+
+    private void validarForca(Categoria categoria, int forca) throws ForcaInvalidaParaCategoriaException {
+        if(!categoria.equals(Categoria.EFEITO) && forca <= 0) {
+            throw new ForcaInvalidaParaCategoriaException(categoria);
+        }
+    }
+
+    public Ataque(int acuracia, int pontosDePoder, String nome, String descricao) throws AcuraciaInvalidaException {
+        validarAcuracia(acuracia);
+        this.acuracia = acuracia;
+        this.pontosDePoder = pontosDePoder;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.categoria = Categoria.EFEITO;
+    }
+    
+    private void validarAcuracia(int acuracia) throws AcuraciaInvalidaException {
+        if(acuracia < 0 || acuracia > 100) {
+            throw new AcuraciaInvalidaException();
+        }
     }
 
     public Tipo getTipo() {
