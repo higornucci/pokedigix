@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
 public class PokemonBuilder {
@@ -40,9 +41,19 @@ public class PokemonBuilder {
         return this;
     }
 
-    public Pokemon construir() {
+    public Pokemon construir() throws NivelPokemonInvalidoException {
         return new Pokemon(nome, 
         altura, peso, genero, nivel, 
         numeroPokedex, felicidade, tipos, ataques);
+    }
+
+    public PokemonBuilder comNivel(int nivel) {
+        this.nivel = nivel;
+        return this;
+    }
+
+    public PokemonBuilder comFelicidade(int felicidade) {
+        this.felicidade = felicidade;
+        return this;
     }
 }

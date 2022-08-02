@@ -17,7 +17,7 @@ import br.com.digix.pokedigix.pokemon.Pokemon;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Personagem {
+public abstract class Personagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
