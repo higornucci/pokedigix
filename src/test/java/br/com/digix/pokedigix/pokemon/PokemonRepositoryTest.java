@@ -19,7 +19,7 @@ public class PokemonRepositoryTest {
     private PokemonRepository pokemonRepository;
 
     @Test
-    public void deve_salvar_um_pokemon() throws NivelPokemonInvalidoException {
+    public void deve_salvar_um_pokemon() throws Exception {
         Pokemon gastly = new PokemonBuilder().construir();
 
         pokemonRepository.save(gastly);
@@ -28,7 +28,7 @@ public class PokemonRepositoryTest {
     }
     
     @Test
-    public void deve_salvar_um_pokemon_com_um_tipo() throws NivelPokemonInvalidoException {
+    public void deve_salvar_um_pokemon_com_um_tipo() throws Exception {
         int quantidadeDeTiposEsperada = 1;
         Tipo fantasma = new Tipo("Fantasma");
         Pokemon gastly = new PokemonBuilder().comTipo(fantasma).construir();

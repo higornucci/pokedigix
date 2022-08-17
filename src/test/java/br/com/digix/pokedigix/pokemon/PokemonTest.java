@@ -48,7 +48,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_cadastrar_um_tipo_para_o_pokemon() throws NivelPokemonInvalidoException {
+    public void deve_cadastrar_um_tipo_para_o_pokemon() throws Exception {
         Tipo tipo = new Tipo("Fantasma");
 
         Pokemon gastly = new PokemonBuilder().comTipo(tipo).construir();
@@ -57,7 +57,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_nivel_minimo_um() throws NivelPokemonInvalidoException {
+    public void deve_ter_nivel_minimo_um() throws Exception {
         int nivelMinimo = 1;
         
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMinimo).construir();
@@ -66,7 +66,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_nivel_maximo_cem() throws NivelPokemonInvalidoException {
+    public void deve_ter_nivel_maximo_cem() throws Exception {
         int nivelMaximo = 100;
 
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMaximo).construir();
@@ -93,7 +93,7 @@ public class PokemonTest {
     } 
 
     @Test
-    public void deve_ter_felicidade_minima_zero() throws NivelPokemonInvalidoException {
+    public void deve_ter_felicidade_minima_zero() throws Exception {
         int felicidadeMinima = 0;
 
         Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMinima).construir();
@@ -102,7 +102,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_felicidade_maxima_cem() throws NivelPokemonInvalidoException {
+    public void deve_ter_felicidade_maxima_cem() throws Exception {
         int felicidadeMaxima = 100;
 
         Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMaxima).construir();
