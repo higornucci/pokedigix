@@ -75,6 +75,8 @@ public class Pokemon {
         this.ataques = ataques;
     }
 
+    
+
     private void validarFelicidade(int felicidade) throws FelicidadeInvalidaException {
         if(felicidade < 0 || felicidade > 100) {
             throw new FelicidadeInvalidaException();
