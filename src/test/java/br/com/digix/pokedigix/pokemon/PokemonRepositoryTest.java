@@ -70,11 +70,8 @@ public class PokemonRepositoryTest {
         tipoRepository.save(tipo);
         
         pokemonRepository.save(pokemon);       
-        
-        ArrayList<Tipo> tipos = new ArrayList<Tipo>();
-        tipos.add(tipo);
 
-        Collection<Pokemon> pokemonsRetornados = pokemonRepository.findByTipos(tipos);
+        Collection<Pokemon> pokemonsRetornados = pokemonRepository.buscarPorTipo(tipo.getId());
         assertTrue(pokemonsRetornados.contains(pokemon));
     }
 }
