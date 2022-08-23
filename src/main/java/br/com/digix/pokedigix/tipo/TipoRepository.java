@@ -1,9 +1,11 @@
 package br.com.digix.pokedigix.tipo;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.data.repository.CrudRepository;
 
 public interface TipoRepository extends CrudRepository<Tipo, Long> {
-    List<Tipo> findByNome(String nome);
+
+    Collection<Tipo> findByNomeContaining(String nome);
+    Long deleteByNomeContaining(String nome);
 }
