@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
 public class PokemonBuilder {
@@ -53,6 +54,11 @@ public class PokemonBuilder {
 
     public PokemonBuilder comFelicidade(int felicidade) {
         this.felicidade = felicidade;
+        return this;
+    }
+
+    public PokemonBuilder comNome(String nome) {
+        this.nome = nome;
         return this;
     }
 }
