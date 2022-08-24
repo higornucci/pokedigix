@@ -2,12 +2,8 @@ package br.com.digix.pokedigix.pokemon;
 
 import java.util.Collection;
 
-import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
+public class PokemonRequestDTO {
 
-public class PokemonResponseDTO {
-
-    private Long id;
     private String nome;
     private double altura;
     private double peso;
@@ -15,31 +11,8 @@ public class PokemonResponseDTO {
     private int nivel;
     private int numeroPokedex;
     private int felicidade;
-    private Collection<AtaqueResponseDTO> ataques;
-    private Collection<TipoResponseDTO> tipos;
-
-    public PokemonResponseDTO(Long id, String nome, double altura, double peso, Genero genero, int nivel,
-            int numeroPokedex,
-            int felicidade, Collection<AtaqueResponseDTO> ataques, Collection<TipoResponseDTO> tipos) {
-        this.id = id;
-        this.nome = nome;
-        this.altura = altura;
-        this.peso = peso;
-        this.genero = genero;
-        this.nivel = nivel;
-        this.numeroPokedex = numeroPokedex;
-        this.felicidade = felicidade;
-        this.ataques = ataques;
-        this.tipos = tipos;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Collection<Long> tiposIds;
+    private Collection<Long> ataquesIds;
 
     public String getNome() {
         return nome;
@@ -97,20 +70,20 @@ public class PokemonResponseDTO {
         this.felicidade = felicidade;
     }
 
-    public Collection<AtaqueResponseDTO> getAtaques() {
-        return ataques;
+    public Collection<Long> getAtaquesIds() {
+        return ataquesIds;
     }
 
-    public void setAtaques(Collection<AtaqueResponseDTO> ataques) {
-        this.ataques = ataques;
+    public void setAtaquesIds(Collection<Long> ataquesIds) {
+        this.ataquesIds = ataquesIds;
     }
 
-    public Collection<TipoResponseDTO> getTipos() {
-        return tipos;
+    public Collection<Long> getTiposIds() {
+        return tiposIds;
     }
 
-    public void setTipos(Collection<TipoResponseDTO> tipos) {
-        this.tipos = tipos;
+    public void setTiposIds(Collection<Long> tiposIds) {
+        this.tiposIds = tiposIds;
     }
 
 }
