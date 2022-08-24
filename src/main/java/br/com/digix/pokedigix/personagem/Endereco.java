@@ -14,6 +14,8 @@ public class Endereco {
     private String regiao;
     private String cidade;
 
+    protected Endereco() {}
+
     public Endereco(String regiao, String cidade) {
         this.regiao = regiao;
         this.cidade = cidade;

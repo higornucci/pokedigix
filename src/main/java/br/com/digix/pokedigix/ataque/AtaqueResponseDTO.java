@@ -1,5 +1,6 @@
 package br.com.digix.pokedigix.ataque;
 
+
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
 public class AtaqueResponseDTO {
