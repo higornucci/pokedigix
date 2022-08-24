@@ -59,7 +59,7 @@ public class PokemonRepositoryTest {
     }  
 
     @Test
-    public void deve_buscar_um_pokemon_pelo_seu_tipo() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException  {
+    public void deve_buscar_um_pokemon_pelo_seu_tipo() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException  {
     
         Tipo tipo = new Tipo("Psíquico");
         Pokemon pokemon = new PokemonBuilder().comTipo(tipo).construir();

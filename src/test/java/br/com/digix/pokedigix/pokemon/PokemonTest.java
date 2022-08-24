@@ -69,6 +69,45 @@ public class PokemonTest {
     }
 
     @Test
+    public void nao_deve_possuir_mais_que_quatro_ataques() throws Exception {
+
+        assertThrows(LimiteDeAtaquePokemonException.class, () -> {
+            new PokemonBuilder()
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .construir();
+        });
+    }
+
+    @Test
+    public void deve_permitir_ter_ate_dois_tipos() throws Exception {
+
+        int quantidadeDeAtaquesEsperada = 2;
+        Pokemon pokemon = new PokemonBuilder()
+                .comTipo(new Tipo("Fogo"))
+                .comTipo(new Tipo("Fantasma"))
+                .construir();
+
+        assertEquals(quantidadeDeAtaquesEsperada, pokemon.getTipos().size());
+    }
+
+    @Test
+    public void deve_permitir_ter_ate_quatro_ataques() throws Exception {
+
+        int quantidadeDeAtaquesEsperada = 4;
+        Pokemon pokemon = new PokemonBuilder().comAtaque(new AtaqueBuilder().construir())
+                .comAtaque(new AtaqueBuilder().construir())
+                .comAtaque(new AtaqueBuilder().construir())
+                .comAtaque(new AtaqueBuilder().construir())
+                .construir();
+
+        assertEquals(quantidadeDeAtaquesEsperada, pokemon.getAtaques().size());
+    }
+
+    @Test
     public void deve_ter_nivel_minimo_um() throws Exception {
         int nivelMinimo = 1;
 
