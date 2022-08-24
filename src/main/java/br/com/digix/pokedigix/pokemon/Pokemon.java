@@ -1,8 +1,7 @@
 package br.com.digix.pokedigix.pokemon;
 
-import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.tipo.Tipo;
 import java.util.Collection;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.tipo.Tipo;
 
 @Entity
 public class Pokemon {
