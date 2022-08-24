@@ -11,12 +11,23 @@ public class TreinadorResponseDTO {
     private int nivel;
     private Collection<Insignia> insignias;
 
+    public TreinadorResponseDTO(Long id, Endereco endereco, String nome, Collection<Insignia> insignias, int nivel,
+            int dinheiro) {
+        this.id = id;
+        this.endereco = endereco;
+        this.nome = nome;
+        this.insignias = insignias;
+        this.nivel = nivel;
+        this.dinheiro = dinheiro;
+    }
+
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
+
     public int getDinheiro() {
         return dinheiro;
     }
@@ -28,12 +39,12 @@ public class TreinadorResponseDTO {
     }
     public void setNivel(int nivel) {
         this.nivel = nivel;
+
+    public Endereco getEndereco() {
+        return endereco;
     }
-    public Collection<Insignia> getInsignias() {
-        return insignias;
-    }
-    public void setInsignias(Collection<Insignia> insignias) {
-        this.insignias = insignias;
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
     public String getNome() {
         return nome;
@@ -41,10 +52,10 @@ public class TreinadorResponseDTO {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public Endereco getEndereco() {
-        return endereco;
+    public Collection<Insignia> getInsignias() {
+        return insignias;
     }
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setInsignias(Collection<Insignia> insignias) {
+        this.insignias = insignias;
     }
 }
