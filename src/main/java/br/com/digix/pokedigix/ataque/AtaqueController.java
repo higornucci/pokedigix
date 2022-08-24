@@ -1,7 +1,5 @@
 package br.com.digix.pokedigix.ataque;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,48 +20,72 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @RequestMapping(path = { "/api/v1/ataques" }, produces = { "application/json" })
 public class AtaqueController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AtaqueController.class);
+  @Autowired
+  private AtaqueRepository ataqueRepository;
 
-    @Autowired
-    private AtaqueRepository ataqueRepository;
+  @Autowired
+  private TipoRepository tipoRepository;
 
-    @Autowired
-    private TipoRepository tipoRepository;
+  @Operation(summary = "Buscar um ataque pelo seu id")
+  @ApiResponse(
+    responseCode = "200",
+    description = "Retorna os dados do ataque solicitado"
+  )
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
+    Ataque ataque = ataqueRepository.findById(id).get();
 
-    @Operation(summary = "Buscar um ataque pelo seu id")
-    @ApiResponse(responseCode = "200", description = "Retorna os dados do ataque solicitado")
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
-        Ataque ataque = ataqueRepository.findById(id).get();
+    TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
+      ataque.getTipo().getId(),
+      ataque.getTipo().getNome()
+    );
 
-        TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
-                ataque.getTipo().getId(),
-                ataque.getTipo().getNome());
+    return ResponseEntity.ok(
+      new AtaqueResponseDTO(
+        ataque.getId(),
+        ataque.getForca(),
+        ataque.getAcuracia(),
+        ataque.getPontosDePoder(),
+        ataque.getCategoria(),
+        ataque.getNome(),
+        ataque.getDescricao(),
+        tipoResponseDTO
+      )
+    );
+  }
 
-        return ResponseEntity.ok(new AtaqueResponseDTO(ataque.getId(),
-                ataque.getForca(), ataque.getAcuracia(), ataque.getPontosDePoder(),
-                ataque.getCategoria(), ataque.getNome(), ataque.getDescricao(),
-                tipoResponseDTO));
-    }
-
-    @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
-    @ApiResponse(responseCode = "201")
-    @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<AtaqueResponseDTO> criar(@RequestBody AtaqueRequestDTO novoAtaque)
-            throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-        logger.info("Tipo ID" + novoAtaque.getTipoId());
-        Tipo tipo = tipoRepository.findById(novoAtaque.getTipoId()).get();
-        Ataque ataque = new Ataque(novoAtaque.getForca(), novoAtaque.getAcuracia(),
-                novoAtaque.getPontosDePoder(),
-                novoAtaque.getCategoria(), novoAtaque.getDescricao(), novoAtaque.getNome(), tipo);
-        ataqueRepository.save(ataque);
-        TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new AtaqueResponseDTO(ataque.getId(), ataque.getForca(),
-                        ataque.getAcuracia(), ataque.getPontosDePoder(),
-                        ataque.getCategoria(), ataque.getNome(), ataque.getDescricao(),
-                        tipoDTO));
-
-    }
+  @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
+  @ApiResponse(responseCode = "201")
+  @PostMapping(consumes = { "application/json" })
+  public ResponseEntity<AtaqueResponseDTO> criar(
+    @RequestBody AtaqueRequestDTO novoAtaque
+  )
+    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    Tipo tipo = tipoRepository.findById(novoAtaque.getTipoId()).get();
+    Ataque ataque = new Ataque(
+      novoAtaque.getForca(),
+      novoAtaque.getAcuracia(),
+      novoAtaque.getPontosDePoder(),
+      novoAtaque.getCategoria(),
+      novoAtaque.getDescricao(),
+      novoAtaque.getNome(),
+      tipo
+    );
+    ataqueRepository.save(ataque);
+    TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+    return ResponseEntity
+      .status(HttpStatus.CREATED)
+      .body(
+        new AtaqueResponseDTO(
+          ataque.getId(),
+          ataque.getForca(),
+          ataque.getAcuracia(),
+          ataque.getPontosDePoder(),
+          ataque.getCategoria(),
+          ataque.getNome(),
+          ataque.getDescricao(),
+          tipoDTO
+        )
+      );
+  }
 }
