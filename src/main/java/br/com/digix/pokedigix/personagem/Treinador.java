@@ -25,6 +25,8 @@ public class Treinador extends Personagem {
     @Column(name = "insignia")
     private Collection<Insignia> insignias;
 
+    protected Treinador() {}
+
     public Treinador(String nome, Endereco endereco, 
                     Pokemon primeiroPokemon) throws LimiteDePokemonException {
         super(nome, endereco);
