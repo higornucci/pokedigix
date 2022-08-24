@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(
-  path = { "/api/v1/pokemons" },
-  produces = { "application/json" }
-)
+@RequestMapping(path = { "/api/v1/pokemons" }, produces = { "application/json" })
 public class PokemonController {
 
   @Autowired
@@ -38,53 +35,60 @@ public class PokemonController {
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
   public ResponseEntity<PokemonResponseDTO> criarPokemon(
-    @RequestBody PokemonRequestDTO novoPokemon
-  )
-    throws NivelPokemonInvalidoException, FelicidadeInvalidaException {
+      @RequestBody PokemonRequestDTO novoPokemon)
+      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
-    Ataque ataque = ataqueRepository.findById(novoPokemon.getAtaqueId()).get();
-    ataques.add(ataque);
-    Tipo tipo = tipoRepository.findById(novoPokemon.getTipoId()).get();
-    tipos.add(tipo);
+    for (Long ataqueId : novoPokemon.getAtaquesIds()) {
+      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      ataques.add(ataque);
+    }
+    for (Long tipoId : novoPokemon.getTiposIds()) {
+      Tipo tipo = tipoRepository.findById(tipoId).get();
+      tipos.add(tipo);
+    }
     Pokemon pokemon = new Pokemon(
-      novoPokemon.getNome(),
-      novoPokemon.getAltura(),
-      novoPokemon.getPeso(),
-      novoPokemon.getGenero(),
-      novoPokemon.getNivel(),
-      novoPokemon.getNumeroPokedex(),
-      novoPokemon.getFelicidade(),
-      tipos,
-      ataques
-    );
+        novoPokemon.getNome(),
+        novoPokemon.getAltura(),
+        novoPokemon.getPeso(),
+        novoPokemon.getGenero(),
+        novoPokemon.getNivel(),
+        novoPokemon.getNumeroPokedex(),
+        novoPokemon.getFelicidade(),
+        tipos,
+        ataques);
     pokemonRepository.save(pokemon);
-    AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
-      ataque.getId(),
-      ataque.getForca(),
-      ataque.getAcuracia(),
-      ataque.getPontosDePoder(),
-      ataque.getCategoria(),
-      ataque.getNome(),
-      ataque.getDescricao(),
-      null
-    );
-    TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+    Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
+    for(Ataque ataque : ataques) {
+      AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
+          ataque.getId(),
+          ataque.getForca(),
+          ataque.getAcuracia(),
+          ataque.getPontosDePoder(),
+          ataque.getCategoria(),
+          ataque.getNome(),
+          ataque.getDescricao(),
+          new TipoResponseDTO(ataque.getTipo().getId(), ataque.getTipo().getNome()));
+      ataquesDTOs.add(ataqueDTO);
+    }
+    Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
+    for(Tipo tipo : tipos) {
+      TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+      tiposDTOs.add(tipoDTO);
+    }
     return ResponseEntity
-      .status(HttpStatus.CREATED)
-      .body(
-        new PokemonResponseDTO(
-          pokemon.getId(),
-          pokemon.getNome(),
-          pokemon.getAltura(),
-          pokemon.getPeso(),
-          pokemon.getGenero(),
-          pokemon.getNivel(),
-          pokemon.getNumeroPokedex(),
-          pokemon.getFelicidade(),
-          ataqueDTO,
-          tipoDTO
-        )
-      );
+        .status(HttpStatus.CREATED)
+        .body(
+            new PokemonResponseDTO(
+                pokemon.getId(),
+                pokemon.getNome(),
+                pokemon.getAltura(),
+                pokemon.getPeso(),
+                pokemon.getGenero(),
+                pokemon.getNivel(),
+                pokemon.getNumeroPokedex(),
+                pokemon.getFelicidade(),
+                ataquesDTOs,
+                tiposDTOs));
   }
 }

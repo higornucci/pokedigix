@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Pokemon {
 
+  private static final int LIMITE_TIPOS = 2;
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
@@ -45,35 +47,19 @@ public class Pokemon {
   private int felicidade;
 
   @ManyToMany(cascade = CascadeType.PERSIST)
-  @JoinTable(
-    name = "pokemon_tipo",
-    joinColumns = @JoinColumn(name = "pokemon_id"),
-    inverseJoinColumns = @JoinColumn(name = "tipo_id")
-  )
+  @JoinTable(name = "pokemon_tipo", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "tipo_id"))
   private Collection<Tipo> tipos;
 
   @ManyToMany(cascade = CascadeType.PERSIST)
-  @JoinTable(
-    name = "pokemon_ataque",
-    joinColumns = @JoinColumn(name = "pokemon_id"),
-    inverseJoinColumns = @JoinColumn(name = "ataque_id")
-  )
+  @JoinTable(name = "pokemon_ataque", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "ataque_id"))
   private Collection<Ataque> ataques;
 
-  protected Pokemon() {}
+  protected Pokemon() {
+  }
 
-  public Pokemon(
-    String nome,
-    double altura,
-    double peso,
-    Genero genero,
-    int nivel,
-    int numeroPokedex,
-    int felicidade,
-    Collection<Tipo> tipo,
-    Collection<Ataque> ataque
-  )
-    throws NivelPokemonInvalidoException, FelicidadeInvalidaException {
+  public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
+      int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques)
+      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
     validarNivel(nivel);
     validarFelicidade(felicidade);
     this.nome = nome;
@@ -83,12 +69,18 @@ public class Pokemon {
     this.nivel = nivel;
     this.numeroPokedex = numeroPokedex;
     this.felicidade = felicidade;
-    this.tipos = tipo;
-    this.ataques = ataque;
+    setTipos(tipos);
+    this.ataques = ataques;
   }
 
-  private void validarFelicidade(int felicidade)
-    throws FelicidadeInvalidaException {
+  private void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
+    if (tipos.size() >= LIMITE_TIPOS) {
+      throw new LimiteDeTipoPokemonException();
+    }
+    this.tipos = tipos;
+  }
+
+  private void validarFelicidade(int felicidade) throws FelicidadeInvalidaException {
     if (felicidade < 0 || felicidade > 100) {
       throw new FelicidadeInvalidaException();
     }
