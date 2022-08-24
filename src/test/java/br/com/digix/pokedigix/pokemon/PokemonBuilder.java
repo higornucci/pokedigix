@@ -22,7 +22,7 @@ public class PokemonBuilder {
         this.nome = "Gastly";
         this.altura = 0.8;
         this.peso = 0.1;
-        this.genero = Genero.MASCULINO;
+        this.genero = null;
         this.nivel = 5;
         this.numeroPokedex = 92;
         this.felicidade = 0;
@@ -60,4 +60,10 @@ public class PokemonBuilder {
         this.nome = nome;
         return this;
     }
+    
+    public PokemonBuilder comGenero(Genero genero) {
+        this.genero = genero;
+        return this;
+    }
+    
 }

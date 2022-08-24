@@ -81,4 +81,18 @@ public class PokemonRepositoryTest {
 
         assertTrue(pokemonRetornado.contains(pokemon));
     }
+    @Test
+    public void pode_nao_ter_genero() throws Exception { 
+        Genero genero = null;
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
+        pokemonRepository.save(pokemon);
+
+        Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining("Gastly");
+
+
+        assertTrue(pokemonRetornado.contains(pokemon));
+    }
+
+
+   
 }

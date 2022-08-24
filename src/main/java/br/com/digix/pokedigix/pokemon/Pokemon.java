@@ -36,7 +36,7 @@ public class Pokemon {
   private double peso;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 10, nullable = false)
+  @Column(length = 10, nullable = true) // permiti que possa não receber genero
   private Genero genero;
 
   @Column(nullable = false)
