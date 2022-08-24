@@ -33,7 +33,7 @@ public class Treinador extends Personagem {
         this.capturar(primeiroPokemon);
         this.dinheiro = 3000;
         this.nivel = 1;
-        this.insignias = new ArrayList<>();
+        this.insignias = new ArrayList<>(); 
     }
 
     public void receber(Insignia insignia) {
@@ -62,5 +62,20 @@ public class Treinador extends Personagem {
             throw new LimiteDePokemonException();
         }
     }
-    
+
+    public static int getLimitePokemon() {
+        return LIMITE_POKEMON;
+    }
+
+    public void setDinheiro(int dinheiro) {
+        this.dinheiro = dinheiro;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+
+    public void setInsignias(Collection<Insignia> insignias) {
+        this.insignias = insignias;
+    }
 }
