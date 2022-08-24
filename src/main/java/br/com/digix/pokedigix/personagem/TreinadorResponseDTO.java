@@ -24,6 +24,7 @@ public class TreinadorResponseDTO {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -31,12 +32,15 @@ public class TreinadorResponseDTO {
     public int getDinheiro() {
         return dinheiro;
     }
+
     public void setDinheiro(int dinheiro) {
         this.dinheiro = dinheiro;
     }
+
     public int getNivel() {
         return nivel;
     }
+
     public void setNivel(int nivel) {
         this.nivel = nivel;
     }
@@ -44,18 +48,23 @@ public class TreinadorResponseDTO {
     public Endereco getEndereco() {
         return endereco;
     }
+
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public Collection<Insignia> getInsignias() {
         return insignias;
     }
+
     public void setInsignias(Collection<Insignia> insignias) {
         this.insignias = insignias;
     }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,6 +31,18 @@ public class TreinadorController {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Operation(summary = "Buscar um treinador pelo seu id")
+	@ApiResponse(responseCode = "200", description = "Retorna o treinador solicitado")
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<TreinadorResponseDTO> buscarPorId(@PathVariable Long id) {
+		Treinador treinador = treinadorRepository.findById(id).get();
+		return ResponseEntity.ok(new TreinadorResponseDTO(
+				treinador.getId(), treinador.getEndereco(), 
+				treinador.getNome(), treinador.getInsignias(),
+				treinador.getNivel(),
+				treinador.getDinheiro()));
+	}
 
 	@Operation(summary = "Atualizar o Treinador")
 	@ApiResponse(responseCode = "200")
