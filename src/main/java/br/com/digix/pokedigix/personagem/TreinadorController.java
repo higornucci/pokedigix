@@ -1,12 +1,17 @@
 package br.com.digix.pokedigix.personagem;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonRepository;
@@ -25,6 +30,23 @@ public class TreinadorController {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
+    @Operation(summary = "Deletar um Treinador pelo seu id")
+    @ApiResponse(responseCode = "204")
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> removerTreinadorId(@PathVariable Long id) {
+        treinadorRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Deletar um Treinador pelo seu nome parcial ou completo")
+    @ApiResponse(responseCode = "204")
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<?> removerTreinador(@RequestParam(required = true) String termo) {
+        treinadorRepository.deleteByNomeContaining(termo);
+        return ResponseEntity.noContent().build();
+    }
+   
     @Operation(summary = "Cadastrar um novo treinador")
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = {"application/json"})
