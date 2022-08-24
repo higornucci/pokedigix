@@ -28,15 +28,15 @@ public class PokemonTest {
         List<Ataque> ataques = new ArrayList<>();
         ataques.add(new AtaqueBuilder().construir());
 
-        Pokemon gastly = new Pokemon(nome, 
-            altura, 
-            peso, 
-            genero, 
-            nivel, 
-            numeroPokedex, 
-            felicidade, 
-            tipos,
-            ataques);
+        Pokemon gastly = new Pokemon(nome,
+                altura,
+                peso,
+                genero,
+                nivel,
+                numeroPokedex,
+                felicidade,
+                tipos,
+                ataques);
 
         assertEquals(nome, gastly.getNome());
         assertEquals(altura, gastly.getAltura());
@@ -53,13 +53,25 @@ public class PokemonTest {
 
         Pokemon gastly = new PokemonBuilder().comTipo(tipo).construir();
 
-        assertTrue(gastly.getTipos().contains(tipo));        
+        assertTrue(gastly.getTipos().contains(tipo));
+    }
+
+    @Test
+    public void nao_deve_possuir_mais_que_dois_tipos() throws Exception {
+
+        assertThrows(LimiteDeTipoPokemonException.class, () -> {
+            new PokemonBuilder()
+                    .comTipo(new Tipo("Fogo"))
+                    .comTipo(new Tipo("Fantasma"))
+                    .comTipo(new Tipo("Planta"))
+                    .construir();
+        });
     }
 
     @Test
     public void deve_ter_nivel_minimo_um() throws Exception {
         int nivelMinimo = 1;
-        
+
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMinimo).construir();
 
         assertEquals(nivelMinimo, pokemon.getNivel());
@@ -81,7 +93,7 @@ public class PokemonTest {
         assertThrows(NivelPokemonInvalidoException.class, () -> {
             new PokemonBuilder().comNivel(nivelInvalido).construir();
         });
-    } 
+    }
 
     @Test
     public void nao_pode_ter_nivel_maior_que_cem() {
@@ -90,7 +102,7 @@ public class PokemonTest {
         assertThrows(NivelPokemonInvalidoException.class, () -> {
             new PokemonBuilder().comNivel(nivelInvalido).construir();
         });
-    } 
+    }
 
     @Test
     public void deve_ter_felicidade_minima_zero() throws Exception {
@@ -127,8 +139,4 @@ public class PokemonTest {
             new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
         });
     }
-
-
-
-
 }

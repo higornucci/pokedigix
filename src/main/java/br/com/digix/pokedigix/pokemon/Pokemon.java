@@ -20,6 +20,8 @@ import br.com.digix.pokedigix.tipo.Tipo;
 @Entity
 public class Pokemon {
 
+    private static final int LIMITE_TIPOS = 2;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -63,7 +65,7 @@ public class Pokemon {
     protected Pokemon() {}
 
     public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
-            int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques) throws NivelPokemonInvalidoException, FelicidadeInvalidaException {
+            int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques) throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
         validarNivel(nivel);
         validarFelicidade(felicidade);
         this.nome = nome;
@@ -73,8 +75,15 @@ public class Pokemon {
         this.nivel = nivel;
         this.numeroPokedex = numeroPokedex;
         this.felicidade = felicidade;
-        this.tipos = tipos;
+        setTipos(tipos);
         this.ataques = ataques;
+    }
+
+    private void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
+        if (tipos.size() >= LIMITE_TIPOS){
+            throw new LimiteDeTipoPokemonException();
+        }
+        this.tipos = tipos;
     }
 
     private void validarFelicidade(int felicidade) throws FelicidadeInvalidaException {
