@@ -60,6 +60,8 @@ public class Pokemon {
             inverseJoinColumns = @JoinColumn(name = "ataque_id"))
     private Collection<Ataque> ataques;
 
+    protected Pokemon() {}
+
     public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
             int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques) throws NivelPokemonInvalidoException, FelicidadeInvalidaException {
         validarNivel(nivel);
