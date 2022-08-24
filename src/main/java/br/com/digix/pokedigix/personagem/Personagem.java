@@ -32,6 +32,8 @@ public abstract class Personagem {
     @OneToMany
     protected Collection<Pokemon> pokemons;
 
+    protected Personagem() {}
+
     public Personagem(String nome, Endereco endereco) {
         this.nome = nome;
         this.endereco = endereco;
