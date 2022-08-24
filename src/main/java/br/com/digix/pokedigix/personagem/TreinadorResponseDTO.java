@@ -39,6 +39,7 @@ public class TreinadorResponseDTO {
     }
     public void setNivel(int nivel) {
         this.nivel = nivel;
+    }
 
     public Endereco getEndereco() {
         return endereco;
