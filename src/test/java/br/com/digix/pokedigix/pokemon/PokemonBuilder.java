@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
 public class PokemonBuilder {

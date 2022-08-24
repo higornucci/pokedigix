@@ -13,12 +13,16 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
 
 @DataJpaTest
 public class PokemonRepositoryTest {
 
     @Autowired
     private PokemonRepository pokemonRepository;
+    
+    @Autowired
+    private TipoRepository tipoRepository;
 
     @Test
     public void deve_salvar_um_pokemon() throws Exception {
@@ -52,6 +56,19 @@ public class PokemonRepositoryTest {
         pokemonRepository.save(pokemon);
 
         assertTrue(pokemon.getAtaques().contains(ataque));
+    }  
+
+    @Test
+    public void deve_buscar_um_pokemon_pelo_seu_tipo() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException  {
+    
+        Tipo tipo = new Tipo("Psíquico");
+        Pokemon pokemon = new PokemonBuilder().comTipo(tipo).construir();
+        tipoRepository.save(tipo);
+        
+        pokemonRepository.save(pokemon);       
+
+        Collection<Pokemon> pokemonsRetornados = pokemonRepository.buscarPorTipo(tipo.getId());
+        assertTrue(pokemonsRetornados.contains(pokemon));
     }
 
     @Test
