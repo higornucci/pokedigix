@@ -21,6 +21,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
 
 @Entity
 public class Pokemon {
+  private static final int LIMITE_ATAQUES = 4;
 
   private static final int LIMITE_TIPOS = 2;
 
@@ -38,7 +39,7 @@ public class Pokemon {
   private double peso;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 10, nullable = false)
+  @Column(length = 10, nullable = true) // permiti que possa não receber genero
   private Genero genero;
 
   @Column(nullable = false)
@@ -52,7 +53,7 @@ public class Pokemon {
 
   @ManyToOne
   private Treinador treinador;
-  
+
   public boolean isSelvagem() {
     return treinador == null;
   }
@@ -70,7 +71,8 @@ public class Pokemon {
 
   public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
       int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques)
-      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
+      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
+      LimiteDeAtaquePokemonException {
     validarNivel(nivel);
     validarFelicidade(felicidade);
     this.nome = nome;
@@ -81,11 +83,18 @@ public class Pokemon {
     this.numeroPokedex = numeroPokedex;
     this.felicidade = felicidade;
     setTipos(tipos);
+    setAtaques(ataques);
+  }
+
+  public void setAtaques(Collection<Ataque> ataques) throws LimiteDeAtaquePokemonException {
+    if (ataques.size() > LIMITE_ATAQUES) {
+      throw new LimiteDeAtaquePokemonException();
+    }
     this.ataques = ataques;
   }
 
-  private void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
-    if (tipos.size() >= LIMITE_TIPOS) {
+  public void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
+    if (tipos.size() > LIMITE_TIPOS) {
       throw new LimiteDeTipoPokemonException();
     }
     this.tipos = tipos;
@@ -149,5 +158,33 @@ public class Pokemon {
 
   public void setTreinador(Treinador treinador) {
     this.treinador = treinador;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public void setAltura(double altura) {
+    this.altura = altura;
+  }
+
+  public void setPeso(double peso) {
+    this.peso = peso;
+  }
+
+  public void setGenero(Genero genero) {
+    this.genero = genero;
+  }
+
+  public void setNivel(int nivel) {
+    this.nivel = nivel;
+  }
+
+  public void setNumeroPokedex(int numeroPokedex) {
+    this.numeroPokedex = numeroPokedex;
+  }
+
+  public void setFelicidade(int felicidade) {
+    this.felicidade = felicidade;
   }
 }
