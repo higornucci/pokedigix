@@ -19,6 +19,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
 
 @Entity
 public class Pokemon {
+  private static final int LIMITE_ATAQUES = 4;
 
   private static final int LIMITE_TIPOS = 2;
 
@@ -36,7 +37,7 @@ public class Pokemon {
   private double peso;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 10, nullable = false)
+  @Column(length = 10, nullable = true) // permiti que possa não receber genero
   private Genero genero;
 
   @Column(nullable = false)
@@ -61,7 +62,8 @@ public class Pokemon {
 
   public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
       int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques)
-      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
+      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
+      LimiteDeAtaquePokemonException {
     validarNivel(nivel);
     validarFelicidade(felicidade);
     this.nome = nome;
@@ -72,8 +74,16 @@ public class Pokemon {
     this.numeroPokedex = numeroPokedex;
     this.felicidade = felicidade;
     setTipos(tipos);
+    setAtaques(ataques);
+  }
+
+  public void setAtaques(Collection<Ataque> ataques) throws LimiteDeAtaquePokemonException {
+    if (ataques.size() > LIMITE_ATAQUES) {
+      throw new LimiteDeAtaquePokemonException();
+    }
     this.ataques = ataques;
   }
+
 
   public void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
     if (tipos.size() >= LIMITE_TIPOS) {
@@ -166,7 +176,4 @@ public class Pokemon {
     this.felicidade = felicidade;
   }
 
-  public void setAtaques(Collection<Ataque> ataques) {
-    this.ataques = ataques;
-  }
 }

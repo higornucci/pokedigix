@@ -64,7 +64,7 @@ public class PokemonController {
   public ResponseEntity<PokemonResponseDTO> criarPokemon(
     @RequestBody PokemonRequestDTO novoPokemon
   )
-    throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
+    throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : novoPokemon.getAtaquesIds()) {
@@ -137,7 +137,7 @@ public class PokemonController {
     @RequestBody PokemonRequestDTO pokemonAtt,
     @PathVariable Long id
   )
-    throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
+    throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : pokemonAtt.getAtaquesIds()) {
