@@ -92,6 +92,17 @@ public class PokemonRepositoryTest {
 
         assertTrue(pokemonRetornado.contains(pokemon));
     }
+    @Test
+    public void pode_ter_um_genero_indefinido() throws Exception { 
+        Genero genero = Genero.INDEFINIDO;
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
+        pokemonRepository.save(pokemon);
+
+        Pokemon pokemonRetornado = pokemonRepository.findById(pokemon.getId()).get();
+
+
+        assertEquals(Genero.INDEFINIDO, pokemonRetornado.getGenero());
+    }
 
 
    
