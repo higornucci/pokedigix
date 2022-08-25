@@ -75,7 +75,7 @@ public class Pokemon {
     this.ataques = ataques;
   }
 
-  private void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
+  public void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
     if (tipos.size() >= LIMITE_TIPOS) {
       throw new LimiteDeTipoPokemonException();
     }
@@ -136,5 +136,37 @@ public class Pokemon {
 
   public Collection<Ataque> getAtaques() {
     return ataques;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public void setAltura(double altura) {
+    this.altura = altura;
+  }
+
+  public void setPeso(double peso) {
+    this.peso = peso;
+  }
+
+  public void setGenero(Genero genero) {
+    this.genero = genero;
+  }
+
+  public void setNivel(int nivel) {
+    this.nivel = nivel;
+  }
+
+  public void setNumeroPokedex(int numeroPokedex) {
+    this.numeroPokedex = numeroPokedex;
+  }
+
+  public void setFelicidade(int felicidade) {
+    this.felicidade = felicidade;
+  }
+
+  public void setAtaques(Collection<Ataque> ataques) {
+    this.ataques = ataques;
   }
 }
