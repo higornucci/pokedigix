@@ -86,7 +86,7 @@ public class Pokemon {
 
 
   public void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
-    if (tipos.size() >= LIMITE_TIPOS) {
+    if (tipos.size() > LIMITE_TIPOS) {
       throw new LimiteDeTipoPokemonException();
     }
     this.tipos = tipos;
