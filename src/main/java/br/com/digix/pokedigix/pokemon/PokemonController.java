@@ -60,7 +60,7 @@ public class PokemonController {
   @PostMapping(consumes = { "application/json" })
   public ResponseEntity<PokemonResponseDTO> criarPokemon(
       @RequestBody PokemonRequestDTO novoPokemon)
-      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
+      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : novoPokemon.getAtaquesIds()) {

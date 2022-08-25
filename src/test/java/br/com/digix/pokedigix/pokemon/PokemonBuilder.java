@@ -40,7 +40,7 @@ public class PokemonBuilder {
         return this;
     }
 
-    public Pokemon construir() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException {
+    public Pokemon construir() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
         return new Pokemon(nome, 
         altura, peso, genero, nivel, 
         numeroPokedex, felicidade, tipos, ataques);
