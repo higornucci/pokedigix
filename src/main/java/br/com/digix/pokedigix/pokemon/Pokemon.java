@@ -13,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.tipo.Tipo;
 
 @Entity
@@ -48,6 +50,13 @@ public class Pokemon {
 
   @Column(nullable = false)
   private int felicidade;
+
+  @ManyToOne
+  private Treinador treinador;
+
+  public boolean isSelvagem() {
+    return treinador == null;
+  }
 
   @ManyToMany(cascade = CascadeType.PERSIST)
   @JoinTable(name = "pokemon_tipo", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "tipo_id"))
@@ -83,7 +92,6 @@ public class Pokemon {
     }
     this.ataques = ataques;
   }
-
 
   public void setTipos(Collection<Tipo> tipos) throws LimiteDeTipoPokemonException {
     if (tipos.size() > LIMITE_TIPOS) {
@@ -148,6 +156,10 @@ public class Pokemon {
     return ataques;
   }
 
+  public void setTreinador(Treinador treinador) {
+    this.treinador = treinador;
+  }
+
   public void setNome(String nome) {
     this.nome = nome;
   }
@@ -175,5 +187,4 @@ public class Pokemon {
   public void setFelicidade(int felicidade) {
     this.felicidade = felicidade;
   }
-
 }

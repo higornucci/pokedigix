@@ -55,6 +55,7 @@ public class Treinador extends Personagem {
     public void capturar(Pokemon pokemonACapturar) throws LimiteDePokemonException {
         validarQuantidadeDePokemons();
         super.pokemons.add(pokemonACapturar);
+        pokemonACapturar.setTreinador(this);
     }
 
     private void validarQuantidadeDePokemons() throws LimiteDePokemonException {
