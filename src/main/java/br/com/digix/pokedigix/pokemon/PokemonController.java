@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +43,8 @@ public class PokemonController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<?> removerPokemonId(@PathVariable Long id) {
-      pokemonRepository.deleteById(id);
-      return ResponseEntity.noContent().build();
+    pokemonRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
   }
 
   @Operation(summary = "Deletar um Pokemon pelo seu nome parcial ou completo")
@@ -51,8 +52,8 @@ public class PokemonController {
   @DeleteMapping
   @Transactional
   public ResponseEntity<?> removerPokemon(@RequestParam(required = true) String termo) {
-      pokemonRepository.deleteByNomeContaining(termo);
-      return ResponseEntity.noContent().build();
+    pokemonRepository.deleteByNomeContaining(termo);
+    return ResponseEntity.noContent().build();
   }
 
   @Operation(summary = "Criar um novo pokemon")
@@ -83,7 +84,7 @@ public class PokemonController {
         ataques);
     pokemonRepository.save(pokemon);
     Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-    for(Ataque ataque : ataques) {
+    for (Ataque ataque : ataques) {
       AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
           ataque.getId(),
           ataque.getForca(),
@@ -96,7 +97,7 @@ public class PokemonController {
       ataquesDTOs.add(ataqueDTO);
     }
     Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-    for(Tipo tipo : tipos) {
+    for (Tipo tipo : tipos) {
       TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
       tiposDTOs.add(tipoDTO);
     }
@@ -114,5 +115,58 @@ public class PokemonController {
                 pokemon.getFelicidade(),
                 ataquesDTOs,
                 tiposDTOs));
+  }
+
+  @Operation(summary = "Buscar todos")
+  @ApiResponse(responseCode = "200", description = "Lista de pokemons cadastrados")
+  @GetMapping
+  public ResponseEntity<Collection<PokemonResponseDTO>> buscarTodos(
+      @RequestParam(required = false, name = "termo") String nome) {
+    Iterable<Pokemon> pokemons;
+    if (nome != null) {
+      pokemons = pokemonRepository.findByNomeContaining(nome);
+    } else {
+      pokemons = pokemonRepository.findAll();
+    }
+
+    Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
+    Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
+    Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
+
+    for (Pokemon pokemon : pokemons) {
+      for (Ataque ataque : pokemon.getAtaques()) {
+        AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
+            ataque.getId(),
+            ataque.getForca(),
+            ataque.getAcuracia(),
+            ataque.getPontosDePoder(),
+            ataque.getCategoria(),
+            ataque.getNome(),
+            ataque.getDescricao(),
+            new TipoResponseDTO(
+                ataque.getTipo().getId(),
+                ataque.getTipo().getNome()));
+        ataquesDTOs.add(ataqueDTO);
+      }
+
+      for (Tipo tipo : pokemon.getTipos()) {
+        TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+        tiposDTOs.add(tipoDTO);
+      }
+      pokemonsRetornados.add(new PokemonResponseDTO(
+          pokemon.getId(),
+          pokemon.getNome(),
+          pokemon.getAltura(),
+          pokemon.getPeso(),
+          pokemon.getGenero(),
+          pokemon.getNivel(),
+          pokemon.getNumeroPokedex(),
+          pokemon.getFelicidade(),
+          ataquesDTOs,
+          tiposDTOs
+
+      ));
+    }
+    return ResponseEntity.ok(pokemonsRetornados);
   }
 }
