@@ -69,6 +69,17 @@ public class TreinadorController {
 
 	}
 
+	@Operation(summary = "Treinador capturar um Pokemon")
+	@ApiResponse(responseCode = "200")
+	@PutMapping(path = "{idTreinador}/pokemons/{idPokemon}/capturar")
+	public ResponseEntity<TreinadorResponseDTO> treinadorCapturarPokemon(@PathVariable Long idTreinador, @PathVariable Long idPokemon) throws LimiteDePokemonException {
+		Treinador treinador = treinadorRepository.findById(idTreinador).get();
+		Pokemon pokemon = pokemonRepository.findById(idPokemon).get();
+		treinador.capturar(pokemon);
+		treinadorRepository.save(treinador);
+		return ResponseEntity.ok(new TreinadorResponseDTO(treinador.getId(), treinador.getEndereco(), treinador.getNome(), treinador.getInsignias(), treinador.getNivel(), treinador.getDinheiro()));
+	}
+
 	@Operation(summary = "Deletar um Treinador pelo seu id")
 	@ApiResponse(responseCode = "204")
 	@DeleteMapping(path = "/{id}")
