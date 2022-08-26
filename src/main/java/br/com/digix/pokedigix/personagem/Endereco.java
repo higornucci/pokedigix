@@ -35,6 +35,14 @@ public class Endereco {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setRegiao(String regiao) {
+        this.regiao = regiao;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }   
     
 }
