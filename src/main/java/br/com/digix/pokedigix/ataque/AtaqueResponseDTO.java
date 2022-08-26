@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.ataque;
 
-
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
 public class AtaqueResponseDTO {
@@ -13,10 +12,17 @@ public class AtaqueResponseDTO {
     private String nome;
     private String descricao;
     private TipoResponseDTO tipo;
-    
-    public AtaqueResponseDTO(Long id, int forca, int acuracia, 
-            int pontosDePoder, Categoria categoria, String nome,
-            String descricao, TipoResponseDTO tipo) {
+
+    public AtaqueResponseDTO(
+            Long id,
+            int forca,
+            int acuracia,
+            int pontosDePoder,
+            Categoria categoria,
+            String nome,
+            String descricao,
+            TipoResponseDTO tipo) {
+                
         this.id = id;
         this.forca = forca;
         this.acuracia = acuracia;
@@ -91,5 +97,4 @@ public class AtaqueResponseDTO {
         this.tipo = tipo;
     }
 
-    
 }

@@ -189,59 +189,6 @@ public class PokemonController {
             tiposDTOs));
   }
 
-  @Operation(summary = "Buscar Pokemon pelo seu nome parcial ou completo")
-  @ApiResponse(responseCode = "200", description = "Lista de Pokemons com o nome completo ou parcial")
-  @GetMapping
-  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPorNome(@RequestParam(required = true) String termo) {
-    Iterable<Pokemon> pokemons;
-
-    if (termo != null) {
-      pokemons = pokemonRepository.findByNomeContaining(termo);
-    } else {
-      pokemons = pokemonRepository.findAll();
-    }
-    Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
-
-    for (Pokemon pokemon : pokemons) {
-
-      Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-      Collection<Tipo> tipos = pokemon.getTipos();
-      for (Tipo tipo : tipos) {
-        TipoResponseDTO tiposRetornadosDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
-        tiposDTOs.add(tiposRetornadosDTO);
-      }
-
-      Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-      Collection<Ataque> ataques = pokemon.getAtaques();
-
-      for (Ataque ataque : ataques) {
-        AtaqueResponseDTO ataquesRetornadoDTO = new AtaqueResponseDTO(ataque.getId(),
-            ataque.getForca(),
-            ataque.getAcuracia(),
-            ataque.getPontosDePoder(),
-            ataque.getCategoria(),
-            ataque.getNome(),
-            ataque.getDescricao(),
-            new TipoResponseDTO(ataque.getTipo().getId(), ataque.getTipo().getNome()));
-        ataquesDTOs.add(ataquesRetornadoDTO);
-      }
-
-      pokemonsRetornados.add(
-          new PokemonResponseDTO(
-              pokemon.getId(),
-              pokemon.getNome(),
-              pokemon.getAltura(),
-              pokemon.getPeso(),
-              pokemon.getGenero(),
-              pokemon.getNivel(),
-              pokemon.getNumeroPokedex(),
-              pokemon.getFelicidade(),
-              ataquesDTOs,
-              tiposDTOs));
-    }
-    return ResponseEntity.ok(pokemonsRetornados);
-  }
-
   @Operation(summary = "Buscar Pokemon pelo seu id do tipo")
   @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo tipo")
   @GetMapping(path = "/tipo/{id}")
