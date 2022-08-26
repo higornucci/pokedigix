@@ -133,4 +133,36 @@ public class Ataque {
     public Collection<Pokemon> getPokemons() {
         return pokemons;
     }
+
+    public void setForca(int forca) {
+        this.forca = forca;
+    }
+
+    public void setAcuracia(int acuracia) {
+        this.acuracia = acuracia;
+    }
+
+    public void setPontosDePoder(int pontosDePoder) {
+        this.pontosDePoder = pontosDePoder;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setPokemons(Collection<Pokemon> pokemons) {
+        this.pokemons = pokemons;
+    }
 }
