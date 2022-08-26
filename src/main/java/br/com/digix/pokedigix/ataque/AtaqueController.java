@@ -3,6 +3,7 @@ package br.com.digix.pokedigix.ataque;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,5 +88,12 @@ public class AtaqueController {
           tipoDTO
         )
       );
+  }
+  @Operation(summary = "Deletar um Ataque pelo seu id")
+  @ApiResponse(responseCode = "204")
+  @DeleteMapping(path = "/{id}")
+  public ResponseEntity<?> removerAtaqueId(@PathVariable Long id) {
+      ataqueRepository.deleteById(id);
+      return ResponseEntity.noContent().build();
   }
 }
