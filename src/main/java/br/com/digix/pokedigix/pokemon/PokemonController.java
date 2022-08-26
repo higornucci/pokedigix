@@ -189,7 +189,6 @@ public class PokemonController {
             tiposDTOs));
   }
 
-
   @Operation(summary = "Buscar Pokemon pelo seu id do tipo")
   @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo tipo")
   @GetMapping(path = "/tipo/{id}")
