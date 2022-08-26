@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -88,4 +89,33 @@ public class AtaqueController {
         )
       );
   }
+
+  @Operation(summary = "Atualizar um Ataque")
+	@ApiResponse(responseCode = "200")
+	@PutMapping(path = "/{id}", consumes = "application/json")
+	public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
+			@PathVariable Long id) {
+		Ataque ataque = ataqueRepository.findById(id).get();
+		ataque.setNome(ataqueRequestDTO.getNome());
+		ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
+		ataque.setCategoria(ataqueRequestDTO.getCategoria());
+		ataque.setDescricao(ataqueRequestDTO.getDescricao());
+		ataque.setForca(ataqueRequestDTO.getForca());
+		ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
+
+		ataqueRepository.save(ataque);
+    TipoResponseDTO tipoDTO = new TipoResponseDTO(ataque.getId(), ataque.getNome());
+
+		return ResponseEntity.ok(new AtaqueResponseDTO(
+				ataque.getId(),
+				ataque.getForca(),
+				ataque.getAcuracia(),
+				ataque.getPontosDePoder(),
+				ataque.getCategoria(),
+        ataque.getNome(),
+				ataque.getDescricao(),
+        tipoDTO
+        ));
+
+	}
 }
