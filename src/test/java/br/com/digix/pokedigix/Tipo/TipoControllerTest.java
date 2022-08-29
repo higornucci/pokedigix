@@ -1,7 +1,6 @@
 package br.com.digix.pokedigix.tipo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.assertj.core.api.Assertions;
@@ -17,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import br.com.digix.pokedigix.PokedigixApplication;
@@ -42,12 +40,12 @@ public class TipoControllerTest {
 
     @Test
 	public void deve_adicionar_um_tipo() throws Exception {
-		String nome = "Fire";
-		TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nome);
+		String nomeEsperado = "Fire";
+		TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
         mvc.perform(post("/api/v1/tipos").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO)));
 
         Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
-        Assertions.assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nome);
+        Assertions.assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
 	}
 
     @Test
