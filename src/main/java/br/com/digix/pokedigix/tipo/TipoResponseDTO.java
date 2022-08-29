@@ -5,6 +5,9 @@ public class TipoResponseDTO {
     private Long id;
     private String nome;
     
+    public TipoResponseDTO() {
+    }
+
     public TipoResponseDTO(Long id, String nome) {
         this.id = id;
         this.nome = nome;
