@@ -31,8 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
-<<<<<<< HEAD
 src/main/resources/application-dev.properties
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 src/main/resources/application-dev.properties
@@ -41,3 +41,7 @@ src/main/resources/application-dev.properties
 /src/main/resources/application-dev.properties
 >>>>>>> 57cae47a72e7a37b06980e9b479acb4db1727a4c
 >>>>>>> faee5901981f6c145d95f5380774410213ca7e71
+=======
+
+
+>>>>>>> 787ebbfd92acc303d82f4dbb0867409b9be8a75f
