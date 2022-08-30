@@ -2,7 +2,6 @@ package br.com.digix.pokedigix.tipo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,9 +40,11 @@ public class TipoControllerTest {
 
     @Test
     public void deve_adicionar_um_tipo() throws Exception {
+
         String nomeEsperado = "Fire";
         int quantidadeEsperada = 1;
         TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
+
 
         mvc.perform(post("/api/v1/tipos")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,6 +63,7 @@ public class TipoControllerTest {
 
     @Test
     public void deve_buscar_um_tipo_pelo_id() throws Exception {
+
         String nome = "Fire";
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
@@ -94,6 +96,7 @@ public class TipoControllerTest {
         TipoResponseDTO[] tiposRetornados = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),
                 TipoResponseDTO[].class);
 
+
         assertThat(tiposRetornados.length)
                 .isEqualTo(quantidadeEsperada);
 
@@ -107,6 +110,7 @@ public class TipoControllerTest {
 
     @Test
     public void deve_deletar_um_tipo_pelo_id() throws Exception {
+
         int quantidadeEsperada = 2;
         String eletrico = "Eletrico";
         String agua = "Agua";
@@ -128,10 +132,12 @@ public class TipoControllerTest {
                 .spliterator()
                 .getExactSizeIfKnown();
 
+
         assertThat(quantidadeEncontrada)
                 .isEqualTo(quantidadeEsperada);
 
         assertThat(HttpStatus.NO_CONTENT.value())
                 .isEqualTo(resultado.getResponse().getStatus());
     }
+
 }
