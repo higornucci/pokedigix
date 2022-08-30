@@ -6,10 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -63,38 +60,48 @@ public class TipoControllerTest {
         assertThat(tiposEncontrados)
         .extracting(Tipo::getNome)
         .containsOnly(nomeEsperado);
+
+            
+      
 	}
 
     @Test
 	public void deve_buscar_um_tipo_pelo_id() throws Exception {
-		String nome = "Fire";
+		// Arrange
+        String nome = "Fire";
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
 
+        // Action
         MvcResult mvcResult = mvc.
             perform(get("/api/v1/tipos/" + tipo.getId()).
             accept(MediaType.APPLICATION_JSON_VALUE)).
-            andReturn();
 
+
+        // Assert
         int status = mvcResult.getResponse().getStatus();
+
         assertEquals(HttpStatus.OK, status);
 
         String content = mvcResult.getResponse().getContentAsString();
         TipoResponseDTO tipoDTO = JsonUtil.mapFromJson(content, TipoResponseDTO.class);
 
-        Assertions.assertThat(tipoDTO.getId()).isEqualTo(tipo.getId());
+        assertThat(tipoDTO.getId()).isEqualTo(tipo.getId());
 	}
 
     @Test
-    public void deve_buscar_todos_os_tipos_cadastrados() throws Exception{
+
         //Arrange
+    public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
+        // Arrange
+        int quantidadeEsperada = 3;
         String eletrico = "Eletrico";
         String agua = "Agua";
         String fantasma = "Fantasma";
         tipoRepository.save(new Tipo(eletrico));
         tipoRepository.save(new Tipo(agua));
         tipoRepository.save(new Tipo(fantasma));
-        int quantidadeEsperada = 3;
+
 
         //Action
        MvcResult resutado =  mvc.perform(get( "/api/v1/tipos")).andReturn();
@@ -113,6 +120,23 @@ public class TipoControllerTest {
        assertThat(tiposRetornados)
        .extracting(TipoResponseDTO::getNome)
        .contains(eletrico);
+
+        // Action
+        MvcResult resultado = 
+            mvc.perform(get("/api/v1/tipos")).andReturn();
+
+        // Assert
+        TipoResponseDTO[] tiposRetornados = 
+            JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), 
+                                TipoResponseDTO[].class);
+        
+        assertThat(tiposRetornados.length)
+            .isEqualTo(quantidadeEsperada);
+        
+        assertThat(HttpStatus.OK.value())
+            .isEqualTo(resultado.getResponse().getStatus());
+        
+       
     }
     
 }
