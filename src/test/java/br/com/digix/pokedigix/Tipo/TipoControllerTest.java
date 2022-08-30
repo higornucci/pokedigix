@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.Tipo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -48,7 +49,11 @@ public class TipoControllerTest {
         int quantidadeEsperada = 1;
         TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
         mvc.perform(
-                post("/api/v1/tipos").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO)))
+                post("/api/v1/tipos").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO)));
+
+        mvc.perform(post("/api/v1/tipos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.toJson(tipoRequestDTO)))
                 .andExpect(status().isCreated());
 
         Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
@@ -74,8 +79,7 @@ public class TipoControllerTest {
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
 
-        MvcResult mvcResult = mvc.perform(get("/api/v1/tipos/" + tipo.getId()).accept(MediaType.APPLICATION_JSON_VALUE))
-                .andReturn();
+        MvcResult mvcResult = mvc.perform(get("/api/v1/tipos/" + tipo.getId())).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
 
@@ -85,11 +89,11 @@ public class TipoControllerTest {
         TipoResponseDTO tipoDTO = JsonUtil.mapFromJson(content, TipoResponseDTO.class);
 
         assertThat(tipoDTO.getId()).isEqualTo(tipo.getId());
+
     }
 
     @Test
     public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
-
         int quantidadeEsperada = 3;
         String eletrico = "Eletrico";
         String agua = "Agua";
@@ -139,8 +143,8 @@ public class TipoControllerTest {
     }
 
     @Test
-    public void deve_deletar_um_tipo() throws Exception{
-        //Codigo Do Enzão
+    public void deve_deletar_um_tipo() throws Exception {
+        // Codigo Do Enzão
         int quantidadeEsperada = 3;
         String eletrico = "Eletrico";
         String agua = "Agua";
@@ -156,6 +160,30 @@ public class TipoControllerTest {
 
         Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
         long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
+    }
+
+    public void deve_deletar_um_tipo_pelo_id() throws Exception {
+
+        int quantidadeEsperada = 2;
+        String eletrico = "Eletrico";
+        String agua = "Agua";
+        String fantasma = "Fantasma";
+        Tipo tipoEletrico = new Tipo(eletrico);
+
+        tipoRepository
+                .save(tipoEletrico);
+        tipoRepository
+                .save(new Tipo(agua));
+        tipoRepository
+                .save(new Tipo(fantasma));
+
+        String url = "/api/v1/tipos/" + tipoEletrico.getId();
+        MvcResult resultado = mvc.perform(delete(url)).andReturn();
+
+        Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+        long quantidadeEncontrada = tiposEncontrados
+                .spliterator()
+                .getExactSizeIfKnown();
 
         assertThat(quantidadeEncontrada)
                 .isEqualTo(quantidadeEsperada);
@@ -163,4 +191,5 @@ public class TipoControllerTest {
         assertThat(HttpStatus.NO_CONTENT.value())
                 .isEqualTo(resultado.getResponse().getStatus());
     }
+
 }
