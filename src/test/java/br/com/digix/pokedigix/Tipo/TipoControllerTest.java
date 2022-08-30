@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
@@ -99,5 +100,23 @@ public class TipoControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 
         assertThat(tiposRetornados).extracting("nome").contains(eletrico);
+    }
+    @Test
+    public void deve_deletar_um_tipo_por_id() throws Exception {
+        // Arrange
+        int quantidadeEsperada = 0;
+        String eletrico = "eletrico";
+        Tipo tipo = new Tipo(eletrico);
+        tipoRepository.save(tipo);
+        
+
+        // Action
+        MvcResult resultadoDelet = mvc.perform(delete("/api/v1/tipos/"+ tipo.getId())).andReturn();
+
+        // Assert
+        Iterable<Tipo> tiposRetornados = tipoRepository.findAll();
+        assertThat(tiposRetornados.spliterator().getExactSizeIfKnown()).isEqualTo(quantidadeEsperada);
+        
+        assertThat(HttpStatus.NO_CONTENT.value()).isEqualTo(resultadoDelet.getResponse().getStatus());
     }
 }
