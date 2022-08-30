@@ -1,12 +1,11 @@
 package br.com.digix.pokedigix.tipo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.utils.JsonUtil;
@@ -61,8 +58,8 @@ public class TipoControllerTest {
     }
 
     @Test
-    public void deve_buscar_um_tipo_pelo_id() throws Exception {
-        // Arrange
+	public void deve_buscar_um_tipo_pelo_id() throws Exception {
+		// Arrange
         String nome = "Fire";
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
@@ -72,7 +69,7 @@ public class TipoControllerTest {
 
         // Assert
         int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
+        assertEquals(HttpStatus.OK.value(), status);
 
         String content = mvcResult.getResponse().getContentAsString();
         TipoResponseDTO tipoDTO = JsonUtil.mapFromJson(content, TipoResponseDTO.class);
@@ -103,5 +100,4 @@ public class TipoControllerTest {
 
         assertThat(tiposRetornados).extracting("nome").contains(eletrico);
     }
-
 }
