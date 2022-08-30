@@ -87,7 +87,6 @@ public class TipoControllerTest {
     }
 
     @Test
-
     public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
 
         // Arrange
@@ -119,7 +118,6 @@ public class TipoControllerTest {
     }
 
     @Test
-
     public void deve_deletar_um_tipo_por_id() throws Exception {
         // Arrange
         int quantidadeEsperada = 0;
