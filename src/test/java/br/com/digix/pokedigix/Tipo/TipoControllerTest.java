@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -34,7 +34,7 @@ public class TipoControllerTest {
         @Autowired
         private TipoRepository tipoRepository;
 
-        @AfterEach
+        @BeforeEach
         public void resetDb() {
                 tipoRepository.deleteAll();
         }
@@ -137,18 +137,21 @@ public class TipoControllerTest {
                 String eletrico = "Eletrico";
                 Tipo tipoEletrico = new Tipo(eletrico);
                 tipoRepository.save(tipoEletrico);
+
                 String nomeNovo = "Fogo";
                 TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeNovo);
                 String url = "/api/v1/tipos/" + tipoEletrico.getId();
 
                 // Action
-                mvc.perform(put(url)
+                var resultado = mvc.perform(put(url)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(JsonUtil.toJson(tipoRequestDTO)));
+                                .content(JsonUtil.toJson(tipoRequestDTO))).andReturn();
 
                 // Asserts
-                Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+                int status = resultado.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
 
+                Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
                 assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeNovo);
         }
 }
