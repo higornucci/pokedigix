@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
@@ -53,7 +54,7 @@ public class TipoControllerTest {
         // Asserts
         Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
         long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
-        
+
         assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
         assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
 
@@ -97,13 +98,12 @@ public class TipoControllerTest {
         TipoResponseDTO[] tiposRetornados = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),
                 TipoResponseDTO[].class);
 
-
         assertThat(tiposRetornados.length).isEqualTo(quantidadeEsperada);
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 
         assertThat(tiposRetornados).extracting("nome").contains(eletrico);
     }
-   
+
     @Test
     public void deve_deletar_um_tipo_pelo_id() throws Exception {
         // Arrange
@@ -129,5 +129,29 @@ public class TipoControllerTest {
 
         assertThat(HttpStatus.NO_CONTENT.value())
                 .isEqualTo(resultado.getResponse().getStatus());
+    }
+
+    @Test
+    public void deve_alterar_um_tipo() throws Exception {
+        // Arrange
+        String eletrico = "Eletrico";
+        Tipo tipoEletrico = new Tipo(eletrico);
+        tipoRepository.save(tipoEletrico);
+
+        String novoNome = "Fogo";
+        TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(novoNome);
+        String url = "/api/v1/tipos/" + tipoEletrico.getId();
+
+        // Action
+        var resultado = mvc.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.toJson(tipoRequestDTO))).andReturn();
+
+        // Asserts
+        int status = resultado.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), status);
+
+        Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+        assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(novoNome);
     }
 }
