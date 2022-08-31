@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -129,5 +130,31 @@ public class TipoControllerTest {
 
         assertThat(HttpStatus.NO_CONTENT.value())
                 .isEqualTo(resultado.getResponse().getStatus());
+    }
+
+    @Test
+    public void deve_atualizar_um_tipo_pelo_id() throws Exception {
+        // Arrange
+        int quantidadeEsperada = 1;
+        String eletrico = "Eletrico";
+        Tipo tipoEletrico = new Tipo(eletrico);
+        tipoRepository.save(tipoEletrico);
+       
+        String agua = "agua";
+        TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(agua);
+
+        // Action
+        String url = "/api/v1/tipos/" + tipoEletrico.getId();
+       mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO))).andExpect(status().isOk());
+
+
+        // Assert
+        Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+        long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
+
+        assertThat(quantidadeEncontrada)
+                .isEqualTo(quantidadeEsperada);
+
+        assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(agua);
     }
 }
