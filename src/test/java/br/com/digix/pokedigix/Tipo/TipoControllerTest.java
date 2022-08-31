@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -147,6 +148,27 @@ public class TipoControllerTest {
 
         assertThat(HttpStatus.NO_CONTENT.value())
                 .isEqualTo(resultado.getResponse().getStatus());
+    }
+
+    @Test
+    public void deve_alterar_um_tipo() throws Exception {
+            // Arrange
+            String fantasma = "Fantasma";
+            Tipo tipoFantasma = new Tipo(fantasma);
+            String nomeNovo = "Capitão America";
+            tipoRepository.save(tipoFantasma);
+
+            TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeNovo);
+
+            // Action
+            MvcResult resultado = mvc.perform(put("/api/v1/tipos/" + tipoFantasma.getId()).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO))).andReturn();
+
+            // Asserts
+            Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+            int status = resultado.getResponse().getStatus();
+            
+            assertEquals(HttpStatus.OK.value(), status);
+            assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeNovo);
     }
 
 }

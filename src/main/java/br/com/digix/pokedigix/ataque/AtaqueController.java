@@ -69,8 +69,8 @@ public class AtaqueController {
       novoAtaque.getAcuracia(),
       novoAtaque.getPontosDePoder(),
       novoAtaque.getCategoria(),
-      novoAtaque.getDescricao(),
       novoAtaque.getNome(),
+      novoAtaque.getDescricao(),
       tipo
     );
     ataqueRepository.save(ataque);

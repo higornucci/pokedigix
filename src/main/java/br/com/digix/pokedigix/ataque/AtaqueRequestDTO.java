@@ -9,6 +9,8 @@ public class AtaqueRequestDTO {
     private String nome;
     private String descricao;
 
+   
+
     public int getForca() {
         return forca;
     }
