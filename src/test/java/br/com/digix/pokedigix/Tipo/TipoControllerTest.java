@@ -157,8 +157,7 @@ public class TipoControllerTest {
             Tipo tipoFantasma = new Tipo(fantasma);
             String nomeNovo = "Capitão America";
             tipoRepository.save(tipoFantasma);
-            tipoRepository.save(new Tipo("Homem aranha"));
-
+            
 
             TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeNovo);
 
@@ -166,12 +165,11 @@ public class TipoControllerTest {
             MvcResult resultado = mvc.perform(put("/api/v1/tipos/" + tipoFantasma.getId()).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO))).andReturn();
 
             // Asserts
-            Tipo tiposEncontrados = tipoRepository.findById(tipoFantasma.getId()).get();
+            Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+            int status = resultado.getResponse().getStatus();
             
-            assertThat(tiposEncontrados.getNome()).isEqualTo(nomeNovo);
-
-            assertThat(HttpStatus.OK.value())
-            .isEqualTo(resultado.getResponse().getStatus());
+            assertEquals(HttpStatus.OK.value(), status);
+            assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeNovo);
     }
 
 }
