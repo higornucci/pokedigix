@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,9 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.utils.JsonUtil;
+import ch.qos.logback.core.joran.action.Action;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
@@ -33,7 +37,7 @@ public class TipoControllerTest {
     @Autowired
     private TipoRepository tipoRepository;
 
-    @AfterEach
+    @BeforeEach
     public void resetDb() {
         tipoRepository.deleteAll();
     }
@@ -129,5 +133,30 @@ public class TipoControllerTest {
 
         assertThat(HttpStatus.NO_CONTENT.value())
                 .isEqualTo(resultado.getResponse().getStatus());
+    }
+
+    @Test
+    public void deve_atualizar_um_tipo_pelo_id() throws Exception {
+        //Assert
+        String nome = "Fogo";
+        Tipo tipoPokemon = new Tipo(nome);
+        tipoRepository.save(tipoPokemon);
+
+        String nomeEsperado = "Agua";
+        TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
+        int quantidadeEsperada = 1;
+
+        //Action
+        mvc.perform(put("/api/v1/tipos/" + tipoPokemon.getId())
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(JsonUtil.toJson(tipoRequestDTO)))
+        .andExpect(status().isOk());
+
+        //Assert
+        Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+        long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
+        assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+        assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
+
     }
 }
