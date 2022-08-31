@@ -63,28 +63,5 @@ public class TipoRepositoryTest {
         assertEquals(quantidadeEsperada, quantidadeRemovida);
     }
 
-    /* @Test
-    public void deve_alterar_um_tipo() throws Exception {
-            // Arrange
-            String fantasma = "Fantasma";
-            Tipo tipoFantasma = new Tipo(fantasma);
-            String nomeNovo = "Capitão America";
-            tipoRepository.save(tipoFantasma);
-            tipoRepository.save(new Tipo("Homem aranha"));
-
-
-            TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeNovo);
-
-            // Action
-            MvcResult resultado = mvc.perform(put("/api/v1/tipos/" + tipoFantasma.getId()).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO))).andReturn();
-
-            // Asserts
-            Tipo tiposEncontrados = tipoRepository.findById(tipoFantasma.getId()).get();
-            
-            assertThat(tiposEncontrados.getNome()).isEqualTo(nomeNovo);
-
-            assertThat(HttpStatus.OK.value())
-            .isEqualTo(resultado.getResponse().getStatus());
-    }
- */
+   
 }
