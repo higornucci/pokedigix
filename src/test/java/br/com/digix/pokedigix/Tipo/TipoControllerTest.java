@@ -144,8 +144,8 @@ public class TipoControllerTest {
                 Tipo tipoEletrico = new Tipo(eletrico);
                 tipoRepository.save(tipoEletrico);
 
-                String nomeNovo = "Agua";
-                TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeNovo);
+                String tipoNovo = "Agua";
+                TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(tipoNovo);
                 String url = "/api/v1/tipos/" + tipoEletrico.getId();
 
                 var resultado = mvc
@@ -159,7 +159,7 @@ public class TipoControllerTest {
 
                 Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
                 assertThat(tiposEncontrados).extracting(Tipo::getNome)
-                                .containsOnly(nomeNovo);
+                                .containsOnly(tipoNovo);
         }
 
 }
