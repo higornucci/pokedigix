@@ -1,5 +1,6 @@
 package br.com.digix.pokedigix.personagem;
 
+import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.pokemon.FelicidadeInvalidaException;
 import br.com.digix.pokedigix.pokemon.LimiteDeAtaquePokemonException;
 import br.com.digix.pokedigix.pokemon.LimiteDeTipoPokemonException;
@@ -13,7 +14,8 @@ public class TreinadorBuilder {
     private Endereco endereco;
     private Pokemon pokemon;
 
-    public TreinadorBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
+    public TreinadorBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException,
+            LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
         this.nome = "Ash";
         this.endereco = new EnderecoBuilder().construir();
         this.pokemon = new PokemonBuilder().construir();
@@ -25,6 +27,11 @@ public class TreinadorBuilder {
 
     public TreinadorBuilder comPokemonInicial(Pokemon pokemonInicial) {
         this.pokemon = pokemonInicial;
+        return this;
+    }
+
+    public TreinadorBuilder comEndereco(Endereco endereco) {
+        this.endereco = endereco;
         return this;
     }
 

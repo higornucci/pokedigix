@@ -58,11 +58,11 @@ public class Pokemon {
     return treinador == null;
   }
 
-  @ManyToMany(cascade = CascadeType.PERSIST)
+  @ManyToMany
   @JoinTable(name = "pokemon_tipo", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "tipo_id"))
   private Collection<Tipo> tipos;
 
-  @ManyToMany(cascade = CascadeType.PERSIST)
+  @ManyToMany
   @JoinTable(name = "pokemon_ataque", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "ataque_id"))
   private Collection<Ataque> ataques;
 
