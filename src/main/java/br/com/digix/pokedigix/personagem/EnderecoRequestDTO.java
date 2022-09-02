@@ -5,6 +5,9 @@ public class EnderecoRequestDTO {
   private String regiao;
   private String cidade;
 
+  public EnderecoRequestDTO(String regiao2, String cidade2) {
+  }
+
   public String getRegiao() {
     return regiao;
   }
