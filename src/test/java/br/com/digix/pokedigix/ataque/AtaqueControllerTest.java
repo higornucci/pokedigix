@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 public class AtaqueControllerTest {
-    
+
     @Autowired
     private MockMvc mvc;
 
@@ -34,12 +35,15 @@ public class AtaqueControllerTest {
     private TipoRepository tipoRepository;
 
     @BeforeEach
+    @AfterEach
+
     public void resetDb() {
+        ataqueRepository.deleteAll();
         tipoRepository.deleteAll();
     }
-    
+
     @Test
-    public void deve_adicionar_um_ataque() throws Exception{
+    public void deve_adicionar_um_ataque() throws Exception {
         int quantidadeEsperada = 1;
         Tipo tipoEsperado = new Tipo("Normal");
         tipoRepository.save(tipoEsperado);
@@ -52,7 +56,6 @@ public class AtaqueControllerTest {
         String descricao = "ataque no olho";
         // TipoRequestDTO tipoRequestDTO = new TipoRequestDTO("Normal");
 
-
         AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
 
         ataqueRequestDTO.setForca(forca);
@@ -64,16 +67,15 @@ public class AtaqueControllerTest {
         ataqueRequestDTO.setTipoId(idTipo);
 
         mvc.perform(post("/api/v1/ataques/")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(JsonUtil.toJson(ataqueRequestDTO)))
-        .andExpect(status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.toJson(ataqueRequestDTO)))
+                .andExpect(status().isCreated());
 
         Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
         long quantidadeEncontrada = ataquesEncontrados.spliterator().getExactSizeIfKnown();
 
         assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
         assertThat(ataquesEncontrados).extracting(Ataque::getNome).contains(nome);
-
 
     }
 }

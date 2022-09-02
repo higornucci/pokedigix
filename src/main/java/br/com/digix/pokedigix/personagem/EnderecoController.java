@@ -76,11 +76,12 @@ public class EnderecoController {
         } else {
             enderecos = enderecoRepository.findAll();
         }
+        
         Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
 
         for (Endereco endereco : enderecos) {
             enderecosRetornados
-                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getCidade(), endereco.getRegiao()));
+                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getRegiao(), endereco.getCidade()));
         }
         return ResponseEntity.ok(enderecosRetornados);
     }
