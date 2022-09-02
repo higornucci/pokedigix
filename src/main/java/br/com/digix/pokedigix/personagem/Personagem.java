@@ -24,15 +24,15 @@ public abstract class Personagem {
     private Long id;
     @Column(nullable = false)
     private String nome;
-   
+
     @ManyToOne
     private Endereco endereco;
-  
 
     @OneToMany
     protected Collection<Pokemon> pokemons;
 
-    protected Personagem() {}
+    protected Personagem() {
+    }
 
     public Personagem(String nome, Endereco endereco) {
         this.nome = nome;
@@ -56,7 +56,6 @@ public abstract class Personagem {
         this.nome = nome;
     }
 
-
     public Endereco getEndereco() {
         return endereco;
     }
@@ -69,5 +68,4 @@ public abstract class Personagem {
         return pokemons;
     }
 
-    
 }
