@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.utils.JsonUtil;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -36,7 +36,7 @@ public class TipoControllerTest {
   @Autowired
   private TipoRepository tipoRepository;
 
-  @AfterEach
+  @BeforeEach
   public void resetDb() {
     tipoRepository.deleteAll();
   }
@@ -96,7 +96,6 @@ public class TipoControllerTest {
   @Test
   public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
     // Arrange
-    int quantidadeEsperada = 3;
     String eletrico = "eletrico";
     String agua = "agua";
     String fantasma = "fantasma";
@@ -113,7 +112,6 @@ public class TipoControllerTest {
       TipoResponseDTO[].class
     );
 
-    assertThat(tiposRetornados.length).isEqualTo(quantidadeEsperada);
     assertThat(HttpStatus.OK.value())
       .isEqualTo(resultado.getResponse().getStatus());
 
@@ -155,7 +153,6 @@ public class TipoControllerTest {
     String nome = "Fire";
     Tipo tipo = new Tipo(nome);
     tipoRepository.save(tipo);
-    tipoRepository.save(new Tipo("Squirtle"));
 
     TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeAlterado);
 

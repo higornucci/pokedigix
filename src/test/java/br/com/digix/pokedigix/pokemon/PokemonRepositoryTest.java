@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -34,7 +36,14 @@ public class PokemonRepositoryTest {
 
     @Autowired
     private TipoRepository tipoRepository;
-
+	
+	@AfterEach
+	@BeforeEach
+	public void resetDb() {
+	  pokemonRepository.deleteAll();
+	  treinadorRepository.deleteAll();
+	  tipoRepository.deleteAll();
+	}
     @Test
     public void deve_salvar_um_pokemon() throws Exception {
         Pokemon gastly = new PokemonBuilder().construir();

@@ -175,6 +175,8 @@ public class PokemonController {
     alterarPokemon.setAtaques(ataques);
     alterarPokemon.setTipos(tipos);
 
+	pokemonRepository.save(alterarPokemon);
+
     return ResponseEntity.ok(
         new PokemonResponseDTO(
             alterarPokemon.getId(),
