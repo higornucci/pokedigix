@@ -1,7 +1,9 @@
 package br.com.digix.pokedigix.ataque;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.tipo.Tipo;
@@ -29,6 +32,7 @@ public class AtaqueControllerTest {
 
     @Autowired
     private AtaqueRepository ataqueRepository;
+    
     @Autowired
     private TipoRepository tipoRepository;
 
@@ -72,5 +76,25 @@ public class AtaqueControllerTest {
         assertThat(ataquesEncontrados)
                 .extracting(Ataque::getNome)
                 .containsOnly(ataqueEsperado);
+    }
+
+    @Test
+    public void deve_excluir_um_ataque_pelo_id() throws Exception {
+        // Teste do código Do Enzão
+        int quantidadeEsperada = 0;
+
+        Tipo tipo = new Tipo("Eletrico");
+        tipoRepository.save(tipo);
+
+        Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
+        ataqueRepository.save(ataque);
+
+        String url = "/api/v1/ataques/" + ataque.getId();
+        MvcResult resultado = mvc.perform(delete(url)).andReturn();
+
+        Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+        long quantidadeEncontrada = ataquesEncontrados.spliterator().getExactSizeIfKnown();
+
+        assertEquals(quantidadeEsperada, quantidadeEncontrada);
     }
 }
