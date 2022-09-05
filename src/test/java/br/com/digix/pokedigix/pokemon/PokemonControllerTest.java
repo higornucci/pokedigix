@@ -64,9 +64,7 @@ public class PokemonControllerTest {
     String tipao = "Agua";
 
     Tipo tipo = new Tipo(tipao);
-    tipoRepository.save(tipo);
     Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-    ataqueRepository.save(ataque);
     Pokemon pokemon = new PokemonBuilder()
       .comAtaque(ataque)
       .comTipo(tipo)
@@ -129,9 +127,7 @@ public class PokemonControllerTest {
     String tipao = "Fogo";
 
     Tipo tipo = new Tipo(tipao);
-    tipoRepository.save(tipo);
     Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-    ataqueRepository.save(ataque);
     Pokemon pokemon = new PokemonBuilder()
       .comAtaque(ataque)
       .comTipo(tipo)
