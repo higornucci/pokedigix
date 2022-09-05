@@ -39,8 +39,8 @@ public class EnderecoController {
     public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
             @RequestBody EnderecoRequestDTO novoEndereco) {
         Endereco endereco = new Endereco(
-                novoEndereco.getCidade(),
-                novoEndereco.getRegiao());
+			novoEndereco.getRegiao(),
+			novoEndereco.getCidade());
         enderecoRepository.save(endereco);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
