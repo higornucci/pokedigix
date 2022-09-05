@@ -3,6 +3,9 @@ package br.com.digix.pokedigix.personagem;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import javax.transaction.Transactional;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,20 +52,23 @@ public class TreinadorControllerTest {
     private EnderecoRepository enderecoRepository;
 
     @BeforeEach
+    @AfterEach
     public void resetDb() {
+        pokemonRepository.deleteAll();
         treinadorRepository.deleteAll();
+        ataqueRepository.deleteAll();
+        tipoRepository.deleteAll();
+        enderecoRepository.deleteAll();
     }
 
     @Test
+    @Transactional
     public void deve_buscar_os_pokemons_do_treinador() throws Exception {
         // Arrange
         int quantidadeEsperada = 1;
         Tipo tipo = new Tipo("Eletrico");
-        tipoRepository.save(tipo);
         Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-        ataqueRepository.save(ataque);
         Pokemon pokemon = new PokemonBuilder().comAtaque(ataque).comTipo(tipo).construir();
-        pokemonRepository.save(pokemon);
         Endereco endereco = new Endereco("Kanto", "Pallet");
         enderecoRepository.save(endereco);
         Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).comEndereco(endereco).construir();
@@ -79,6 +85,5 @@ public class TreinadorControllerTest {
 
         assertThat(pokemonsRetornadDtos.length).isEqualTo(quantidadeEsperada);
         assertThat(pokemonsRetornadDtos).extracting("nome").contains(pokemon.getNome());
-
     }
 }

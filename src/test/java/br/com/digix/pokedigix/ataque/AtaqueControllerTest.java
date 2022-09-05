@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -35,8 +36,10 @@ public class AtaqueControllerTest {
     private TipoRepository tipoRepository;
 
     @AfterEach
+    @BeforeEach
     public void resetDb() {
         ataqueRepository.deleteAll();
+        tipoRepository.deleteAll();
     }
 
     @Test
