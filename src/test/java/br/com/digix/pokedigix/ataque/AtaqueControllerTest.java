@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,10 @@ public class AtaqueControllerTest {
     private AtaqueRepository ataqueRepository;
 
     @BeforeEach
+    @AfterEach
     public void resetDb() {
         ataqueRepository.deleteAll();
+        tipoRepository.deleteAll();
     }
     
     @Test
