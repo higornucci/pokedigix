@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -35,6 +36,10 @@ public class TipoControllerTest {
     private TipoRepository tipoRepository;
 
     @AfterEach
+    public void resetDb1() {
+        tipoRepository.deleteAll();
+    }
+    @BeforeEach
     public void resetDb() {
         tipoRepository.deleteAll();
     }

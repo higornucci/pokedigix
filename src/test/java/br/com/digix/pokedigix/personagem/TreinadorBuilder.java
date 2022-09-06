@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.personagem;
 
-import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.pokemon.FelicidadeInvalidaException;
 import br.com.digix.pokedigix.pokemon.LimiteDeAtaquePokemonException;
 import br.com.digix.pokedigix.pokemon.LimiteDeTipoPokemonException;
