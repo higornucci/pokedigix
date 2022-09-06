@@ -78,7 +78,7 @@ public class TipoController {
     @ApiResponse(responseCode = "204")
     @DeleteMapping
     @Transactional
-    public ResponseEntity<?> removerTipoPorNome(@RequestParam(required = true) String termo) {
+    public ResponseEntity<Void> removerTipoPorNome(@RequestParam(required = true) String termo) {
         tipoRepository.deleteByNomeContaining(termo);
         return ResponseEntity.noContent().build();
     }

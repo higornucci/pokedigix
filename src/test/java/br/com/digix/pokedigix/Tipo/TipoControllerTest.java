@@ -134,6 +134,34 @@ public class TipoControllerTest {
         }
 
         @Test
+        public void deve_deletar_um_tipo_pelo_nome() throws Exception {
+                // Arrange
+                int quantidadeEsperada = 2;
+                String eletrico = "Eletrico";
+                String agua = "Agua";
+                String fantasma = "Fantasma";
+                Tipo tipoEletrico = new Tipo(eletrico);
+                tipoRepository.save(tipoEletrico);
+                tipoRepository.save(new Tipo(agua));
+                tipoRepository.save(new Tipo(fantasma));
+
+                // Action
+                String url = "/api/v1/tipos?termo=" + tipoEletrico.getNome();
+                MvcResult resultado = mvc.perform(delete(url)).andReturn();
+
+                // Assert
+                Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+                long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
+
+                assertThat(quantidadeEncontrada)
+                                .isEqualTo(quantidadeEsperada);
+
+                assertThat(HttpStatus.NO_CONTENT.value())
+                                .isEqualTo(resultado.getResponse().getStatus());
+        }
+
+
+        @Test
         public void deve_alterar_um_tipo() throws Exception {
                 // Arrange
                 String eletrico = "Eletrico";
