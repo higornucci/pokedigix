@@ -16,9 +16,9 @@ import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.personagem.TreinadorBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
- class PokemonTest {
+class PokemonTest {
     @Test
-     void deve_criar_um_pokemon() throws Exception {
+    void deve_criar_um_pokemon() throws Exception {
         String nome = "Gastly";
         double altura = 0.8;
         double peso = 0.1;
@@ -51,7 +51,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void deve_cadastrar_um_tipo_para_o_pokemon() throws Exception {
+    void deve_cadastrar_um_tipo_para_o_pokemon() throws Exception {
         Tipo tipo = new Tipo("Fantasma");
 
         Pokemon gastly = new PokemonBuilder().comTipo(tipo).construir();
@@ -60,7 +60,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void nao_deve_possuir_mais_que_dois_tipos() throws Exception {
+    void nao_deve_possuir_mais_que_dois_tipos() throws Exception {
 
         assertThrows(LimiteDeTipoPokemonException.class, () -> {
             new PokemonBuilder()
@@ -72,7 +72,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void nao_deve_possuir_mais_que_quatro_ataques() throws Exception {
+    void nao_deve_possuir_mais_que_quatro_ataques() throws Exception {
 
         assertThrows(LimiteDeAtaquePokemonException.class, () -> {
             new PokemonBuilder()
@@ -86,7 +86,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void deve_permitir_ter_ate_dois_tipos() throws Exception {
+    void deve_permitir_ter_ate_dois_tipos() throws Exception {
 
         int quantidadeDeAtaquesEsperada = 2;
         Pokemon pokemon = new PokemonBuilder()
@@ -98,7 +98,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void deve_permitir_ter_ate_quatro_ataques() throws Exception {
+    void deve_permitir_ter_ate_quatro_ataques() throws Exception {
 
         int quantidadeDeAtaquesEsperada = 4;
         Pokemon pokemon = new PokemonBuilder().comAtaque(new AtaqueBuilder().construir())
@@ -111,7 +111,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void deve_ter_nivel_minimo_um() throws Exception {
+    void deve_ter_nivel_minimo_um() throws Exception {
         int nivelMinimo = 1;
 
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMinimo).construir();
@@ -120,7 +120,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void deve_ter_nivel_maximo_cem() throws Exception {
+    void deve_ter_nivel_maximo_cem() throws Exception {
         int nivelMaximo = 100;
 
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMaximo).construir();
@@ -129,7 +129,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void nao_pode_ter_nivel_menor_que_um() {
+    void nao_pode_ter_nivel_menor_que_um() {
         int nivelInvalido = 0;
 
         assertThrows(NivelPokemonInvalidoException.class, () -> {
@@ -138,7 +138,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void nao_pode_ter_nivel_maior_que_cem() {
+    void nao_pode_ter_nivel_maior_que_cem() {
         int nivelInvalido = 101;
 
         assertThrows(NivelPokemonInvalidoException.class, () -> {
@@ -189,12 +189,12 @@ import br.com.digix.pokedigix.tipo.Tipo;
     }
 
     @Test
-     void nao_deve_ter_felicidade_maior_que_cem() {
+    void nao_deve_ter_felicidade_maior_que_cem() {
         int felicidadeInvalida = 101;
 
         assertThrows(FelicidadeInvalidaException.class, () -> {
             new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
         });
     }
-    
+
 }

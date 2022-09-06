@@ -27,7 +27,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class TipoControllerTest {
+ class TipoControllerTest {
 
     @Autowired
     private MockMvc mvc;
