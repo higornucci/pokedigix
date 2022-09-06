@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
 
@@ -18,8 +17,6 @@ public class Lider extends Personagem {
     @Column(nullable = false)
     private Insignia insignia;
 
-    @ManyToMany
-    private Collection<Pokemon>pokemons;
 
     public Lider(String nome, Endereco endereco, Collection<Pokemon> pokemons, Insignia insignia) {
         super(nome, endereco);
