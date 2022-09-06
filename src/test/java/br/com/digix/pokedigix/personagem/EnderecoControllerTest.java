@@ -74,4 +74,5 @@ public class EnderecoControllerTest {
             .extracting("cidade").contains(regiao);
     }
 
+    
 }

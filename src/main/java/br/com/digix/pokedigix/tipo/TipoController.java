@@ -1,8 +1,11 @@
 package br.com.digix.pokedigix.tipo;
 
+import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
+import javax.naming.NameNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.NotAcceptableStatusException;
+import org.webjars.NotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -61,8 +66,12 @@ public class TipoController {
     @Operation(summary = "Buscar um Tipo pelo seu id")
     @ApiResponse(responseCode = "200")
     @GetMapping(path = "/{id}")
-    public ResponseEntity<TipoResponseDTO> buscarPorId(@PathVariable Long id) {
-        Tipo tipo = tipoRepository.findById(id).get();
+    public ResponseEntity<TipoResponseDTO> buscarPorId(@PathVariable Long id) throws NameNotFoundException {
+        Optional<Tipo> tipoOptional = tipoRepository.findById(id);
+        if(tipoOptional.isEmpty()){
+            throw new NameNotFoundException(null);
+        }
+        Tipo tipo = tipoOptional.get();
         return ResponseEntity.ok(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
     }
 
@@ -88,7 +97,11 @@ public class TipoController {
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<TipoResponseDTO> alterarTipo(@RequestBody TipoRequestDTO tipoRequestDTO,
             @PathVariable Long id) {
-        Tipo tipoParaAlterar = tipoRepository.findById(id).get();
+        Optional<Tipo> tipoOptional = tipoRepository.findById(id);
+        if(tipoOptional.isEmpty()){
+            throw new NotFoundException(null);
+        }
+        Tipo tipoParaAlterar = tipoOptional.get();
         tipoParaAlterar.setNome(tipoRequestDTO.getNome());
         tipoRepository.save(tipoParaAlterar);
         return ResponseEntity.ok(new TipoResponseDTO(tipoParaAlterar.getId(), tipoParaAlterar.getNome()));
