@@ -6,6 +6,8 @@ public class EnderecoResponseDTO {
     private String regiao;
     private String cidade;
     
+    public EnderecoResponseDTO(){}
+    
     public EnderecoResponseDTO(Long id, String regiao, String cidade) {
         this.id = id;
         this.regiao = regiao;
