@@ -44,7 +44,7 @@ public class PokemonController {
   @Operation(summary = "Deletar um Pokemon pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerPokemonId(@PathVariable Long id) {
+  public ResponseEntity<Void> removerPokemonId(@PathVariable Long id) {
     pokemonRepository.deleteById(id);
     return ResponseEntity.noContent().build();
   }
@@ -53,7 +53,7 @@ public class PokemonController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping
   @Transactional
-  public ResponseEntity<?> removerPokemon(
+  public ResponseEntity<Void> removerPokemon(
     @RequestParam(required = true) String termo
   ) {
     pokemonRepository.deleteByNomeContaining(termo);

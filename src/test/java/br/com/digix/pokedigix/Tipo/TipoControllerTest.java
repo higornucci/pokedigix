@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 )
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class TipoControllerTest {
+class TipoControllerTest {
 
   @Autowired
   private MockMvc mvc;
@@ -42,7 +42,7 @@ public class TipoControllerTest {
   }
 
   @Test
-  public void deve_adicionar_um_tipo() throws Exception {
+  void deve_adicionar_um_tipo() throws Exception {
     String nomeEsperado = "Fire";
     int quantidadeEsperada = 1;
     TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
@@ -69,7 +69,7 @@ public class TipoControllerTest {
   }
 
   @Test
-  public void deve_buscar_um_tipo_pelo_id() throws Exception {
+  void deve_buscar_um_tipo_pelo_id() throws Exception {
     // Arrange
     String nome = "Fire";
     Tipo tipo = new Tipo(nome);
@@ -94,7 +94,7 @@ public class TipoControllerTest {
   }
 
   @Test
-  public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
+  void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
     // Arrange
     String eletrico = "eletrico";
     String agua = "agua";
@@ -119,7 +119,7 @@ public class TipoControllerTest {
   }
 
   @Test
-  public void deve_deletar_um_tipo_pelo_id() throws Exception {
+  void deve_deletar_um_tipo_pelo_id() throws Exception {
     // Arrange
     int quantidadeEsperada = 2;
     String eletrico = "Eletrico";
@@ -147,7 +147,7 @@ public class TipoControllerTest {
   }
 
   @Test
-  public void deve_atualizar_um_tipo() throws Exception {
+  void deve_atualizar_um_tipo() throws Exception {
     //Arrange
     String nomeAlterado = "Charmander";
     String nome = "Fire";

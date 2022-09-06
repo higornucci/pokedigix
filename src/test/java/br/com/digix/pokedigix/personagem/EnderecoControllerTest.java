@@ -4,10 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
-
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.utils.JsonUtil;
+import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 )
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class EnderecoControllerTest {
+class EnderecoControllerTest {
 
   @Autowired
   private MockMvc mvc;
@@ -44,7 +43,7 @@ public class EnderecoControllerTest {
   }
 
   @Test
-  public void deve_adicionar_um_endereco() throws IOException, Exception {
+  void deve_adicionar_um_endereco() throws IOException, Exception {
     int quantidadeEsperada = 1;
     String cidadeEsperada = "Pallet";
     String regiaoEsperada = "Kanto";

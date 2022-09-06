@@ -4,6 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.com.digix.pokedigix.PokedigixApplication;
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
+import br.com.digix.pokedigix.utils.JsonUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,17 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import br.com.digix.pokedigix.PokedigixApplication;
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.utils.JsonUtil;
-
 @SpringBootTest(
-  webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class
+  webEnvironment = WebEnvironment.RANDOM_PORT,
+  classes = PokedigixApplication.class
 )
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class AtaqueControllerTest {
+class AtaqueControllerTest {
 
   @Autowired
   private MockMvc mvc;
@@ -39,12 +39,12 @@ public class AtaqueControllerTest {
   @BeforeEach
   @AfterEach
   public void resetDb() {
-	ataqueRepository.deleteAll();
+    ataqueRepository.deleteAll();
     tipoRepository.deleteAll();
   }
 
   @Test
-  public void deve_adicionar_um_ataque() throws Exception {
+  void deve_adicionar_um_ataque() throws Exception {
     int quantidadeEsperada = 1;
     String nomeDoTipo = "Watter";
     Tipo tipo = new Tipo(nomeDoTipo);
@@ -65,7 +65,8 @@ public class AtaqueControllerTest {
       .perform(
         post("/api/v1/ataques/")
           .contentType(MediaType.APPLICATION_JSON)
-          .content(JsonUtil.toJson(ataqueRequestDTO)))
+          .content(JsonUtil.toJson(ataqueRequestDTO))
+      )
       .andExpect(status().isCreated());
 
     // Asserts
@@ -75,6 +76,8 @@ public class AtaqueControllerTest {
       .getExactSizeIfKnown();
 
     assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
-    assertThat(ataquesEncontrados).extracting(Ataque::getNome).containsOnly(nomeDoAtaque);
+    assertThat(ataquesEncontrados)
+      .extracting(Ataque::getNome)
+      .containsOnly(nomeDoAtaque);
   }
 }
