@@ -83,7 +83,7 @@ public class TreinadorControllerTest {
         PokemonResponseDTO[] pokemonsRetornadDtos = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),
                 PokemonResponseDTO[].class);
 
-        assertThat(pokemonsRetornadDtos.length).isEqualTo(quantidadeEsperada);
+        assertThat(pokemonsRetornadDtos).hasSize(quantidadeEsperada);
         assertThat(pokemonsRetornadDtos).extracting("nome").contains(pokemon.getNome());
     }
 }
