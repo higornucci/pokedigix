@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.tipo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -62,14 +63,18 @@ public class TipoController {
     @ApiResponse(responseCode = "200")
     @GetMapping(path = "/{id}")
     public ResponseEntity<TipoResponseDTO> buscarPorId(@PathVariable Long id) {
-        Tipo tipo = tipoRepository.findById(id).get();
+        Tipo tipo = new Tipo();
+        Optional<Tipo> value = tipoRepository.findById(id);
+        if(value.isPresent()) {
+            tipo = value.get();
+        }
         return ResponseEntity.ok(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
     }
 
     @Operation(summary = "Deletar um Tipo pelo seu id")
     @ApiResponse(responseCode = "204")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> removerTipoPorId(@PathVariable Long id) {
+    public ResponseEntity<Void> removerTipoPorId(@PathVariable Long id) {
         tipoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -78,7 +83,7 @@ public class TipoController {
     @ApiResponse(responseCode = "204")
     @DeleteMapping
     @Transactional
-    public ResponseEntity<?> removerTipoPorNome(@RequestParam(required = true) String termo) {
+    public ResponseEntity<Void> removerTipoPorNome(@RequestParam(required = true) String termo) {
         tipoRepository.deleteByNomeContaining(termo);
         return ResponseEntity.noContent().build();
     }
@@ -88,7 +93,11 @@ public class TipoController {
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<TipoResponseDTO> alterarTipo(@RequestBody TipoRequestDTO tipoRequestDTO,
             @PathVariable Long id) {
-        Tipo tipoParaAlterar = tipoRepository.findById(id).get();
+        Tipo tipoParaAlterar = new Tipo();
+        Optional<Tipo> value = tipoRepository.findById(id);
+        if(value.isPresent()) {
+            tipoParaAlterar = value.get();
+        }
         tipoParaAlterar.setNome(tipoRequestDTO.getNome());
         tipoRepository.save(tipoParaAlterar);
         return ResponseEntity.ok(new TipoResponseDTO(tipoParaAlterar.getId(), tipoParaAlterar.getNome()));

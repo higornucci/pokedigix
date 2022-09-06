@@ -122,7 +122,7 @@ public class AtaqueController {
   @Operation(summary = "Deletar um Ataque pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerAtaqueId(@PathVariable Long id) {
+  public ResponseEntity<Void> removerAtaqueId(@PathVariable Long id) {
       ataqueRepository.deleteById(id);
       return ResponseEntity.noContent().build();
   }
