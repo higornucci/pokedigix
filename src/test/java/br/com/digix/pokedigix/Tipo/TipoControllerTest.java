@@ -27,7 +27,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class TipoControllerTest {
+class TipoControllerTest {
 
         @Autowired
         private MockMvc mvc;
@@ -42,7 +42,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_adicionar_um_tipo() throws Exception {
+        void deve_adicionar_um_tipo() throws Exception {
                 String nomeEsperado = "Fire";
                 int quantidadeEsperada = 1;
                 TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
@@ -63,7 +63,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_buscar_um_tipo_pelo_id() throws Exception {
+        void deve_buscar_um_tipo_pelo_id() throws Exception {
                 // Arrange
                 String nome = "Fire";
                 Tipo tipo = new Tipo(nome);
@@ -83,7 +83,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_buscar_um_tipo_pelo_nome() throws Exception {
+        void deve_buscar_um_tipo_pelo_nome() throws Exception {
                 // Arrange
                 int quantidadeEsperada = 1;
                 String nome = "Fire";
@@ -105,7 +105,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
+        void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
                 // Arrange
                 int quantidadeEsperada = 3;
                 String eletrico = "eletrico";
@@ -128,7 +128,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_deletar_um_tipo_pelo_id() throws Exception {
+        void deve_deletar_um_tipo_pelo_id() throws Exception {
                 // Arrange
                 int quantidadeEsperada = 2;
                 String eletrico = "Eletrico";
@@ -155,7 +155,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_deletar_um_tipo_pelo_nome() throws Exception {
+        void deve_deletar_um_tipo_pelo_nome() throws Exception {
                 // Arrange
                 int quantidadeEsperada = 2;
                 String eletrico = "Eletrico";
@@ -182,7 +182,7 @@ public class TipoControllerTest {
         }
 
         @Test
-        public void deve_alterar_um_tipo() throws Exception {
+        void deve_alterar_um_tipo() throws Exception {
                 // Arrange
                 String eletrico = "Eletrico";
                 Tipo tipoEletrico = new Tipo(eletrico);
