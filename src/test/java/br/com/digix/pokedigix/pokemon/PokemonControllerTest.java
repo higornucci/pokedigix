@@ -3,6 +3,8 @@ package br.com.digix.pokedigix.pokemon;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -37,6 +39,14 @@ public class PokemonControllerTest {
 
 	@Autowired
 	private TipoRepository tipoRepository;
+
+	@BeforeEach
+	@AfterEach
+	public void reset2Db() {
+		pokemonRepository.deleteAll();
+		ataqueRepository.deleteAll();
+		tipoRepository.deleteAll();
+	}
 
 	@Test
 	public void deve_buscar_todos_os_pokemons() throws Exception {

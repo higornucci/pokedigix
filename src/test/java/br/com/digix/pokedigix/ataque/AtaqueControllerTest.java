@@ -1,8 +1,11 @@
 package br.com.digix.pokedigix.ataque;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +14,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.tipo.Tipo;
@@ -75,4 +80,37 @@ public class AtaqueControllerTest {
 
 
     }
+
+    @Test
+	public void deve_atualizar_o_Ataque() throws Exception {
+        Tipo tipo = new Tipo("eletrico");
+		tipoRepository.save(tipo);
+        String nome = "eletro pau";
+		int forca = 90;
+		int acuracia = 100;
+		int pontosDePoder = 80;
+        Categoria categoria = Categoria.ESPECIAL;
+        String descricao = "Tomale choque!!!";
+        Ataque ataque = new AtaqueBuilder().comTipo(tipo).comNome(nome).construir();
+        ataqueRepository.save(ataque);
+
+		String novoAtaque = "Choque do trovão";
+		AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO(
+            forca, acuracia, pontosDePoder, tipo.getId(), categoria, novoAtaque, descricao);
+
+		String url = "/api/v1/ataques/" + ataque.getId();
+
+		 MvcResult resultado = mvc
+				.perform(put(url)
+						.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+						.content(JsonUtil.toJson(ataqueRequestDTO)))
+				.andReturn();
+
+		int status = resultado.getResponse().getStatus();
+		assertEquals(HttpStatus.OK.value(), status);
+
+		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+		assertThat(ataquesEncontrados).extracting(Ataque::getNome)
+				.containsOnly(novoAtaque);
+	}
 }

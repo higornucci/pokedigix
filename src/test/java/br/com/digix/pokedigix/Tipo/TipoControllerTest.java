@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -34,6 +35,10 @@ public class TipoControllerTest {
         @Autowired
         private TipoRepository tipoRepository;
 
+        @BeforeEach
+        public void reset2Db() {
+                tipoRepository.deleteAll();
+        }
         @AfterEach
         public void resetDb() {
                 tipoRepository.deleteAll();
@@ -103,7 +108,6 @@ public class TipoControllerTest {
 
         @Test
         public void deve_deletar_um_tipo_pelo_id() throws Exception {
-
                 int quantidadeEsperada = 2;
                 String eletrico = "Eletrico";
                 String agua = "Agua";

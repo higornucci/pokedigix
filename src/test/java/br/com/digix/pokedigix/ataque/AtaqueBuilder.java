@@ -53,5 +53,10 @@ public class AtaqueBuilder {
     public AtaqueBuilder comCategoria(Categoria categoria) {
         this.categoria = categoria;
         return this;
-    } 
+    }
+
+	public AtaqueBuilder comNome(String nome) {
+        this.nome = nome;
+		return this;
+	} 
 }

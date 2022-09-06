@@ -2,7 +2,6 @@ package br.com.digix.pokedigix.pokemon;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,7 +38,7 @@ public class Pokemon {
   private double peso;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 10, nullable = true) // permiti que possa não receber genero
+  @Column(length = 10, nullable = true)
   private Genero genero;
 
   @Column(nullable = false)
