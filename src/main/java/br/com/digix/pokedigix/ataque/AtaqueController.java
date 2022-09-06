@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.ataque;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +37,12 @@ public class AtaqueController {
   )
   @GetMapping(path = "/{id}")
   public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
-    Ataque ataque = ataqueRepository.findById(id).get();
-
+    Ataque ataque = new Ataque();
+   Optional<Ataque> value = ataqueRepository.findById(id);
+   
+if (value.isPresent()) {
+    ataque = value.get();
+}
     TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
       ataque.getTipo().getId(),
       ataque.getTipo().getNome()
