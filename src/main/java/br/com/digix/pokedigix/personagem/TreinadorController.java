@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.personagem;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -29,140 +30,235 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@RequestMapping(path = { "/api/v1/treinadores" }, produces = { "application/json" })
+@RequestMapping(
+  path = { "/api/v1/treinadores" },
+  produces = { "application/json" }
+)
 public class TreinadorController {
-	@Autowired
-	private TreinadorRepository treinadorRepository;
 
-	@Autowired
-	private PokemonRepository pokemonRepository;
+  @Autowired
+  private TreinadorRepository treinadorRepository;
 
-	@Autowired
-	private EnderecoRepository enderecoRepository;
+  @Autowired
+  private PokemonRepository pokemonRepository;
 
-	@Operation(summary = "Buscar um treinador pelo seu id")
-	@ApiResponse(responseCode = "200", description = "Retorna o treinador solicitado")
-	@GetMapping(path = "/{id}")
-	public ResponseEntity<TreinadorResponseDTO> buscarPorId(@PathVariable Long id) {
-		Treinador treinador = treinadorRepository.findById(id).get();
-		return ResponseEntity.ok(new TreinadorResponseDTO(
-				treinador.getId(), treinador.getEndereco(),
-				treinador.getNome(), treinador.getInsignias(),
-				treinador.getNivel(),
-				treinador.getDinheiro()));
-	}
+  @Autowired
+  private EnderecoRepository enderecoRepository;
 
-	@Operation(summary = "Buscar pokemons do treinador pelo id do treinador")
-	@ApiResponse(responseCode = "200", description = "Retorna uma lista contendo os pokemons do treinador")
-	@GetMapping(path = "/{id}/pokemons")
-	public ResponseEntity<Collection<PokemonResponseDTO>> buscarPorPokemons(@PathVariable Long id) {
-		Treinador treinador = treinadorRepository.findById(id).get();
+  @Operation(summary = "Buscar um treinador pelo seu id")
+  @ApiResponse(
+    responseCode = "200",
+    description = "Retorna o treinador solicitado"
+  )
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<TreinadorResponseDTO> buscarPorId(
+    @PathVariable Long id
+  ) {
+    Treinador treinador = new Treinador();
+    Optional<Treinador> valorTreinador = treinadorRepository.findById(id);
+    if (valorTreinador.isPresent()) {
+      treinador = valorTreinador.get();
+    }
+    return ResponseEntity.ok(
+      new TreinadorResponseDTO(
+        treinador.getId(),
+        treinador.getEndereco(),
+        treinador.getNome(),
+        treinador.getInsignias(),
+        treinador.getNivel(),
+        treinador.getDinheiro()
+      )
+    );
+  }
 
-		Collection<PokemonResponseDTO> pokemonsDTO = new ArrayList<PokemonResponseDTO>();
-		for (Pokemon pokemon : treinador.getPokemons()) {
-			Collection<AtaqueResponseDTO> ataquesDTO = new ArrayList<>();
-			for (Ataque ataque : pokemon.getAtaques()) {
-				ataquesDTO.add(
-						new AtaqueResponseDTO(
-								ataque.getId(),
-								ataque.getForca(),
-								ataque.getAcuracia(),
-								ataque.getPontosDePoder(),
-								ataque.getCategoria(),
-								ataque.getNome(),
-								ataque.getDescricao(),
-								new TipoResponseDTO(ataque.getTipo().getId(), ataque.getTipo().getNome())));
-			}
+  @Operation(summary = "Buscar pokemons do treinador pelo id do treinador")
+  @ApiResponse(
+    responseCode = "200",
+    description = "Retorna uma lista contendo os pokemons do treinador"
+  )
+  @GetMapping(path = "/{id}/pokemons")
+  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPorPokemons(
+    @PathVariable Long id
+  ) {
+    Treinador treinador = new Treinador();
+    Optional<Treinador> valorTreinador = treinadorRepository.findById(id);
+    if (valorTreinador.isPresent()) {
+      treinador = valorTreinador.get();
+    }
 
-			Collection<TipoResponseDTO> tiposDTO = new ArrayList<>();
-			for (Tipo tipo : pokemon.getTipos()) {
-				tiposDTO.add(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
-			}
+    Collection<PokemonResponseDTO> pokemonsDTO = new ArrayList<PokemonResponseDTO>();
+    for (Pokemon pokemon : treinador.getPokemons()) {
+      Collection<AtaqueResponseDTO> ataquesDTO = new ArrayList<>();
+      for (Ataque ataque : pokemon.getAtaques()) {
+        ataquesDTO.add(
+          new AtaqueResponseDTO(
+            ataque.getId(),
+            ataque.getForca(),
+            ataque.getAcuracia(),
+            ataque.getPontosDePoder(),
+            ataque.getCategoria(),
+            ataque.getNome(),
+            ataque.getDescricao(),
+            new TipoResponseDTO(
+              ataque.getTipo().getId(),
+              ataque.getTipo().getNome()
+            )
+          )
+        );
+      }
 
-			pokemonsDTO.add(
-					new PokemonResponseDTO(
-							pokemon.getId(),
-							pokemon.getNome(),
-							pokemon.getAltura(),
-							pokemon.getPeso(),
-							pokemon.getGenero(),
-							pokemon.getNivel(),
-							pokemon.getNumeroPokedex(),
-							pokemon.getFelicidade(),
-							ataquesDTO,
-							tiposDTO));
-		}
+      Collection<TipoResponseDTO> tiposDTO = new ArrayList<>();
+      for (Tipo tipo : pokemon.getTipos()) {
+        tiposDTO.add(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+      }
 
-		return ResponseEntity.ok(pokemonsDTO);
-	}
+      pokemonsDTO.add(
+        new PokemonResponseDTO(
+          pokemon.getId(),
+          pokemon.getNome(),
+          pokemon.getAltura(),
+          pokemon.getPeso(),
+          pokemon.getGenero(),
+          pokemon.getNivel(),
+          pokemon.getNumeroPokedex(),
+          pokemon.getFelicidade(),
+          ataquesDTO,
+          tiposDTO
+        )
+      );
+    }
 
-	@Operation(summary = "Atualizar o Treinador")
-	@ApiResponse(responseCode = "200")
-	@PutMapping(path = "/{id}", consumes = "application/json")
-	public ResponseEntity<TreinadorResponseDTO> atualizarTreinador(@RequestBody TreinadorUpdateDTO treinadorRequestDTO,
-			@PathVariable Long id) {
-		Treinador treinador = treinadorRepository.findById(id).get();
-		Endereco endereco = enderecoRepository.findById(treinadorRequestDTO.getEnderecoId()).get();
-		treinador.setNome(treinadorRequestDTO.getNome());
-		treinador.setEndereco(endereco);
-		treinador.setNivel(treinadorRequestDTO.getNivel());
-		treinador.setDinheiro(treinadorRequestDTO.getDinheiro());
-		treinador.setInsignias(treinadorRequestDTO.getInsignias());
+    return ResponseEntity.ok(pokemonsDTO);
+  }
 
-		treinadorRepository.save(treinador);
+  @Operation(summary = "Atualizar o Treinador")
+  @ApiResponse(responseCode = "200")
+  @PutMapping(path = "/{id}", consumes = "application/json")
+  public ResponseEntity<TreinadorResponseDTO> atualizarTreinador(
+    @RequestBody TreinadorUpdateDTO treinadorRequestDTO,
+    @PathVariable Long id
+  ) {
+    Treinador treinador = new Treinador();
+    Optional<Treinador> valorTreinador = treinadorRepository.findById(id);
+    if (valorTreinador.isPresent()) {
+      treinador = valorTreinador.get();
+    }
+    Endereco endereco = new Endereco();
+    Optional<Endereco> valorEndereco = enderecoRepository.findById(
+      treinadorRequestDTO.getEnderecoId()
+    );
+    if (valorEndereco.isPresent()) {
+      endereco = valorEndereco.get();
+    }
+    treinador.setNome(treinadorRequestDTO.getNome());
+    treinador.setEndereco(endereco);
+    treinador.setNivel(treinadorRequestDTO.getNivel());
+    treinador.setDinheiro(treinadorRequestDTO.getDinheiro());
+    treinador.setInsignias(treinadorRequestDTO.getInsignias());
 
-		return ResponseEntity.ok(new TreinadorResponseDTO(
-				treinador.getId(),
-				treinador.getEndereco(),
-				treinador.getNome(),
-				treinador.getInsignias(),
-				treinador.getNivel(),
-				treinador.getDinheiro()));
+    treinadorRepository.save(treinador);
 
-	}
+    return ResponseEntity.ok(
+      new TreinadorResponseDTO(
+        treinador.getId(),
+        treinador.getEndereco(),
+        treinador.getNome(),
+        treinador.getInsignias(),
+        treinador.getNivel(),
+        treinador.getDinheiro()
+      )
+    );
+  }
 
-	@Operation(summary = "Treinador capturar um Pokemon")
-	@ApiResponse(responseCode = "200")
-	@PutMapping(path = "{idTreinador}/pokemons/{idPokemon}/capturar")
-	public ResponseEntity<TreinadorResponseDTO> treinadorCapturarPokemon(@PathVariable Long idTreinador,
-			@PathVariable Long idPokemon) throws LimiteDePokemonException {
-		Treinador treinador = treinadorRepository.findById(idTreinador).get();
-		Pokemon pokemon = pokemonRepository.findById(idPokemon).get();
-		treinador.capturar(pokemon);
-		treinadorRepository.save(treinador);
-		return ResponseEntity.ok(new TreinadorResponseDTO(treinador.getId(), treinador.getEndereco(),
-				treinador.getNome(), treinador.getInsignias(), treinador.getNivel(), treinador.getDinheiro()));
-	}
+  @Operation(summary = "Treinador capturar um Pokemon")
+  @ApiResponse(responseCode = "200")
+  @PutMapping(path = "{idTreinador}/pokemons/{idPokemon}/capturar")
+  public ResponseEntity<TreinadorResponseDTO> treinadorCapturarPokemon(
+    @PathVariable Long idTreinador,
+    @PathVariable Long idPokemon
+  )
+    throws LimiteDePokemonException {
+    Treinador treinador = new Treinador();
+    Optional<Treinador> valorTreinador = treinadorRepository.findById(idTreinador);
+    if (valorTreinador.isPresent()) {
+      treinador = valorTreinador.get();
+    }
+    Pokemon pokemon = new Pokemon();
+    Optional<Pokemon> valorPokemon = pokemonRepository.findById(idPokemon);
+    if (valorPokemon.isPresent()) {
+      pokemon = valorPokemon.get();
+    }
+    treinador.capturar(pokemon);
+    treinadorRepository.save(treinador);
+    return ResponseEntity.ok(
+      new TreinadorResponseDTO(
+        treinador.getId(),
+        treinador.getEndereco(),
+        treinador.getNome(),
+        treinador.getInsignias(),
+        treinador.getNivel(),
+        treinador.getDinheiro()
+      )
+    );
+  }
 
-	@Operation(summary = "Deletar um Treinador pelo seu id")
-	@ApiResponse(responseCode = "204")
-	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<?> removerTreinadorId(@PathVariable Long id) {
-		treinadorRepository.deleteById(id);
-		return ResponseEntity.noContent().build();
-	}
+  @Operation(summary = "Deletar um Treinador pelo seu id")
+  @ApiResponse(responseCode = "204")
+  @DeleteMapping(path = "/{id}")
+  public ResponseEntity<?> removerTreinadorId(@PathVariable Long id) {
+    treinadorRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
+  }
 
-	@Operation(summary = "Deletar um Treinador pelo seu nome parcial ou completo")
-	@ApiResponse(responseCode = "204")
-	@DeleteMapping
-	@Transactional
-	public ResponseEntity<?> removerTreinador(@RequestParam(required = true) String termo) {
-		treinadorRepository.deleteByNomeContaining(termo);
-		return ResponseEntity.noContent().build();
-	}
+  @Operation(summary = "Deletar um Treinador pelo seu nome parcial ou completo")
+  @ApiResponse(responseCode = "204")
+  @DeleteMapping
+  @Transactional
+  public ResponseEntity<Void> removerTreinador(
+    @RequestParam(required = true) String termo
+  ) {
+    treinadorRepository.deleteByNomeContaining(termo);
+    return ResponseEntity.noContent().build();
+  }
 
-	@Operation(summary = "Cadastrar um novo treinador")
-	@ApiResponse(responseCode = "201")
-	@PostMapping(consumes = { "application/json" })
-	public ResponseEntity<TreinadorResponseDTO> cadastrarTreinador(@RequestBody TreinadorRequestDTO novoTreinador)
-			throws LimiteDePokemonException {
-		Endereco endereco = enderecoRepository.findById(novoTreinador.getIdEndereco()).get();
-		Pokemon pokemon = pokemonRepository.findById(novoTreinador.getIdPrimeiroPokemon()).get();
-		Treinador treinador = new Treinador(novoTreinador.getNome(), endereco, pokemon);
-		treinadorRepository.save(treinador);
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(new TreinadorResponseDTO(treinador.getId(), treinador.getEndereco(), treinador.getNome(),
-						treinador.getInsignias(), treinador.getDinheiro(), treinador.getNivel()));
-	}
-
+  @Operation(summary = "Cadastrar um novo treinador")
+  @ApiResponse(responseCode = "201")
+  @PostMapping(consumes = { "application/json" })
+  public ResponseEntity<TreinadorResponseDTO> cadastrarTreinador(
+    @RequestBody TreinadorRequestDTO novoTreinador
+  )
+    throws LimiteDePokemonException {
+    Endereco endereco = new Endereco();
+    Optional<Endereco> valorEndereco = enderecoRepository.findById(
+      novoTreinador.getIdEndereco()
+    );
+    if (valorEndereco.isPresent()) {
+      endereco = valorEndereco.get();
+    }
+    Pokemon pokemon = new Pokemon();
+    Optional<Pokemon> valorPokemon = pokemonRepository.findById(
+      novoTreinador.getIdPrimeiroPokemon()
+    );
+    if (valorPokemon.isPresent()) {
+      pokemon = valorPokemon.get();
+    }
+    Treinador treinador = new Treinador(
+      novoTreinador.getNome(),
+      endereco,
+      pokemon
+    );
+    treinadorRepository.save(treinador);
+    return ResponseEntity
+      .status(HttpStatus.CREATED)
+      .body(
+        new TreinadorResponseDTO(
+          treinador.getId(),
+          treinador.getEndereco(),
+          treinador.getNome(),
+          treinador.getInsignias(),
+          treinador.getDinheiro(),
+          treinador.getNivel()
+        )
+      );
+  }
 }

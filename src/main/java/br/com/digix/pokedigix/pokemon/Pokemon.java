@@ -66,7 +66,7 @@ public class Pokemon {
   @JoinTable(name = "pokemon_ataque", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "ataque_id"))
   private Collection<Ataque> ataques;
 
-  protected Pokemon() {
+  public Pokemon() {
   }
 
   public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
