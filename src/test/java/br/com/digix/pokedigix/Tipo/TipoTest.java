@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class TipoTest {
     @Test
-    public void deve_poder_criar_um_tipo() {
+     void deve_poder_criar_um_tipo() {
 
         String nomeEsperado = "Fantasma";
 
