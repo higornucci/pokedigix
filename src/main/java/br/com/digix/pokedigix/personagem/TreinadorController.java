@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.personagem;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -44,7 +45,12 @@ public class TreinadorController {
 	@ApiResponse(responseCode = "200", description = "Retorna o treinador solicitado")
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<TreinadorResponseDTO> buscarPorId(@PathVariable Long id) {
-		Treinador treinador = treinadorRepository.findById(id).get();
+		
+		Treinador treinador = new Treinador();
+		Optional<Treinador> value = treinadorRepository.findById(id);
+		if (value.isPresent()) {
+		treinador = value.get();
+		}
 		return ResponseEntity.ok(new TreinadorResponseDTO(
 				treinador.getId(), treinador.getEndereco(),
 				treinador.getNome(), treinador.getInsignias(),
