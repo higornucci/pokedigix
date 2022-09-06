@@ -117,7 +117,7 @@ public class PokemonRepositoryTest {
     @Test
     public void pode_nao_ter_genero() throws Exception {
         Genero genero = null;
-        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();//Flávio
         pokemonRepository.save(pokemon);
 
         Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining("Gastly");
@@ -128,7 +128,7 @@ public class PokemonRepositoryTest {
     @Test
     public void pode_ter_um_genero_indefinido() throws Exception {
         Genero genero = Genero.INDEFINIDO;
-        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir(); //Flávio
         pokemonRepository.save(pokemon);
 
         Pokemon pokemonRetornado = pokemonRepository.findById(pokemon.getId()).get();
