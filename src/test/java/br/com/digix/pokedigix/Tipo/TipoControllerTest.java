@@ -132,6 +132,7 @@ public class TipoControllerTest {
                 .isEqualTo(resultado.getResponse().getStatus());
     }
 
+
     @Test
     public void deve_alterar_um_tipo() throws Exception {
             // Arrange
@@ -153,4 +154,5 @@ public class TipoControllerTest {
             assertEquals(HttpStatus.OK.value(), status);
             assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeNovo);
     }
+
 }
