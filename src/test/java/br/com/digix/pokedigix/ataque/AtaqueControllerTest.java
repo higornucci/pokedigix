@@ -75,24 +75,7 @@ public class AtaqueControllerTest {
         assertThat(ataquesEncontrados)
                 .extracting(Ataque::getNome)
                 .containsOnly(nomeAtaque);
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-            
-                
-
-      
-
-       
-
 
     }
-
+    
 }

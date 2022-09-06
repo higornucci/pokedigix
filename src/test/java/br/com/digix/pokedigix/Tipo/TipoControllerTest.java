@@ -39,6 +39,7 @@ public class TipoControllerTest {
     public void resetDb1() {
         tipoRepository.deleteAll();
     }
+    
     @BeforeEach
     public void resetDb() {
         tipoRepository.deleteAll();
