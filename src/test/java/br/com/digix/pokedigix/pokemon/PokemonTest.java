@@ -147,7 +147,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_felicidade_minima_zero() throws Exception {
+    void deve_ter_felicidade_minima_zero() throws Exception {
         int felicidadeMinima = 0;
 
         Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMinima).construir();
@@ -156,14 +156,14 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ser_pokemon_selvagem() throws Exception {
+    void deve_ser_pokemon_selvagem() throws Exception {
         Pokemon pokemon = new PokemonBuilder().construir();
 
         assertTrue(pokemon.isSelvagem());
     }
 
     @Test
-    public void deve_ser_pokemon_nao_eh_selvagem() throws Exception {
+    void deve_ser_pokemon_nao_eh_selvagem() throws Exception {
         Pokemon pokemon = new PokemonBuilder().construir();
         Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).construir();
 
@@ -171,7 +171,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_felicidade_maxima_cem() throws Exception {
+    void deve_ter_felicidade_maxima_cem() throws Exception {
         int felicidadeMaxima = 100;
 
         Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMaxima).construir();
@@ -180,7 +180,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_deve_ter_felicidade_menor_que_zero() {
+    void nao_deve_ter_felicidade_menor_que_zero() {
         int felicidadeInvalida = -1;
 
         assertThrows(FelicidadeInvalidaException.class, () -> {
