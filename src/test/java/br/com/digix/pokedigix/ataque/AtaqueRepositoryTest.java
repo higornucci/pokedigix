@@ -39,7 +39,7 @@ public class AtaqueRepositoryTest {
     }
 
     @Test
-    public void deve_salvar_um_tipo_para_um_ataque() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+     void deve_salvar_um_tipo_para_um_ataque() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         int forca = 40;
         int acuracia = 100;
         int pontosDePoder = 35;
@@ -58,7 +58,7 @@ public class AtaqueRepositoryTest {
     }
 
     @Test
-    public void deve_um_ataque_pelo_seu_tipo() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+     void deve_um_ataque_pelo_seu_tipo() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         int forca = 40;
         int acuracia = 100;
         int pontosDePoder = 35;

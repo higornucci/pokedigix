@@ -17,7 +17,7 @@ public class TipoRepositoryTest {
     private TipoRepository tipoRepository;
 
     @Test
-    public void deve_salvar_um_tipo() {
+     void deve_salvar_um_tipo() {
         String nomeEsperado = "Fantasma";
         Tipo tipo = new Tipo(nomeEsperado);
 
@@ -27,7 +27,7 @@ public class TipoRepositoryTest {
     }
 
     @Test
-    public void deve_buscar_um_tipo_pelo_nome() {
+     void deve_buscar_um_tipo_pelo_nome() {
         String nome = "Eletrico";
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
@@ -38,7 +38,7 @@ public class TipoRepositoryTest {
     }
 
     @Test
-    public void deve_buscar_um_tipo_pelo_nome_parcial() {
+     void deve_buscar_um_tipo_pelo_nome_parcial() {
         String nome = "Eletrico";
         String nomeParcial = "Ele";
         Tipo tipo = new Tipo(nome);
@@ -50,7 +50,7 @@ public class TipoRepositoryTest {
     }
 
     @Test
-    public void deve_poder_remover_pelo_nome() {
+     void deve_poder_remover_pelo_nome() {
         String fada = "Fada";
         String fantasma = "Fantasma";
         tipoRepository.save(new Tipo(fada));

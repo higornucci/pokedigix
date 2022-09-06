@@ -40,7 +40,7 @@ public class AtaqueControllerTest {
     }
 
     @Test
-    public void deve_adicionar_um_ataque() throws Exception {
+    void deve_adicionar_um_ataque() throws Exception {
         // Arrenge
         int quantidadeEsperada = 1;
         String eletrico = "Eletrico";

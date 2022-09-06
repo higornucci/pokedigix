@@ -16,7 +16,7 @@ import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.personagem.TreinadorBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
-public class PokemonTest {
+ class PokemonTest {
     @Test
      void deve_criar_um_pokemon() throws Exception {
         String nome = "Gastly";

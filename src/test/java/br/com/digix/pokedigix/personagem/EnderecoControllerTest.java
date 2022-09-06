@@ -33,7 +33,7 @@ public class EnderecoControllerTest {
     }
 
     @Test
-    public void deve_atualizar_um_endereco() throws Exception {
+     void deve_atualizar_um_endereco() throws Exception {
         String regiao = "Centro Oeste";
         String regiaoAtualizada = "Sul";
         String cidade = "Campo Grande";
