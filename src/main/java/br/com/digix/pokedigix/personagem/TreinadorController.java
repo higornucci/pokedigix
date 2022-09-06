@@ -1,11 +1,18 @@
 package br.com.digix.pokedigix.personagem;
 
+import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.pokemon.Pokemon;
+import br.com.digix.pokedigix.pokemon.PokemonRepository;
+import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoResponseDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
-import br.com.digix.pokedigix.pokemon.Pokemon;
-import br.com.digix.pokedigix.pokemon.PokemonRepository;
-import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping(
@@ -86,7 +83,7 @@ public class TreinadorController {
       treinador = valorTreinador.get();
     }
 
-    Collection<PokemonResponseDTO> pokemonsDTO = new ArrayList<PokemonResponseDTO>();
+    Collection<PokemonResponseDTO> pokemonsDTO = new ArrayList<>();
     for (Pokemon pokemon : treinador.getPokemons()) {
       Collection<AtaqueResponseDTO> ataquesDTO = new ArrayList<>();
       for (Ataque ataque : pokemon.getAtaques()) {
@@ -179,7 +176,9 @@ public class TreinadorController {
   )
     throws LimiteDePokemonException {
     Treinador treinador = new Treinador();
-    Optional<Treinador> valorTreinador = treinadorRepository.findById(idTreinador);
+    Optional<Treinador> valorTreinador = treinadorRepository.findById(
+      idTreinador
+    );
     if (valorTreinador.isPresent()) {
       treinador = valorTreinador.get();
     }
@@ -205,7 +204,7 @@ public class TreinadorController {
   @Operation(summary = "Deletar um Treinador pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerTreinadorId(@PathVariable Long id) {
+  public ResponseEntity<Void> removerTreinadorId(@PathVariable Long id) {
     treinadorRepository.deleteById(id);
     return ResponseEntity.noContent().build();
   }

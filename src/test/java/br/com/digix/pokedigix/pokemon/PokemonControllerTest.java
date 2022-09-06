@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 )
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class PokemonControllerTest {
+class PokemonControllerTest {
 
   @Autowired
   private MockMvc mvc;
@@ -46,21 +46,15 @@ public class PokemonControllerTest {
   private AtaqueRepository ataqueRepository;
 
   @AfterEach
-  void resetdb2() {
-    pokemonRepository.deleteAll();
-    ataqueRepository.deleteAll();
-    tipoRepository.deleteAll();
-  }
-
   @BeforeEach
-  public void resetDb() {
+  void resetDb() {
     pokemonRepository.deleteAll();
     ataqueRepository.deleteAll();
     tipoRepository.deleteAll();
   }
 
   @Test
-  public void deve_criar_um_pokemon() throws Exception {
+  void deve_criar_um_pokemon() throws Exception {
     String tipao = "Agua";
 
     Tipo tipo = new Tipo(tipao);
@@ -121,7 +115,7 @@ public class PokemonControllerTest {
   }
 
   @Test
-  public void deve_atualizar_um_Pokemon() throws Exception {
+  void deve_atualizar_um_Pokemon() throws Exception {
     //Arrange
     String nomeAlterado = "Eeve";
     String tipao = "Fogo";
