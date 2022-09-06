@@ -2,10 +2,12 @@ package br.com.digix.pokedigix.personagem;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -155,9 +157,19 @@ public class TreinadorController {
 	@ApiResponse(responseCode = "201")
 	@PostMapping(consumes = { "application/json" })
 	public ResponseEntity<TreinadorResponseDTO> cadastrarTreinador(@RequestBody TreinadorRequestDTO novoTreinador)
-			throws LimiteDePokemonException {
-		Endereco endereco = enderecoRepository.findById(novoTreinador.getIdEndereco()).get();
-		Pokemon pokemon = pokemonRepository.findById(novoTreinador.getIdPrimeiroPokemon()).get();
+			throws LimiteDePokemonException, NotFoundException {
+		Optional<Endereco> enderecoOptical = enderecoRepository.findById(novoTreinador.getIdEndereco());
+		if (enderecoOptical.isEmpty()) {
+			throw new NotFoundException();
+		}
+		Endereco endereco = enderecoOptical.get();
+
+		Optional<Pokemon> pokemonOptical = pokemonRepository.findById(novoTreinador.getIdPrimeiroPokemon());
+		if (pokemonOptical.isEmpty()) {
+			throw new NotFoundException();
+		}
+		Pokemon pokemon = pokemonOptical.get();
+
 		Treinador treinador = new Treinador(novoTreinador.getNome(), endereco, pokemon);
 		treinadorRepository.save(treinador);
 		return ResponseEntity.status(HttpStatus.CREATED)
