@@ -83,6 +83,28 @@ public class TipoControllerTest {
         }
 
         @Test
+        public void deve_buscar_um_tipo_pelo_nome() throws Exception {
+                // Arrange
+                int quantidadeEsperada = 1;
+                String nome = "Fire";
+                Tipo tipo = new Tipo(nome);
+                tipoRepository.save(tipo);
+
+                // Action
+                MvcResult mvcResult = mvc.perform(get("/api/v1/tipos?termo=" + tipo.getNome())).andReturn();
+
+                // Assert
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
+
+                String content = mvcResult.getResponse().getContentAsString();
+                TipoResponseDTO[] tiposRetornados = JsonUtil.mapFromJson(content, TipoResponseDTO[].class);
+
+                assertThat(tiposRetornados).hasSize(quantidadeEsperada);
+                assertThat(tiposRetornados).extracting("nome").contains(tipo.getNome());
+        }
+
+        @Test
         public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
                 // Arrange
                 int quantidadeEsperada = 3;
@@ -100,9 +122,8 @@ public class TipoControllerTest {
                 TipoResponseDTO[] tiposRetornados = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),
                                 TipoResponseDTO[].class);
 
-                assertThat(tiposRetornados.length).isEqualTo(quantidadeEsperada);
+                assertThat(tiposRetornados).hasSize(quantidadeEsperada);
                 assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
-
                 assertThat(tiposRetornados).extracting("nome").contains(eletrico);
         }
 
@@ -159,7 +180,6 @@ public class TipoControllerTest {
                 assertThat(HttpStatus.NO_CONTENT.value())
                                 .isEqualTo(resultado.getResponse().getStatus());
         }
-
 
         @Test
         public void deve_alterar_um_tipo() throws Exception {

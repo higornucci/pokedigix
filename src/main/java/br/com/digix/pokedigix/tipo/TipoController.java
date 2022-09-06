@@ -35,13 +35,11 @@ public class TipoController {
         Tipo tipo = new Tipo(novoTipo.getNome());
         tipoRepository.save(tipo);
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+                .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
     }
 
     @Operation(summary = "Buscar todos os tipos sem ordem")
-    @ApiResponse(
-        responseCode = "200", 
-        description = "Lista de tipos cadastrados")
+    @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
     @GetMapping
     public ResponseEntity<Collection<TipoResponseDTO>> buscarTodos(
             @RequestParam(required = false, name = "termo") String nome) {
