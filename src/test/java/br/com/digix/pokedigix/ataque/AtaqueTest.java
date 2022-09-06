@@ -20,7 +20,6 @@ public class AtaqueTest {
         Tipo tipoEsperado = new Tipo("Normal");
 
         Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
-
         assertEquals(forca, ataque.getForca());
         assertEquals(acuracia, ataque.getAcuracia());
         assertEquals(pontosDePoder, ataque.getPontosDePoder());

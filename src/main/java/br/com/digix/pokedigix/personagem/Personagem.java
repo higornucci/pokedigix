@@ -23,7 +23,7 @@ public abstract class Personagem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
-    private String nome;
+    protected String nome;
    
     @ManyToOne
     private Endereco endereco;
