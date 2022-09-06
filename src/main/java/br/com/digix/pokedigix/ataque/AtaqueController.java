@@ -68,7 +68,11 @@ public class AtaqueController {
     @RequestBody AtaqueRequestDTO novoAtaque
   )
     throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-    Tipo tipo = tipoRepository.findById(novoAtaque.getTipoId()).get();
+    Tipo tipo = new Tipo();
+    Optional<Tipo> value = tipoRepository.findById(novoAtaque.getTipoId());
+    if (value.isPresent()) {
+      tipo = value.get();
+    }
     Ataque ataque = new Ataque(
       novoAtaque.getForca(),
       novoAtaque.getAcuracia(),
