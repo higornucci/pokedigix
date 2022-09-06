@@ -52,6 +52,7 @@ public class EnderecoControllerTest {
         assertThat(enderecosRetornadosDTO).extracting("cidade").contains(cidade);
     }
 
+    
     @Test
     public void deve_buscar_pelo_nome_da_regiao() throws Exception{
         String regiao = "Kanto";
@@ -62,10 +63,15 @@ public class EnderecoControllerTest {
         MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?" + endereco.getId())).andReturn();
 
         //Assertions
-        EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+        EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
+            .mapFromJson(resultado.getResponse()    
+                .getContentAsString(), EnderecoResponseDTO[].class);
 
-        assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
-        assertThat(enderecosRetornadosDTO).extracting("cidade").contains(regiao);
+        assertThat(HttpStatus.OK.value())
+            .isEqualTo(resultado.getResponse().getStatus());
+        
+            assertThat(enderecosRetornadosDTO)
+            .extracting("cidade").contains(regiao);
     }
 
 }
