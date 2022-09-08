@@ -29,7 +29,7 @@ public abstract class Personagem {
     private Endereco endereco;
   
 
-    @OneToMany
+    @OneToMany(mappedBy = "treinador")
     protected Collection<Pokemon> pokemons;
 
     protected Personagem() {}

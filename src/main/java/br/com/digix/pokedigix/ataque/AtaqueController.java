@@ -127,7 +127,7 @@ public class AtaqueController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<Void> removerAtaqueId(@PathVariable Long id) {
-    ataqueRepository.deleteById(id);
-    return ResponseEntity.noContent().build();
+      ataqueRepository.deleteById(id);
+      return ResponseEntity.noContent().build();
   }
 }

@@ -7,30 +7,31 @@ import br.com.digix.pokedigix.pokemon.NivelPokemonInvalidoException;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonBuilder;
 
-public class TreinadorBuilder {
-
+public class LiderBuilder {
     private String nome;
     private Endereco endereco;
     private Pokemon pokemon;
+    private Insignia insignia;
 
-    public TreinadorBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
+    
+
+    public LiderBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
         this.nome = "Ash";
         this.endereco = new EnderecoBuilder().construir();
         this.pokemon = new PokemonBuilder().construir();
+        this.insignia = Insignia.ARCO_IRIS;
     }
 
-    public Treinador construir() throws LimiteDePokemonException {
-        return new Treinador(nome, endereco, pokemon);
+
+
+    public Lider construir() {
+        return new Lider(nome, endereco, pokemon, insignia);
     }
 
-    public TreinadorBuilder comPokemonInicial(Pokemon pokemonInicial) {
-        this.pokemon = pokemonInicial;
+    public LiderBuilder comInsignia(Insignia insignia) {
+        this.insignia = insignia;
         return this;
     }
-
-    public TreinadorBuilder comEndereco(Endereco endereco) {
-        this.endereco = endereco;
-        return this;
-    }
-
+    
+    
 }

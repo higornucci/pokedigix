@@ -31,27 +31,23 @@ public class TipoController {
   @Autowired
   private TipoRepository tipoRepository;
 
-  @Operation(
-    summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques"
-  )
+  @Operation(summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
   public ResponseEntity<TipoResponseDTO> criarTipo(
-    @RequestBody TipoRequestDTO novoTipo
-  ) {
+      @RequestBody TipoRequestDTO novoTipo) {
     Tipo tipo = new Tipo(novoTipo.getNome());
     tipoRepository.save(tipo);
     return ResponseEntity
-      .status(HttpStatus.CREATED)
-      .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+        .status(HttpStatus.CREATED)
+        .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
   }
 
   @Operation(summary = "Buscar todos os tipos sem ordem")
   @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
   @GetMapping
   public ResponseEntity<Collection<TipoResponseDTO>> buscarTodos(
-    @RequestParam(required = false, name = "termo") String nome
-  ) {
+      @RequestParam(required = false, name = "termo") String nome) {
     Iterable<Tipo> tipos;
     if (nome != null) {
       tipos = tipoRepository.findByNomeContaining(nome);

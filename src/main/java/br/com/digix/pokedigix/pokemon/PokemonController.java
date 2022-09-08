@@ -152,6 +152,7 @@ public class PokemonController {
       LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
+
     for (Long ataqueId : pokemonAtt.getAtaquesIds()) {
       Optional<Ataque> ataqueOptional = ataqueRepository.findById(ataqueId);
       if (ataqueOptional.isEmpty()) {
@@ -160,6 +161,7 @@ public class PokemonController {
       Ataque ataque = ataqueOptional.get();
       ataques.add(ataque);
     }
+
     for (Long tipoId : pokemonAtt.getTiposIds()) {
       Optional<Tipo> tipoOptional = tipoRepository.findById(tipoId);
       if (tipoOptional.isEmpty()) {
@@ -234,7 +236,7 @@ public class PokemonController {
   @GetMapping(path = "/tipo/{id}")
   public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloTipo(
     @PathVariable Long id
-  ) {
+    ) {
     Iterable<Pokemon> pokemons = pokemonRepository.buscarPorTipo(id);
 
     Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();

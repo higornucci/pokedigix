@@ -1,5 +1,11 @@
 package br.com.digix.pokedigix.personagem;
 
+import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 <<<<<<< HEAD
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+<<<<<<< HEAD
 <<<<<<< HEAD
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
@@ -87,32 +94,67 @@ class EnderecoControllerTest {
     
 =======
 import org.springframework.http.MediaType;
+=======
+>>>>>>> dev
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import org.springframework.http.MediaType;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(
-  webEnvironment = WebEnvironment.RANDOM_PORT,
-  classes = PokedigixApplication.class
-)
+import java.io.IOException;
+
+import br.com.digix.pokedigix.PokedigixApplication;
+import br.com.digix.pokedigix.utils.JsonUtil;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-class EnderecoControllerTest {
+public class EnderecoControllerTest {
+    @Autowired
+    private MockMvc mvc;
+    
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+    
+    @AfterEach
+    public void resetDb() {
+        enderecoRepository.deleteAll();
+    }
+    @Test
+    public void deve_excluir_um_endereco_pelo_id() throws Exception {
+        // Teste do código Do Enzão
+        int quantidadeEsperada = 0;
+        
+        Endereco endereco = new EnderecoBuilder().construir();
+        enderecoRepository.save(endereco);
 
-  @Autowired
-  private MockMvc mvc;
+        String url = "/api/v1/enderecos/" + endereco.getId();
+        MvcResult resultado = mvc.perform(delete(url)).andReturn();
 
-  @Autowired
-  private EnderecoRepository enderecoRepository;
+        Iterable<Endereco> enderecosEncontrados = enderecoRepository.findAll();
+        long quantidadeEncontrada = enderecosEncontrados.spliterator().getExactSizeIfKnown();
 
-  @AfterEach
-  public void resetDb1() {
-    enderecoRepository.deleteAll();
-  }
+        assertEquals(quantidadeEsperada, quantidadeEncontrada);
+    }
+    @Test
+    public void deve_cadastrar_um_novo_endereco() throws Exception {
+        int quantidadeEsperada = 1;
+        Endereco endereco = new EnderecoBuilder().construir();
+        EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO(endereco.getRegiao(), endereco.getCidade());
+        
+        mvc.perform(post("/api/v1/enderecos/")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(JsonUtil.toJson(enderecoRequestDTO)))
+        .andExpect(status().isCreated());
 
-  @BeforeEach
-  public void resetDb() {
-    enderecoRepository.deleteAll();
-  }
+        Iterable<Endereco> buscaEndereco = enderecoRepository.findAll();
+        long quantidadeEncontrada = buscaEndereco.spliterator().getExactSizeIfKnown();
 
+        assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+        assertThat(buscaEndereco).extracting(Endereco::getCidade).containsOnly(endereco.getCidade());
+
+    }
   @Test
   void deve_adicionar_um_endereco() throws IOException, Exception {
     int quantidadeEsperada = 1;

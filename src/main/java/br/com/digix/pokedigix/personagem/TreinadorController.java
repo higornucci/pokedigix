@@ -28,20 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
 @RestController
-@RequestMapping(
-  path = { "/api/v1/treinadores" },
-  produces = { "application/json" }
-)
+@RequestMapping(path = { "/api/v1/treinadores" }, produces = { "application/json" })
 public class TreinadorController {
 
-  @Autowired
-  private TreinadorRepository treinadorRepository;
+	@Autowired
+	private TreinadorRepository treinadorRepository;
 
-  @Autowired
-  private PokemonRepository pokemonRepository;
+	@Autowired
+	private PokemonRepository pokemonRepository;
 
-  @Autowired
-  private EnderecoRepository enderecoRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	@Operation(summary = "Buscar um treinador pelo seu id")
 	@ApiResponse(responseCode = "200", description = "Retorna o treinador solicitado")
@@ -85,29 +82,27 @@ public class TreinadorController {
 								new TipoResponseDTO(ataque.getTipo().getId(), ataque.getTipo().getNome())));
 			}
 
-      Collection<TipoResponseDTO> tiposDTO = new ArrayList<>();
-      for (Tipo tipo : pokemon.getTipos()) {
-        tiposDTO.add(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
-      }
+			Collection<TipoResponseDTO> tiposDTO = new ArrayList<>();
+			for (Tipo tipo : pokemon.getTipos()) {
+				tiposDTO.add(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+			}
 
-      pokemonsDTO.add(
-        new PokemonResponseDTO(
-          pokemon.getId(),
-          pokemon.getNome(),
-          pokemon.getAltura(),
-          pokemon.getPeso(),
-          pokemon.getGenero(),
-          pokemon.getNivel(),
-          pokemon.getNumeroPokedex(),
-          pokemon.getFelicidade(),
-          ataquesDTO,
-          tiposDTO
-        )
-      );
-    }
+			pokemonsDTO.add(
+					new PokemonResponseDTO(
+							pokemon.getId(),
+							pokemon.getNome(),
+							pokemon.getAltura(),
+							pokemon.getPeso(),
+							pokemon.getGenero(),
+							pokemon.getNivel(),
+							pokemon.getNumeroPokedex(),
+							pokemon.getFelicidade(),
+							ataquesDTO,
+							tiposDTO));
+		}
 
-    return ResponseEntity.ok(pokemonsDTO);
-  }
+		return ResponseEntity.ok(pokemonsDTO);
+	}
 
 	@Operation(summary = "Atualizar o Treinador")
 	@ApiResponse(responseCode = "200")
@@ -131,7 +126,7 @@ public class TreinadorController {
 		treinador.setDinheiro(treinadorRequestDTO.getDinheiro());
 		treinador.setInsignias(treinadorRequestDTO.getInsignias());
 
-    treinadorRepository.save(treinador);
+		treinadorRepository.save(treinador);
 
     return ResponseEntity.ok(
       new TreinadorResponseDTO(
@@ -166,24 +161,22 @@ public class TreinadorController {
 				treinador.getNome(), treinador.getInsignias(), treinador.getNivel(), treinador.getDinheiro()));
 	}
 
-  @Operation(summary = "Deletar um Treinador pelo seu id")
-  @ApiResponse(responseCode = "204")
-  @DeleteMapping(path = "/{id}")
-  public ResponseEntity<Void> removerTreinadorId(@PathVariable Long id) {
-    treinadorRepository.deleteById(id);
-    return ResponseEntity.noContent().build();
-  }
+	@Operation(summary = "Deletar um Treinador pelo seu id")
+	@ApiResponse(responseCode = "204")
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Void> removerTreinadorId(@PathVariable Long id) {
+		treinadorRepository.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
 
-  @Operation(summary = "Deletar um Treinador pelo seu nome parcial ou completo")
-  @ApiResponse(responseCode = "204")
-  @DeleteMapping
-  @Transactional
-  public ResponseEntity<Void> removerTreinador(
-    @RequestParam(required = true) String termo
-  ) {
-    treinadorRepository.deleteByNomeContaining(termo);
-    return ResponseEntity.noContent().build();
-  }
+	@Operation(summary = "Deletar um Treinador pelo seu nome parcial ou completo")
+	@ApiResponse(responseCode = "204")
+	@DeleteMapping
+	@Transactional
+	public ResponseEntity<Void> removerTreinador(@RequestParam(required = true) String termo) {
+		treinadorRepository.deleteByNomeContaining(termo);
+		return ResponseEntity.noContent().build();
+	}
 
 	@Operation(summary = "Cadastrar um novo treinador")
 	@ApiResponse(responseCode = "201")
