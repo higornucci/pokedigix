@@ -1,10 +1,17 @@
 package br.com.digix.pokedigix.pokemon;
 
+import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueRepository;
+import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
+import br.com.digix.pokedigix.tipo.TipoResponseDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.Optional;
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.ataque.AtaqueRepository;
-import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 @RestController
-@RequestMapping(path = { "/api/v1/pokemons" }, produces = { "application/json" })
+@RequestMapping(
+  path = { "/api/v1/pokemons" },
+  produces = { "application/json" }
+)
 public class PokemonController {
 
   @Autowired
@@ -43,7 +44,7 @@ public class PokemonController {
   @Operation(summary = "Deletar um Pokemon pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerPokemonId(@PathVariable Long id) {
+  public ResponseEntity<Void> removerPokemonId(@PathVariable Long id) {
     pokemonRepository.deleteById(id);
     return ResponseEntity.noContent().build();
   }
@@ -52,9 +53,9 @@ public class PokemonController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping
   @Transactional
-
-  public ResponseEntity<?> removerPokemon(@RequestParam(required = true) String termo) {
-
+  public ResponseEntity<Void> removerPokemon(
+    @RequestParam(required = true) String termo
+  ) {
     pokemonRepository.deleteByNomeContaining(termo);
     return ResponseEntity.noContent().build();
   }
@@ -63,108 +64,139 @@ public class PokemonController {
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
   public ResponseEntity<PokemonResponseDTO> criarPokemon(
-      @RequestBody PokemonRequestDTO novoPokemon)
-      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
-      LimiteDeAtaquePokemonException {
+    @RequestBody PokemonRequestDTO novoPokemon
+  )
+    throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : novoPokemon.getAtaquesIds()) {
-      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      Ataque ataque = new Ataque();
+      Optional<Ataque> value = ataqueRepository.findById(ataqueId);
+      if (value.isPresent()) {
+        ataque = value.get();
+      }
       ataques.add(ataque);
     }
     for (Long tipoId : novoPokemon.getTiposIds()) {
-      Tipo tipo = tipoRepository.findById(tipoId).get();
+      Tipo tipo = new Tipo();
+      Optional<Tipo> value = tipoRepository.findById(tipoId);
+      if (value.isPresent()) {
+        tipo = value.get();
+      }
       tipos.add(tipo);
     }
     Pokemon pokemon = new Pokemon(
-        novoPokemon.getNome(),
-        novoPokemon.getAltura(),
-        novoPokemon.getPeso(),
-        novoPokemon.getGenero(),
-        novoPokemon.getNivel(),
-        novoPokemon.getNumeroPokedex(),
-        novoPokemon.getFelicidade(),
-        tipos,
-        ataques);
+      novoPokemon.getNome(),
+      novoPokemon.getAltura(),
+      novoPokemon.getPeso(),
+      novoPokemon.getGenero(),
+      novoPokemon.getNivel(),
+      novoPokemon.getNumeroPokedex(),
+      novoPokemon.getFelicidade(),
+      tipos,
+      ataques
+    );
     pokemonRepository.save(pokemon);
     Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
     for (Ataque ataque : ataques) {
       AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
-          ataque.getId(),
-          ataque.getForca(),
-          ataque.getAcuracia(),
-          ataque.getPontosDePoder(),
-          ataque.getCategoria(),
-          ataque.getNome(),
-          ataque.getDescricao(),
-          new TipoResponseDTO(
-              ataque.getTipo().getId(),
-              ataque.getTipo().getNome()));
+        ataque.getId(),
+        ataque.getForca(),
+        ataque.getAcuracia(),
+        ataque.getPontosDePoder(),
+        ataque.getCategoria(),
+        ataque.getNome(),
+        ataque.getDescricao(),
+        new TipoResponseDTO(
+          ataque.getTipo().getId(),
+          ataque.getTipo().getNome()
+        )
+      );
       ataquesDTOs.add(ataqueDTO);
     }
     Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
     for (Tipo tipo : tipos) {
-      TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+      TipoResponseDTO tipoDTO = new TipoResponseDTO(
+        tipo.getId(),
+        tipo.getNome()
+      );
 
       tiposDTOs.add(tipoDTO);
     }
     return ResponseEntity
-        .status(HttpStatus.CREATED)
-        .body(
-            new PokemonResponseDTO(
-                pokemon.getId(),
-                pokemon.getNome(),
-                pokemon.getAltura(),
-                pokemon.getPeso(),
-                pokemon.getGenero(),
-                pokemon.getNivel(),
-                pokemon.getNumeroPokedex(),
-                pokemon.getFelicidade(),
-                ataquesDTOs,
-                tiposDTOs));
+      .status(HttpStatus.CREATED)
+      .body(
+        new PokemonResponseDTO(
+          pokemon.getId(),
+          pokemon.getNome(),
+          pokemon.getAltura(),
+          pokemon.getPeso(),
+          pokemon.getGenero(),
+          pokemon.getNivel(),
+          pokemon.getNumeroPokedex(),
+          pokemon.getFelicidade(),
+          ataquesDTOs,
+          tiposDTOs
+        )
+      );
   }
 
   @Operation(summary = "Atualizar um pokemon")
   @ApiResponse(responseCode = "200")
   @PutMapping(path = "/{id}", consumes = { "application/json" })
   public ResponseEntity<PokemonResponseDTO> atualizarPokemon(
-      @RequestBody PokemonRequestDTO pokemonAtt,
-      @PathVariable Long id)
-      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
-      LimiteDeAtaquePokemonException {
+    @RequestBody PokemonRequestDTO pokemonAtt,
+    @PathVariable Long id
+  )
+    throws LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : pokemonAtt.getAtaquesIds()) {
-      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      Ataque ataque = new Ataque();
+      Optional<Ataque> value = ataqueRepository.findById(ataqueId);
+      if (value.isPresent()) {
+        ataque = value.get();
+      }
       ataques.add(ataque);
     }
     for (Long tipoId : pokemonAtt.getTiposIds()) {
-      Tipo tipo = tipoRepository.findById(tipoId).get();
+      Tipo tipo = new Tipo();
+      Optional<Tipo> value = tipoRepository.findById(tipoId);
+      if (value.isPresent()) {
+        tipo = value.get();
+      }
       tipos.add(tipo);
     }
     Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
     for (Ataque ataque : ataques) {
       AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
-          ataque.getId(),
-          ataque.getForca(),
-          ataque.getAcuracia(),
-          ataque.getPontosDePoder(),
-          ataque.getCategoria(),
-          ataque.getNome(),
-          ataque.getDescricao(),
-          new TipoResponseDTO(
-              ataque.getTipo().getId(),
-              ataque.getTipo().getNome()));
+        ataque.getId(),
+        ataque.getForca(),
+        ataque.getAcuracia(),
+        ataque.getPontosDePoder(),
+        ataque.getCategoria(),
+        ataque.getNome(),
+        ataque.getDescricao(),
+        new TipoResponseDTO(
+          ataque.getTipo().getId(),
+          ataque.getTipo().getNome()
+        )
+      );
       ataquesDTOs.add(ataqueDTO);
     }
     Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
     for (Tipo tipo : tipos) {
       TipoResponseDTO tipoDTO = new TipoResponseDTO(
-          tipo.getId(),
-          tipo.getNome());
+        tipo.getId(),
+        tipo.getNome()
+      );
       tiposDTOs.add(tipoDTO);
     }
-    Pokemon alterarPokemon = pokemonRepository.findById(id).get();
+    Pokemon alterarPokemon = new Pokemon();
+    Optional<Pokemon> value = pokemonRepository.findById(id);
+    if (value.isPresent()) {
+      alterarPokemon = value.get();
+    }
     alterarPokemon.setNome(pokemonAtt.getNome());
     alterarPokemon.setAltura(pokemonAtt.getAltura());
     alterarPokemon.setPeso(pokemonAtt.getPeso());
@@ -175,24 +207,33 @@ public class PokemonController {
     alterarPokemon.setAtaques(ataques);
     alterarPokemon.setTipos(tipos);
 
+    pokemonRepository.save(alterarPokemon);
+
     return ResponseEntity.ok(
-        new PokemonResponseDTO(
-            alterarPokemon.getId(),
-            alterarPokemon.getNome(),
-            alterarPokemon.getAltura(),
-            alterarPokemon.getPeso(),
-            alterarPokemon.getGenero(),
-            alterarPokemon.getNivel(),
-            alterarPokemon.getNumeroPokedex(),
-            alterarPokemon.getFelicidade(),
-            ataquesDTOs,
-            tiposDTOs));
+      new PokemonResponseDTO(
+        alterarPokemon.getId(),
+        alterarPokemon.getNome(),
+        alterarPokemon.getAltura(),
+        alterarPokemon.getPeso(),
+        alterarPokemon.getGenero(),
+        alterarPokemon.getNivel(),
+        alterarPokemon.getNumeroPokedex(),
+        alterarPokemon.getFelicidade(),
+        ataquesDTOs,
+        tiposDTOs
+      )
+    );
   }
 
   @Operation(summary = "Buscar Pokemon pelo seu id do tipo")
-  @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo tipo")
+  @ApiResponse(
+    responseCode = "200",
+    description = "Lista de Pokemons buscada pelo tipo"
+  )
   @GetMapping(path = "/tipo/{id}")
-  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloTipo(@PathVariable Long id) {
+  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloTipo(
+    @PathVariable Long id
+  ) {
     Iterable<Pokemon> pokemons = pokemonRepository.buscarPorTipo(id);
 
     Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
@@ -201,7 +242,10 @@ public class PokemonController {
       Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
       Collection<Tipo> tipos = pokemon.getTipos();
       for (Tipo tipo : tipos) {
-        TipoResponseDTO tiposRetornadosDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+        TipoResponseDTO tiposRetornadosDTO = new TipoResponseDTO(
+          tipo.getId(),
+          tipo.getNome()
+        );
         tiposDTOs.add(tiposRetornadosDTO);
       }
 
@@ -209,31 +253,37 @@ public class PokemonController {
       Collection<Ataque> ataques = pokemon.getAtaques();
 
       for (Ataque ataque : ataques) {
-        AtaqueResponseDTO ataquesRetornadoDTO = new AtaqueResponseDTO(ataque.getId(),
-            ataque.getForca(),
-            ataque.getAcuracia(),
-            ataque.getPontosDePoder(),
-            ataque.getCategoria(),
-            ataque.getNome(),
-            ataque.getDescricao(),
-            new TipoResponseDTO(ataque.getTipo().getId(), ataque.getTipo().getNome()));
+        AtaqueResponseDTO ataquesRetornadoDTO = new AtaqueResponseDTO(
+          ataque.getId(),
+          ataque.getForca(),
+          ataque.getAcuracia(),
+          ataque.getPontosDePoder(),
+          ataque.getCategoria(),
+          ataque.getNome(),
+          ataque.getDescricao(),
+          new TipoResponseDTO(
+            ataque.getTipo().getId(),
+            ataque.getTipo().getNome()
+          )
+        );
         ataquesDTOs.add(ataquesRetornadoDTO);
       }
 
       pokemonsRetornados.add(
-          new PokemonResponseDTO(
-              pokemon.getId(),
-              pokemon.getNome(),
-              pokemon.getAltura(),
-              pokemon.getPeso(),
-              pokemon.getGenero(),
-              pokemon.getNivel(),
-              pokemon.getNumeroPokedex(),
-              pokemon.getFelicidade(),
-              ataquesDTOs,
-              tiposDTOs));
+        new PokemonResponseDTO(
+          pokemon.getId(),
+          pokemon.getNome(),
+          pokemon.getAltura(),
+          pokemon.getPeso(),
+          pokemon.getGenero(),
+          pokemon.getNivel(),
+          pokemon.getNumeroPokedex(),
+          pokemon.getFelicidade(),
+          ataquesDTOs,
+          tiposDTOs
+        )
+      );
     }
     return ResponseEntity.ok(pokemonsRetornados);
   }
-
 }

@@ -6,8 +6,8 @@ public class EnderecoBuilder {
     private String cidade;
 
     public EnderecoBuilder() {
-        this.regiao = "Kanto";
         this.cidade = "Pallet";
+        this.regiao = "Kanto";
     }
 
     public Endereco construir() {

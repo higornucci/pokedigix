@@ -2,8 +2,8 @@ package br.com.digix.pokedigix.personagem;
 
 public class EnderecoRequestDTO {
 
-  private String regiao;
   private String cidade;
+  private String regiao;
 
   public String getRegiao() {
     return regiao;
