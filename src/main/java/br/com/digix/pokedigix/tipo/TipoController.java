@@ -29,27 +29,23 @@ public class TipoController {
   @Autowired
   private TipoRepository tipoRepository;
 
-  @Operation(
-    summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques"
-  )
+  @Operation(summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
   public ResponseEntity<TipoResponseDTO> criarTipo(
-    @RequestBody TipoRequestDTO novoTipo
-  ) {
+      @RequestBody TipoRequestDTO novoTipo) {
     Tipo tipo = new Tipo(novoTipo.getNome());
     tipoRepository.save(tipo);
     return ResponseEntity
-      .status(HttpStatus.CREATED)
-      .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+        .status(HttpStatus.CREATED)
+        .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
   }
 
   @Operation(summary = "Buscar todos os tipos sem ordem")
   @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
   @GetMapping
   public ResponseEntity<Collection<TipoResponseDTO>> buscarTodos(
-    @RequestParam(required = false, name = "termo") String nome
-  ) {
+      @RequestParam(required = false, name = "termo") String nome) {
     Iterable<Tipo> tipos;
     if (nome != null) {
       tipos = tipoRepository.findByNomeContaining(nome);
@@ -87,23 +83,16 @@ public class TipoController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping
   @Transactional
-  public ResponseEntity<Void> removerTipoPorNome(
-    @RequestParam(required = true) String termo
-  ) {
+  public ResponseEntity<Void> removerTipoPorNome(@RequestParam(required = true) String termo) {
     tipoRepository.deleteByNomeContaining(termo);
     return ResponseEntity.noContent().build();
   }
 
   @Operation(summary = "Atualizar o Tipo")
-  @ApiResponse(
-    responseCode = "200",
-    description = "Retorna os dados atualizados"
-  )
+  @ApiResponse(responseCode = "200", description = "Retorna os dados atualizados")
   @PutMapping(path = "/{id}", consumes = "application/json")
-  public ResponseEntity<TipoResponseDTO> alterarTipo(
-    @RequestBody TipoRequestDTO tipoRequestDTO,
-    @PathVariable Long id
-  ) {
+  public ResponseEntity<TipoResponseDTO> alterarTipo(@RequestBody TipoRequestDTO tipoRequestDTO,
+      @PathVariable Long id) {
     Tipo tipoParaAlterar = new Tipo();
     Optional<Tipo> value = tipoRepository.findById(id);
     if (value.isPresent()) {
@@ -111,8 +100,7 @@ public class TipoController {
     }
     tipoParaAlterar.setNome(tipoRequestDTO.getNome());
     tipoRepository.save(tipoParaAlterar);
-    return ResponseEntity.ok(
-      new TipoResponseDTO(tipoParaAlterar.getId(), tipoParaAlterar.getNome())
-    );
+    return ResponseEntity.ok(new TipoResponseDTO(tipoParaAlterar.getId(), tipoParaAlterar.getNome()));
   }
+
 }
