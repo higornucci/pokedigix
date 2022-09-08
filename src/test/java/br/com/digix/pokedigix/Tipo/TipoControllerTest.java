@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import br.com.digix.pokedigix.PokedigixApplication;
+import br.com.digix.pokedigix.ataque.AtaqueRepository;
+import br.com.digix.pokedigix.pokemon.PokemonRepository;
 import br.com.digix.pokedigix.utils.JsonUtil;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
@@ -35,14 +37,19 @@ public class TipoControllerTest {
         @Autowired
         private TipoRepository tipoRepository;
 
+        @Autowired
+        private PokemonRepository pokemonRepository;
+
+        @Autowired
+        private AtaqueRepository ataqueRepository;
+
         @BeforeEach
-        public void reset2Db() {
-                tipoRepository.deleteAll();
-        }
         @AfterEach
         public void resetDb() {
-                tipoRepository.deleteAll();
-        }
+		pokemonRepository.deleteAll();
+		ataqueRepository.deleteAll();
+		tipoRepository.deleteAll();
+	}
 
         @Test
         public void deve_adicionar_um_tipo() throws Exception {

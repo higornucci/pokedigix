@@ -42,7 +42,7 @@ public class PokemonControllerTest {
 
 	@BeforeEach
 	@AfterEach
-	public void reset2Db() {
+	public void resetDb() {
 		pokemonRepository.deleteAll();
 		ataqueRepository.deleteAll();
 		tipoRepository.deleteAll();

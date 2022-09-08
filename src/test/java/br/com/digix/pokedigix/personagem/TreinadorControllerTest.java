@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -50,6 +52,16 @@ public class TreinadorControllerTest {
 	@Autowired
 	private MockMvc mvc;
 
+	@BeforeEach
+	@AfterEach
+	public void resetDb() {
+		treinadorRepository.deleteAll();
+		enderecoRepository.deleteAll();
+		pokemonRepository.deleteAll();
+		ataqueRepository.deleteAll();
+		tipoRepository.deleteAll();
+	}
+
 	@Test
 	public void deve_atualizar_o_Treinador() throws Exception {
 		String nome = "kaioken";
@@ -70,10 +82,10 @@ public class TreinadorControllerTest {
 
 		String treinadorNovo = "Kaio";
 		TreinadorUpdateDTO TreinadorRequestDTO = new TreinadorUpdateDTO(
-			treinadorNovo, endereco.getId(), nivel, dinheiro, new ArrayList<>());
+				treinadorNovo, endereco.getId(), nivel, dinheiro, new ArrayList<>());
 		String url = "/api/v1/treinadores/" + treinador.getId();
 
-		 MvcResult resultado = mvc
+		MvcResult resultado = mvc
 				.perform(put(url)
 						.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
 						.content(JsonUtil.toJson(TreinadorRequestDTO)))

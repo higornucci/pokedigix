@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 public class AtaqueControllerTest {
-    
+
     @Autowired
     private MockMvc mvc;
 
@@ -39,12 +39,14 @@ public class AtaqueControllerTest {
     private TipoRepository tipoRepository;
 
     @BeforeEach
+    @AfterEach
     public void resetDb() {
+        ataqueRepository.deleteAll();
         tipoRepository.deleteAll();
     }
-    
+
     @Test
-    public void deve_adicionar_um_ataque() throws Exception{
+    public void deve_adicionar_um_ataque() throws Exception {
         int quantidadeEsperada = 1;
         Tipo tipoEsperado = new Tipo("Normal");
         tipoRepository.save(tipoEsperado);
@@ -55,7 +57,6 @@ public class AtaqueControllerTest {
         Categoria categoria = Categoria.FISICO;
         String nome = "Ataque Rapido";
         String descricao = "ataque na pança";
-
 
         AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
 
@@ -68,9 +69,9 @@ public class AtaqueControllerTest {
         ataqueRequestDTO.setDescricao(descricao);
 
         mvc.perform(post("/api/v1/ataques/")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(JsonUtil.toJson(ataqueRequestDTO)))
-        .andExpect(status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.toJson(ataqueRequestDTO)))
+                .andExpect(status().isCreated());
 
         Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
         long quantidadeEncontrada = ataquesEncontrados.spliterator().getExactSizeIfKnown();
@@ -78,39 +79,38 @@ public class AtaqueControllerTest {
         assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
         assertThat(ataquesEncontrados).extracting(Ataque::getNome).contains(nome);
 
-
     }
 
     @Test
-	public void deve_atualizar_o_Ataque() throws Exception {
+    public void deve_atualizar_o_Ataque() throws Exception {
         Tipo tipo = new Tipo("eletrico");
-		tipoRepository.save(tipo);
+        tipoRepository.save(tipo);
         String nome = "eletro pau";
-		int forca = 90;
-		int acuracia = 100;
-		int pontosDePoder = 80;
+        int forca = 90;
+        int acuracia = 100;
+        int pontosDePoder = 80;
         Categoria categoria = Categoria.ESPECIAL;
         String descricao = "Tomale choque!!!";
         Ataque ataque = new AtaqueBuilder().comTipo(tipo).comNome(nome).construir();
         ataqueRepository.save(ataque);
 
-		String novoAtaque = "Choque do trovão";
-		AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO(
-            forca, acuracia, pontosDePoder, tipo.getId(), categoria, novoAtaque, descricao);
+        String novoAtaque = "Choque do trovão";
+        AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO(
+                forca, acuracia, pontosDePoder, tipo.getId(), categoria, novoAtaque, descricao);
 
-		String url = "/api/v1/ataques/" + ataque.getId();
+        String url = "/api/v1/ataques/" + ataque.getId();
 
-		 MvcResult resultado = mvc
-				.perform(put(url)
-						.contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-						.content(JsonUtil.toJson(ataqueRequestDTO)))
-				.andReturn();
+        MvcResult resultado = mvc
+                .perform(put(url)
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                        .content(JsonUtil.toJson(ataqueRequestDTO)))
+                .andReturn();
 
-		int status = resultado.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status);
+        int status = resultado.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), status);
 
-		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
-		assertThat(ataquesEncontrados).extracting(Ataque::getNome)
-				.containsOnly(novoAtaque);
-	}
+        Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+        assertThat(ataquesEncontrados).extracting(Ataque::getNome)
+                .containsOnly(novoAtaque);
+    }
 }
