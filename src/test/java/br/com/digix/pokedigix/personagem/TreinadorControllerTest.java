@@ -37,7 +37,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class TreinadorControllerTest {
+class TreinadorControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -67,7 +67,7 @@ public class TreinadorControllerTest {
     }
 
     @Test
-    public void deve_excluir_um_treinador() throws Exception {
+    void deve_excluir_um_treinador() throws Exception {
         // Teste do código Do Enzão
         int quantidadeEsperada = 0;
 
@@ -90,7 +90,7 @@ public class TreinadorControllerTest {
     }
 
     @Test
-    public void deve_adicionar_um_treinador() throws Exception {
+    void deve_adicionar_um_treinador() throws Exception {
         // Arrange
         int quantidadeEsperada = 1;
         Endereco endereco = new EnderecoBuilder().construir();
@@ -120,7 +120,7 @@ public class TreinadorControllerTest {
 
     @Test
     @Transactional
-    public void deve_buscar_os_pokemons_do_treinador() throws Exception {
+    void deve_buscar_os_pokemons_do_treinador() throws Exception {
         // Arrange
         int quantidadeEsperada = 1;
         Tipo tipo = new Tipo("Eletrico");
