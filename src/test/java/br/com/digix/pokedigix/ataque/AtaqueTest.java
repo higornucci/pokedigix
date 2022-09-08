@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import br.com.digix.pokedigix.tipo.Tipo;
 
-public class AtaqueTest {
+ class AtaqueTest {
     
     @Test
-    public void deve_criar_um_ataque() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+     void deve_criar_um_ataque() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         int forca = 40;
         int acuracia = 100;
         int pontosDePoder = 35;
@@ -29,7 +29,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void deve_ser_obrigatorio_informar_um_tipo() throws Exception {
+     void deve_ser_obrigatorio_informar_um_tipo() throws Exception {
         Tipo tipoEsperado = new Tipo("Normal");
         Ataque ataque = new AtaqueBuilder().comTipo(tipoEsperado).construir();
 
@@ -37,7 +37,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_acuracia_menor_que_zero() {
+     void nao_deve_ter_acuracia_menor_que_zero() {
         // Arrange
         int acuracia = -1;
 
@@ -55,7 +55,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_acuracia_maior_que_cem() {
+     void nao_deve_ter_acuracia_maior_que_cem() {
         // Arrange
         int acuracia = 101;
 
@@ -73,7 +73,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void deve_poder_ter_acuracia_igual_a_zero() throws Exception {
+     void deve_poder_ter_acuracia_igual_a_zero() throws Exception {
         int acuraciaEsperada = 0;
 
         Ataque ataque = new AtaqueBuilder().comAcuracia(acuraciaEsperada).construir();
@@ -82,7 +82,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_forca_nem_tipo_quando_a_categoria_for_efeito() throws Exception {
+     void nao_deve_ter_forca_nem_tipo_quando_a_categoria_for_efeito() throws Exception {
         Categoria categoria = Categoria.EFEITO;
         int forca = 0;
         Tipo tipo = null;
@@ -97,7 +97,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_ataque_de_categoria_fisica_sem_forca() {
+     void nao_deve_ter_ataque_de_categoria_fisica_sem_forca() {
         Categoria categoria = Categoria.FISICO;
         int forca = 0;
 
@@ -107,7 +107,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_ataque_de_categoria_fisica_sem_tipo() {
+     void nao_deve_ter_ataque_de_categoria_fisica_sem_tipo() {
         Categoria categoria = Categoria.FISICO;
         Tipo tipo = null;
 
@@ -117,7 +117,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_ataque_de_categoria_especial_sem_forca() {
+     void nao_deve_ter_ataque_de_categoria_especial_sem_forca() {
         Categoria categoria = Categoria.ESPECIAL;
         int forca = 0;
 
@@ -127,7 +127,7 @@ public class AtaqueTest {
     }
 
     @Test
-    public void nao_deve_ter_ataque_de_categoria_especial_sem_tipo() {
+     void nao_deve_ter_ataque_de_categoria_especial_sem_tipo() {
         Categoria categoria = Categoria.ESPECIAL;
         Tipo tipo = null;
 

@@ -21,7 +21,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
 
 @DataJpaTest
-public class PokemonRepositoryTest {
+ class PokemonRepositoryTest {
 
     @Autowired
     private PokemonRepository pokemonRepository;
@@ -36,7 +36,7 @@ public class PokemonRepositoryTest {
     private TipoRepository tipoRepository;
 
     @Test
-    public void deve_salvar_um_pokemon() throws Exception {
+     void deve_salvar_um_pokemon() throws Exception {
         Pokemon gastly = new PokemonBuilder().construir();
 
         pokemonRepository.save(gastly);
@@ -45,7 +45,7 @@ public class PokemonRepositoryTest {
     }
 
     @Test
-    public void deve_salvar_um_pokemon_com_um_tipo() throws Exception {
+     void deve_salvar_um_pokemon_com_um_tipo() throws Exception {
         int quantidadeDeTiposEsperada = 1;
         Tipo fantasma = new Tipo("Fantasma");
         Pokemon gastly = new PokemonBuilder().comTipo(fantasma).construir();
@@ -103,7 +103,7 @@ public class PokemonRepositoryTest {
     }
 
     @Test
-    public void pokemon_com_treinador_nao_e_selvagem() throws Exception {
+     void pokemon_com_treinador_nao_e_selvagem() throws Exception {
         Pokemon pokemon = new PokemonBuilder().construir();
         Endereco endereco = new Endereco("Norte", "campo grande");
         Treinador treinador = new Treinador("Ash", endereco, pokemon);
@@ -115,9 +115,9 @@ public class PokemonRepositoryTest {
     }
 
     @Test
-    public void pode_nao_ter_genero() throws Exception {
+     void pode_nao_ter_genero() throws Exception {
         Genero genero = null;
-        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();//Flávio
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
         pokemonRepository.save(pokemon);
 
         Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining("Gastly");
@@ -126,9 +126,9 @@ public class PokemonRepositoryTest {
     }
 
     @Test
-    public void pode_ter_um_genero_indefinido() throws Exception {
+     void pode_ter_um_genero_indefinido() throws Exception {
         Genero genero = Genero.INDEFINIDO;
-        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir(); //Flávio
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
         pokemonRepository.save(pokemon);
 
         Pokemon pokemonRetornado = pokemonRepository.findById(pokemon.getId()).get();

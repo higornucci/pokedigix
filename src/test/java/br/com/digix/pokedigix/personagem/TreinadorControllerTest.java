@@ -31,7 +31,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class TreinadorControllerTest {
+ class TreinadorControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -48,7 +48,7 @@ public class TreinadorControllerTest {
 
     @AfterEach
     @BeforeEach
-    public void resetDb() {
+     void resetDb() {
         pokemonRepository.deleteAll();
         ataqueRepository.deleteAll();
         treinadorRepository.deleteAll();
@@ -57,7 +57,7 @@ public class TreinadorControllerTest {
     }
 
     @Test
-    public void deve_buscar_um_treinador_pelo_id() throws Exception {
+     void deve_buscar_um_treinador_pelo_id() throws Exception {
         // Arrange
         String nome = "Flavio";
         Endereco endereco = new Endereco("centro-oeste", "Campo-Grande");

@@ -25,7 +25,7 @@ import br.com.digix.pokedigix.tipo.Tipo;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class AtaqueControllerTest {
+ class AtaqueControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -36,12 +36,12 @@ public class AtaqueControllerTest {
     
 
     @AfterEach
-    public void reserDb(){
+     void reserDb(){
         ataqueRepository.deleteAll();
     }
 
     @Test
-    public void deve_adicionar_um_ataque()throws Exception{
+     void deve_adicionar_um_ataque()throws Exception{
         //Arrange
         int quantidadeDeAtaquesEsperada = 1;
         String nometipo = "Normal";

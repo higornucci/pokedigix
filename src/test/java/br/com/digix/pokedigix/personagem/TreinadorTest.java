@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonBuilder;
 
-public class TreinadorTest {
+ class TreinadorTest {
     
     @Test
-    public void deve_comecar_com_um_pokemon() throws Exception {
+     void deve_comecar_com_um_pokemon() throws Exception {
         // Arrange
         int quantidadeDePokemonsEsperada = 1;
         Pokemon pokemonInicial = new PokemonBuilder().construir();
@@ -28,7 +28,7 @@ public class TreinadorTest {
     }
 
     @Test
-    public void deve_poder_capturar_um_pokemon() throws Exception {
+     void deve_poder_capturar_um_pokemon() throws Exception {
         int quantidadeDePokemonsEsperada = 2;
         Pokemon pokemonACapturar = new PokemonBuilder().construir();
 
@@ -41,7 +41,7 @@ public class TreinadorTest {
     }
 
     @Test
-    public void nao_pode_ter_mais_que_seis_pokemons_ao_mesmo_tempo() throws Exception {
+     void nao_pode_ter_mais_que_seis_pokemons_ao_mesmo_tempo() throws Exception {
         Treinador treinador = new TreinadorBuilder().construir();
         for(int i = 1; i <= 5; i++) {
             treinador.capturar(new PokemonBuilder().construir());
@@ -53,7 +53,7 @@ public class TreinadorTest {
     }
 
     @Test
-    public void deve_ter_ate_seis_pokemons() throws Exception {
+     void deve_ter_ate_seis_pokemons() throws Exception {
         int quantidadeDePokemonsEsperada = 6;
         Treinador treinador = new TreinadorBuilder().construir();
         for(int i = 1; i <= 5; i++) {
