@@ -18,7 +18,7 @@ public class PokemonResponseDTO {
     private Collection<AtaqueResponseDTO> ataques;
     private Collection<TipoResponseDTO> tipos;
 
-    public PokemonResponseDTO() {}
+    protected PokemonResponseDTO() {}
     
     public PokemonResponseDTO(Long id, String nome, double altura, double peso, Genero genero, int nivel,
             int numeroPokedex,

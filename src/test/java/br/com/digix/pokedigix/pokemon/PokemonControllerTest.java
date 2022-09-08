@@ -169,14 +169,12 @@ class PokemonControllerTest {
 		int quantidadeEsperada = 3;
 		String nome = "Pikachu";
 		Tipo tipo = new Tipo("eletrico");
-		tipoRepository.save(tipo);
 		Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-		ataqueRepository.save(ataque);
 		Pokemon pikachu = new PokemonBuilder().comNome(nome).comTipo(tipo).comAtaque(ataque).construir();
 		pokemonRepository.save(pikachu);
-		Pokemon mew = new PokemonBuilder().comTipo(tipo).comAtaque(ataque).construir();
+		Pokemon mew = new PokemonBuilder().construir();
 		pokemonRepository.save(mew);
-		Pokemon mewTwo = new PokemonBuilder().comTipo(tipo).comAtaque(ataque).construir();
+		Pokemon mewTwo = new PokemonBuilder().construir();
 		pokemonRepository.save(mewTwo);
 
 		MvcResult resultado = mvc.perform(get("/api/v1/pokemons/")).andReturn();
@@ -184,8 +182,8 @@ class PokemonControllerTest {
 		PokemonResponseDTO[] pokemonsRetornados = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),
 				PokemonResponseDTO[].class);
 
-		assertThat(pokemonsRetornados.length)
-				.isEqualTo(quantidadeEsperada);
+		assertThat(pokemonsRetornados)
+				.hasSize(quantidadeEsperada);
 
 		assertThat(HttpStatus.OK.value())
 				.isEqualTo(resultado.getResponse().getStatus());

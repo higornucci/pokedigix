@@ -70,9 +70,7 @@ public class TreinadorControllerTest {
 		int nivel = 100;
 		int dinheiro = 999;
 		Tipo tipo = new Tipo("eletrico");
-		tipoRepository.save(tipo);
 		Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-		ataqueRepository.save(ataque);
 		Pokemon pikachu = new PokemonBuilder().comNome(nome).comTipo(tipo).comAtaque(ataque).construir();
 		pokemonRepository.save(pikachu);
 		Endereco endereco = new Endereco(regiao, cidade);

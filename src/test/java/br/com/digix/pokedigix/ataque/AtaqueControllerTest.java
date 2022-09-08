@@ -84,7 +84,6 @@ public class AtaqueControllerTest {
     @Test
     public void deve_atualizar_o_Ataque() throws Exception {
         Tipo tipo = new Tipo("eletrico");
-        tipoRepository.save(tipo);
         String nome = "eletro pau";
         int forca = 90;
         int acuracia = 100;
