@@ -155,7 +155,7 @@ public class TreinadorController {
 	@Operation(summary = "Deletar um Treinador pelo seu id")
 	@ApiResponse(responseCode = "204")
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<?> removerTreinadorId(@PathVariable Long id) {
+	public ResponseEntity<TreinadorResponseDTO> removerTreinadorId(@PathVariable Long id) {
 		treinadorRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -164,7 +164,7 @@ public class TreinadorController {
 	@ApiResponse(responseCode = "204")
 	@DeleteMapping
 	@Transactional
-	public ResponseEntity<?> removerTreinador(@RequestParam(required = true) String termo) {
+	public ResponseEntity<TreinadorResponseDTO> removerTreinador(@RequestParam(required = true) String termo) {
 		treinadorRepository.deleteByNomeContaining(termo);
 		return ResponseEntity.noContent().build();
 	}
