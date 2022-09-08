@@ -1,7 +1,11 @@
 package br.com.digix.pokedigix.personagem;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -43,22 +48,74 @@ public class TreinadorControllerTest {
     private PokemonRepository pokemonRepository;
 
     @Autowired
-    private TipoRepository tipoRepository;
+    private EnderecoRepository enderecoRepository;
 
     @Autowired
     private AtaqueRepository ataqueRepository;
 
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private TipoRepository tipoRepository;
 
-    @BeforeEach
     @AfterEach
+    @BeforeEach
     public void resetDb() {
         pokemonRepository.deleteAll();
         treinadorRepository.deleteAll();
+        enderecoRepository.deleteAll();
         ataqueRepository.deleteAll();
         tipoRepository.deleteAll();
-        enderecoRepository.deleteAll();
+    }
+
+    @Test
+    public void deve_excluir_um_treinador() throws Exception {
+        // Teste do código Do Enzão
+        int quantidadeEsperada = 0;
+
+        Pokemon pokemonInicial = new PokemonBuilder().construir();
+        pokemonRepository.save(pokemonInicial);
+
+        Endereco endereco = new Endereco("Kanto", "Pallet");
+        enderecoRepository.save(endereco);
+        Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemonInicial).comEndereco(endereco)
+                .construir();
+        treinadorRepository.save(treinador);
+
+        String url = "/api/v1/treinadores/" + treinador.getId();
+        mvc.perform(delete(url)).andReturn();
+
+        Iterable<Treinador> treinadoresEncontrados = treinadorRepository.findAll();
+        long quantidadeEncontrada = treinadoresEncontrados.spliterator().getExactSizeIfKnown();
+
+        assertEquals(quantidadeEsperada, quantidadeEncontrada);
+    }
+
+    @Test
+    public void deve_adicionar_um_treinador() throws Exception {
+        // Arrange
+        int quantidadeEsperada = 1;
+        Endereco endereco = new EnderecoBuilder().construir();
+        enderecoRepository.save(endereco);
+        Long enderecoId = endereco.getId();
+        Pokemon pokemonInicialEsperado = new PokemonBuilder().construir();
+        pokemonRepository.save(pokemonInicialEsperado);
+        Long pokemonId = pokemonInicialEsperado.getId();
+        String nomeTreinadorEsperado = "Ash";
+        TreinadorRequestDTO treinadorRequestDTO = new TreinadorRequestDTO();
+        treinadorRequestDTO.setIdEndereco(enderecoId);
+        treinadorRequestDTO.setIdPrimeiroPokemon(pokemonId);
+        treinadorRequestDTO.setNome(nomeTreinadorEsperado);
+        // Act
+        mvc.perform(post("/api/v1/treinadores")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.toJson(treinadorRequestDTO)))
+                .andExpect(status().isCreated());
+
+        // Assert
+        Iterable<Treinador> treinadoresEncontrados = treinadorRepository.findAll();
+        long quantidadeEncontrada = treinadoresEncontrados.spliterator().getExactSizeIfKnown();
+        assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+        assertThat(treinadoresEncontrados).extracting(Treinador::getNome).containsOnly(nomeTreinadorEsperado);
+
     }
 
     @Test

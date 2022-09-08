@@ -18,7 +18,7 @@ public class AtaqueBuilder {
         this.pontosDePoder = 35;
         this.categoria = Categoria.FISICO;
         this.nome = "Ataque Rapido";
-        this.descricao = "O usuario ataque antes do oponente.";
+        this.descricao = "O usuario ataque antes.";
         this.tipoEsperado = new Tipo("Normal");
     }
 

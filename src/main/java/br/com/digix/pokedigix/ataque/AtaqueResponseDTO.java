@@ -13,8 +13,7 @@ public class AtaqueResponseDTO {
     private String descricao;
     private TipoResponseDTO tipo;
 
-    public AtaqueResponseDTO() {
-    }
+    protected AtaqueResponseDTO(){}
 
     public AtaqueResponseDTO(
             Long id,
