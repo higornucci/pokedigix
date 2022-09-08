@@ -19,55 +19,53 @@ import br.com.digix.pokedigix.pokemon.Pokemon;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Personagem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @Column(nullable = false)
-    private String nome;
-   
-    @ManyToOne
-    private Endereco endereco;
-  
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	@Column(nullable = false)
+	private String nome;
 
-    @OneToMany
-    protected Collection<Pokemon> pokemons;
+	@ManyToOne
+	private Endereco endereco;
 
-    protected Personagem() {}
+	@OneToMany
+	protected Collection<Pokemon> pokemons;
 
-    protected Personagem(String nome, Endereco endereco) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.pokemons = new ArrayList<>();
-    }
+	protected Personagem() {
+	}
 
-    public Long getId() {
-        return id;
-    }
+	protected Personagem(String nome, Endereco endereco) {
+		this.nome = nome;
+		this.endereco = endereco;
+		this.pokemons = new ArrayList<>();
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
+	public Endereco getEndereco() {
+		return endereco;
+	}
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
 
-    public Collection<Pokemon> getPokemons() {
-        return pokemons;
-    }
+	public Collection<Pokemon> getPokemons() {
+		return pokemons;
+	}
 
-    
 }

@@ -19,65 +19,61 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(
-  webEnvironment = WebEnvironment.RANDOM_PORT,
-  classes = PokedigixApplication.class
-)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 class AtaqueControllerTest {
 
-  @Autowired
-  private MockMvc mvc;
+	@Autowired
+	private MockMvc mvc;
 
-  @Autowired
-  private AtaqueRepository ataqueRepository;
+	@Autowired
+	private AtaqueRepository ataqueRepository;
 
-  @Autowired
-  private TipoRepository tipoRepository;
+	@Autowired
+	private TipoRepository tipoRepository;
 
-  @BeforeEach
-  @AfterEach
-  public void resetDb() {
-    ataqueRepository.deleteAll();
-    tipoRepository.deleteAll();
-  }
+	@BeforeEach
+	@AfterEach
+	public void resetDb() {
+		ataqueRepository.deleteAll();
+		tipoRepository.deleteAll();
+	}
 
-  @Test
-  void deve_adicionar_um_ataque() throws Exception {
-    int quantidadeEsperada = 1;
-    String nomeDoTipo = "Watter";
-    Tipo tipo = new Tipo(nomeDoTipo);
-    tipoRepository.save(tipo);
-    String nomeDoAtaque = "Aqua-Jet";
+	@Test
+	void deve_adicionar_um_ataque() throws Exception {
+		int quantidadeEsperada = 1;
+		String nomeDoTipo = "Watter";
+		Tipo tipo = new Tipo(nomeDoTipo);
+		tipoRepository.save(tipo);
+		String nomeDoAtaque = "Aqua-Jet";
 
-    AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
-    ataqueRequestDTO.setTipoId(tipo.getId());
-    ataqueRequestDTO.setAcuracia(10);
-    ataqueRequestDTO.setCategoria(Categoria.FISICO);
-    ataqueRequestDTO.setDescricao("Cospe agua no outro");
-    ataqueRequestDTO.setForca(30);
-    ataqueRequestDTO.setNome(nomeDoAtaque);
-    ataqueRequestDTO.setPontosDePoder(20);
+		AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
+		ataqueRequestDTO.setTipoId(tipo.getId());
+		ataqueRequestDTO.setAcuracia(10);
+		ataqueRequestDTO.setCategoria(Categoria.FISICO);
+		ataqueRequestDTO.setDescricao("Cospe agua no outro");
+		ataqueRequestDTO.setForca(30);
+		ataqueRequestDTO.setNome(nomeDoAtaque);
+		ataqueRequestDTO.setPontosDePoder(20);
 
-    // Action
-    mvc
-      .perform(
-        post("/api/v1/ataques/")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(JsonUtil.toJson(ataqueRequestDTO))
-      )
-      .andExpect(status().isCreated());
+		// Action
+		mvc
+				.perform(
+						post("/api/v1/ataques/")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(JsonUtil.toJson(ataqueRequestDTO)))
+				.andExpect(status().isCreated());
 
-    // Asserts
-    Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
-    long quantidadeEncontrada = ataquesEncontrados
-      .spliterator()
-      .getExactSizeIfKnown();
+		// Asserts
+		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+		long quantidadeEncontrada = ataquesEncontrados
+				.spliterator()
+				.getExactSizeIfKnown();
 
-    assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
-    assertThat(ataquesEncontrados)
-      .extracting(Ataque::getNome)
-      .containsOnly(nomeDoAtaque);
-  }
+		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+		assertThat(ataquesEncontrados)
+				.extracting(Ataque::getNome)
+				.containsOnly(nomeDoAtaque);
+	}
 }

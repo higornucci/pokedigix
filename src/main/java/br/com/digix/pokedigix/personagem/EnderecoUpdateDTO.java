@@ -1,30 +1,30 @@
 package br.com.digix.pokedigix.personagem;
 
 public class EnderecoUpdateDTO {
-    private String cidade;
-    private String regiao;
-    
-    public EnderecoUpdateDTO() {
-    }
-    
-    public EnderecoUpdateDTO(String regiao, String cidade) {
-        this.cidade = cidade;
-        this.regiao = regiao;
-    }
+	private String cidade;
+	private String regiao;
 
-    public String getCidade() {
-        return cidade;
-    }
+	public EnderecoUpdateDTO() {
+	}
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+	public EnderecoUpdateDTO(String regiao, String cidade) {
+		this.cidade = cidade;
+		this.regiao = regiao;
+	}
 
-    public String getRegiao() {
-        return regiao;
-    }
+	public String getCidade() {
+		return cidade;
+	}
 
-    public void setRegiao(String regiao) {
-        this.regiao = regiao;
-    }
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getRegiao() {
+		return regiao;
+	}
+
+	public void setRegiao(String regiao) {
+		this.regiao = regiao;
+	}
 }

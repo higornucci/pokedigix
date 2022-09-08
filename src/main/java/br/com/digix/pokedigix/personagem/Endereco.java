@@ -7,42 +7,43 @@ import javax.persistence.Id;
 
 @Entity
 public class Endereco {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String cidade;
-    private String regiao;
 
-    protected Endereco() {}
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private String cidade;
+	private String regiao;
 
-    public Endereco(String regiao, String cidade) {
-        this.cidade = cidade;
-        this.regiao = regiao;
-    }
+	protected Endereco() {
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Endereco(String regiao, String cidade) {
+		this.cidade = cidade;
+		this.regiao = regiao;
+	}
 
-    public String getRegiao() {
-        return regiao;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getCidade() {
-        return cidade;
-    }
+	public String getRegiao() {
+		return regiao;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getCidade() {
+		return cidade;
+	}
 
-    public void setRegiao(String regiao) {
-        this.regiao = regiao;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }   
-    
+	public void setRegiao(String regiao) {
+		this.regiao = regiao;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
 }

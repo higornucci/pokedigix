@@ -9,15 +9,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 class TreinadorRepositoryTest {
 
-  @Autowired
-  private TreinadorRepository treinadorRepository;
+	@Autowired
+	private TreinadorRepository treinadorRepository;
 
-  @Test
-  void deve_salvar_um_treinador() throws Exception {
-    Treinador treinador = new TreinadorBuilder().construir();
+	@Test
+	void deve_salvar_um_treinador() throws Exception {
+		Treinador treinador = new TreinadorBuilder().construir();
 
-    treinadorRepository.save(treinador);
+		treinadorRepository.save(treinador);
 
-    assertNotNull(treinador.getId());
-  }
+		assertNotNull(treinador.getId());
+	}
 }

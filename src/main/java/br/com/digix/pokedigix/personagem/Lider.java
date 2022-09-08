@@ -12,14 +12,14 @@ import br.com.digix.pokedigix.pokemon.Pokemon;
 @Entity
 public class Lider extends Personagem {
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Insignia insignia;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Insignia insignia;
 
-    public Lider(String nome, Endereco endereco, Collection<Pokemon> pokemons, Insignia insignia) {
-        super(nome, endereco);
-        super.pokemons = pokemons;
-        this.insignia = insignia;
-    }
-    
+	public Lider(String nome, Endereco endereco, Collection<Pokemon> pokemons, Insignia insignia) {
+		super(nome, endereco);
+		super.pokemons = pokemons;
+		this.insignia = insignia;
+	}
+
 }

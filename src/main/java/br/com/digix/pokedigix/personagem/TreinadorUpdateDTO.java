@@ -9,7 +9,8 @@ public class TreinadorUpdateDTO {
 	private int dinheiro;
 	private Collection<Insignia> insignias;
 
-	protected TreinadorUpdateDTO() {}
+	protected TreinadorUpdateDTO() {
+	}
 
 	public TreinadorUpdateDTO(String nome, Long enderecoId, int nivel, int dinheiro,
 			Collection<Insignia> insignias) {

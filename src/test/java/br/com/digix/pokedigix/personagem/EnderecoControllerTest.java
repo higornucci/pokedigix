@@ -18,59 +18,55 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(
-  webEnvironment = WebEnvironment.RANDOM_PORT,
-  classes = PokedigixApplication.class
-)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 class EnderecoControllerTest {
 
-  @Autowired
-  private MockMvc mvc;
+	@Autowired
+	private MockMvc mvc;
 
-  @Autowired
-  private EnderecoRepository enderecoRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
-  @AfterEach
-  public void resetDb1() {
-    enderecoRepository.deleteAll();
-  }
+	@AfterEach
+	public void resetDb1() {
+		enderecoRepository.deleteAll();
+	}
 
-  @BeforeEach
-  public void resetDb() {
-    enderecoRepository.deleteAll();
-  }
+	@BeforeEach
+	public void resetDb() {
+		enderecoRepository.deleteAll();
+	}
 
-  @Test
-  void deve_adicionar_um_endereco() throws IOException, Exception {
-    int quantidadeEsperada = 1;
-    String cidadeEsperada = "Pallet";
-    String regiaoEsperada = "Kanto";
+	@Test
+	void deve_adicionar_um_endereco() throws IOException, Exception {
+		int quantidadeEsperada = 1;
+		String cidadeEsperada = "Pallet";
+		String regiaoEsperada = "Kanto";
 
-    EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO();
-    enderecoRequestDTO.setCidade(cidadeEsperada);
-    enderecoRequestDTO.setRegiao(regiaoEsperada);
+		EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO();
+		enderecoRequestDTO.setCidade(cidadeEsperada);
+		enderecoRequestDTO.setRegiao(regiaoEsperada);
 
-    mvc
-      .perform(
-        post("/api/v1/enderecos/")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(JsonUtil.toJson(enderecoRequestDTO))
-      )
-      .andExpect(status().isCreated());
+		mvc
+				.perform(
+						post("/api/v1/enderecos/")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(JsonUtil.toJson(enderecoRequestDTO)))
+				.andExpect(status().isCreated());
 
-    Iterable<Endereco> enderecosEncontrados = enderecoRepository.findAll();
-    long quantidadeEncontrada = enderecosEncontrados
-      .spliterator()
-      .getExactSizeIfKnown();
+		Iterable<Endereco> enderecosEncontrados = enderecoRepository.findAll();
+		long quantidadeEncontrada = enderecosEncontrados
+				.spliterator()
+				.getExactSizeIfKnown();
 
-    assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
-    assertThat(enderecosEncontrados)
-      .extracting(Endereco::getCidade)
-      .containsOnly(cidadeEsperada);
-    assertThat(enderecosEncontrados)
-      .extracting(Endereco::getRegiao)
-      .containsOnly(regiaoEsperada);
-  }
+		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+		assertThat(enderecosEncontrados)
+				.extracting(Endereco::getCidade)
+				.containsOnly(cidadeEsperada);
+		assertThat(enderecosEncontrados)
+				.extracting(Endereco::getRegiao)
+				.containsOnly(regiaoEsperada);
+	}
 }
