@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class TreinadorRepositoryTest {
+class TreinadorRepositoryTest {
 
     @Autowired
     private TreinadorRepository treinadorRepository;
 
     @Test
-    public void deve_salvar_um_treinador() throws Exception {
+    void deve_salvar_um_treinador() throws Exception {
         Treinador treinador = new TreinadorBuilder().construir();
 
         treinadorRepository.save(treinador);

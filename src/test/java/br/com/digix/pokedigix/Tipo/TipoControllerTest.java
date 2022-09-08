@@ -27,7 +27,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class TipoControllerTest {
+class TipoControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -37,12 +37,12 @@ public class TipoControllerTest {
 
     @BeforeEach
     @AfterEach
-    public void resetDb() {
+    void resetDb() {
         tipoRepository.deleteAll();
     }
 
     @Test
-    public void deve_adicionar_um_tipo() throws Exception {
+    void deve_adicionar_um_tipo() throws Exception {
         String nomeEsperado = "Fire";
         int quantidadeEsperada = 1;
         TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
@@ -63,7 +63,7 @@ public class TipoControllerTest {
     }
 
     @Test
-    public void deve_buscar_um_tipo_pelo_id() throws Exception {
+    void deve_buscar_um_tipo_pelo_id() throws Exception {
         // Arrange
         String nome = "Fire";
         Tipo tipo = new Tipo(nome);
@@ -83,7 +83,7 @@ public class TipoControllerTest {
     }
 
     @Test
-    public void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
+    void deve_buscar_todos_os_tipos_cadastrados() throws Exception {
         // Arrange
         int quantidadeEsperada = 3;
         String eletrico = "eletrico";
@@ -100,14 +100,14 @@ public class TipoControllerTest {
         TipoResponseDTO[] tiposRetornados = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),
                 TipoResponseDTO[].class);
 
-        assertThat(tiposRetornados.length).isEqualTo(quantidadeEsperada);
+        assertThat(tiposRetornados).hasSize(quantidadeEsperada);
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 
         assertThat(tiposRetornados).extracting("nome").contains(eletrico);
     }
 
     @Test
-    public void deve_deletar_um_tipo_pelo_id() throws Exception {
+    void deve_deletar_um_tipo_pelo_id() throws Exception {
         // Arrange
         int quantidadeEsperada = 2;
         String eletrico = "Eletrico";
@@ -134,7 +134,7 @@ public class TipoControllerTest {
     }
 
     @Test
-    public void deve_atualizar_um_tipo_pelo_id() throws Exception {
+    void deve_atualizar_um_tipo_pelo_id() throws Exception {
         // Assert
         String nome = "Fogo";
         Tipo tipoPokemon = new Tipo(nome);

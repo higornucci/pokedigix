@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.pokemon;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.webjars.NotFoundException;
 
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueRepository;
@@ -43,7 +45,7 @@ public class PokemonController {
   @Operation(summary = "Deletar um Pokemon pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerPokemonId(@PathVariable Long id) {
+  public ResponseEntity<Void> removerPokemonId(@PathVariable Long id) {
     pokemonRepository.deleteById(id);
     return ResponseEntity.noContent().build();
   }
@@ -53,7 +55,7 @@ public class PokemonController {
   @DeleteMapping
   @Transactional
 
-  public ResponseEntity<?> removerPokemon(@RequestParam(required = true) String termo) {
+  public ResponseEntity<Void> removerPokemon(@RequestParam(required = true) String termo) {
 
     pokemonRepository.deleteByNomeContaining(termo);
     return ResponseEntity.noContent().build();
@@ -69,11 +71,19 @@ public class PokemonController {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : novoPokemon.getAtaquesIds()) {
-      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      Optional<Ataque> ataqueOptional = ataqueRepository.findById(ataqueId);
+      if (ataqueOptional.isEmpty()) {
+        throw new NotFoundException(null);
+      }
+      Ataque ataque = ataqueOptional.get();
       ataques.add(ataque);
     }
     for (Long tipoId : novoPokemon.getTiposIds()) {
-      Tipo tipo = tipoRepository.findById(tipoId).get();
+      Optional<Tipo> tipoOptional = tipoRepository.findById(tipoId);
+      if (tipoOptional.isEmpty()) {
+        throw new NotFoundException(null);
+      }
+      Tipo tipo = tipoOptional.get();
       tipos.add(tipo);
     }
     Pokemon pokemon = new Pokemon(
@@ -130,16 +140,24 @@ public class PokemonController {
   public ResponseEntity<PokemonResponseDTO> atualizarPokemon(
       @RequestBody PokemonRequestDTO pokemonAtt,
       @PathVariable Long id)
-      throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
+      throws LimiteDeTipoPokemonException,
       LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : pokemonAtt.getAtaquesIds()) {
-      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      Optional<Ataque> ataqueOptional = ataqueRepository.findById(ataqueId);
+      if (ataqueOptional.isEmpty()) {
+        throw new NotFoundException(null);
+      }
+      Ataque ataque = ataqueOptional.get();
       ataques.add(ataque);
     }
     for (Long tipoId : pokemonAtt.getTiposIds()) {
-      Tipo tipo = tipoRepository.findById(tipoId).get();
+      Optional<Tipo> tipoOptional = tipoRepository.findById(tipoId);
+      if (tipoOptional.isEmpty()) {
+        throw new NotFoundException(null);
+      }
+      Tipo tipo = tipoOptional.get();
       tipos.add(tipo);
     }
     Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
@@ -164,7 +182,11 @@ public class PokemonController {
           tipo.getNome());
       tiposDTOs.add(tipoDTO);
     }
-    Pokemon alterarPokemon = pokemonRepository.findById(id).get();
+    Optional<Pokemon> pokemonOptional = pokemonRepository.findById(id);
+    if (pokemonOptional.isEmpty()) {
+      throw new NotFoundException(null);
+    }
+    Pokemon alterarPokemon = pokemonOptional.get();
     alterarPokemon.setNome(pokemonAtt.getNome());
     alterarPokemon.setAltura(pokemonAtt.getAltura());
     alterarPokemon.setPeso(pokemonAtt.getPeso());
@@ -239,12 +261,13 @@ public class PokemonController {
   @Operation(summary = "Buscar Pokemon pelo seu nome parcial ou completo")
   @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo seu nome (completo ou parcial)")
   @GetMapping
-  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloNome(@RequestParam(required = false, name = "termo") String nome){
-    
+  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloNome(
+      @RequestParam(required = false, name = "termo") String nome) {
+
     Iterable<Pokemon> pokemons;
-    if (nome != null){
+    if (nome != null) {
       pokemons = pokemonRepository.findByNomeContaining(nome);
-    } else{
+    } else {
       pokemons = pokemonRepository.findAll();
     }
 
@@ -288,6 +311,5 @@ public class PokemonController {
     }
     return ResponseEntity.ok(pokemonsRetornados);
   }
-
 
 }

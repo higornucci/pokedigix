@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.personagem;
 
-import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -166,7 +165,7 @@ public class TreinadorController {
 	@Operation(summary = "Deletar um Treinador pelo seu id")
 	@ApiResponse(responseCode = "204")
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<?> removerTreinadorId(@PathVariable Long id) {
+	public ResponseEntity<Void> removerTreinadorId(@PathVariable Long id) {
 		treinadorRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -175,7 +174,7 @@ public class TreinadorController {
 	@ApiResponse(responseCode = "204")
 	@DeleteMapping
 	@Transactional
-	public ResponseEntity<?> removerTreinador(@RequestParam(required = true) String termo) {
+	public ResponseEntity<Void> removerTreinador(@RequestParam(required = true) String termo) {
 		treinadorRepository.deleteByNomeContaining(termo);
 		return ResponseEntity.noContent().build();
 	}

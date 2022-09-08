@@ -1,14 +1,12 @@
 package br.com.digix.pokedigix.tipo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-public class TipoTest {
+class TipoTest {
     @Test
-    public void deve_poder_criar_um_tipo() {
+    void deve_poder_criar_um_tipo() {
 
         String nomeEsperado = "Fantasma";
 

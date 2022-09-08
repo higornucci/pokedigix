@@ -21,7 +21,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class EnderecoControllerTest {
+class EnderecoControllerTest {
      
     @Autowired
     private MockMvc mvc;
@@ -31,12 +31,12 @@ public class EnderecoControllerTest {
 
     @BeforeEach
     @AfterEach
-    public void resetDb() {
+    void resetDb() {
         enderecoRepository.deleteAll();
     } 
 
     @Test
-    public void deve_buscar_pelo_nome_da_cidade() throws Exception{
+    void deve_buscar_pelo_nome_da_cidade() throws Exception{
         String cidade = "Pallet";
         
         Endereco endereco = new EnderecoBuilder().comCidade(cidade).construir();
@@ -54,7 +54,7 @@ public class EnderecoControllerTest {
 
     
     @Test
-    public void deve_buscar_pelo_nome_da_regiao() throws Exception{
+    void deve_buscar_pelo_nome_da_regiao() throws Exception{
         String regiao = "Kanto";
         Endereco endereco = new EnderecoBuilder().comRegiao(regiao).construir();
         enderecoRepository.save(endereco);

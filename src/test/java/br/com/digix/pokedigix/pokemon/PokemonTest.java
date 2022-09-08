@@ -13,9 +13,9 @@ import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
-public class PokemonTest {
+class PokemonTest {
     @Test
-    public void deve_criar_um_pokemon() throws Exception {
+    void deve_criar_um_pokemon() throws Exception {
         String nome = "Gastly";
         double altura = 0.8;
         double peso = 0.1;
@@ -48,7 +48,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_cadastrar_um_tipo_para_o_pokemon() throws Exception {
+    void deve_cadastrar_um_tipo_para_o_pokemon() throws Exception {
         Tipo tipo = new Tipo("Fantasma");
 
         Pokemon gastly = new PokemonBuilder().comTipo(tipo).construir();
@@ -57,7 +57,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_deve_possuir_mais_que_dois_tipos() throws Exception {
+    void nao_deve_possuir_mais_que_dois_tipos() throws Exception {
 
         assertThrows(LimiteDeTipoPokemonException.class, () -> {
             new PokemonBuilder()
@@ -69,7 +69,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_deve_possuir_mais_que_quatro_ataques() throws Exception {
+    void nao_deve_possuir_mais_que_quatro_ataques() throws Exception {
 
         assertThrows(LimiteDeAtaquePokemonException.class, () -> {
             new PokemonBuilder()
@@ -83,7 +83,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_permitir_ter_ate_dois_tipos() throws Exception {
+    void deve_permitir_ter_ate_dois_tipos() throws Exception {
 
         int quantidadeDeAtaquesEsperada = 2;
         Pokemon pokemon = new PokemonBuilder()
@@ -95,7 +95,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_permitir_ter_ate_quatro_ataques() throws Exception {
+    void deve_permitir_ter_ate_quatro_ataques() throws Exception {
 
         int quantidadeDeAtaquesEsperada = 4;
         Pokemon pokemon = new PokemonBuilder().comAtaque(new AtaqueBuilder().construir())
@@ -108,7 +108,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_nivel_minimo_um() throws Exception {
+    void deve_ter_nivel_minimo_um() throws Exception {
         int nivelMinimo = 1;
 
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMinimo).construir();
@@ -117,7 +117,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_nivel_maximo_cem() throws Exception {
+    void deve_ter_nivel_maximo_cem() throws Exception {
         int nivelMaximo = 100;
 
         Pokemon pokemon = new PokemonBuilder().comNivel(nivelMaximo).construir();
@@ -126,7 +126,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_pode_ter_nivel_menor_que_um() {
+    void nao_pode_ter_nivel_menor_que_um() {
         int nivelInvalido = 0;
 
         assertThrows(NivelPokemonInvalidoException.class, () -> {
@@ -135,7 +135,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_pode_ter_nivel_maior_que_cem() {
+    void nao_pode_ter_nivel_maior_que_cem() {
         int nivelInvalido = 101;
 
         assertThrows(NivelPokemonInvalidoException.class, () -> {
@@ -144,7 +144,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_felicidade_minima_zero() throws Exception {
+    void deve_ter_felicidade_minima_zero() throws Exception {
         int felicidadeMinima = 0;
 
         Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMinima).construir();
@@ -153,7 +153,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void deve_ter_felicidade_maxima_cem() throws Exception {
+    void deve_ter_felicidade_maxima_cem() throws Exception {
         int felicidadeMaxima = 100;
 
         Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMaxima).construir();
@@ -162,7 +162,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_deve_ter_felicidade_menor_que_zero() {
+    void nao_deve_ter_felicidade_menor_que_zero() {
         int felicidadeInvalida = -1;
 
         assertThrows(FelicidadeInvalidaException.class, () -> {
@@ -171,7 +171,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void nao_deve_ter_felicidade_maior_que_cem() {
+    void nao_deve_ter_felicidade_maior_que_cem() {
         int felicidadeInvalida = 101;
 
         assertThrows(FelicidadeInvalidaException.class, () -> {

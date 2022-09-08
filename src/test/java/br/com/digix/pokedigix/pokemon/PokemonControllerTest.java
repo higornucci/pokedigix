@@ -29,7 +29,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class PokemonControllerTest {
+class PokemonControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -45,14 +45,14 @@ public class PokemonControllerTest {
 
     @BeforeEach
     @AfterEach
-    public void resetDb() {
+    void resetDb() {
         pokemonRepository.deleteAll();
         ataqueRepository.deleteAll();
         tipoRepository.deleteAll();
     }
 
     @Test
-    public void deve_buscar_um_pokemon_pelo_id_do_tipo() throws Exception {
+    void deve_buscar_um_pokemon_pelo_id_do_tipo() throws Exception {
         // Arrange
         String nome = "Ghost";
         Tipo tipoEsperado = new Tipo(nome);
@@ -82,7 +82,7 @@ public class PokemonControllerTest {
     }
 
     @Test
-    public void deve_buscar_um_pokemon_pelo_nome() throws Exception {
+    void deve_buscar_um_pokemon_pelo_nome() throws Exception {
         // Arrange
         String nome = "Ghost";
         Tipo tipoEsperado = new Tipo(nome);

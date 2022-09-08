@@ -23,7 +23,7 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class AtaqueControllerTest {
+class AtaqueControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -37,13 +37,13 @@ public class AtaqueControllerTest {
     @BeforeEach
     @AfterEach
 
-    public void resetDb() {
+    void resetDb() {
         ataqueRepository.deleteAll();
         tipoRepository.deleteAll();
     }
 
     @Test
-    public void deve_adicionar_um_ataque() throws Exception {
+    void deve_adicionar_um_ataque() throws Exception {
         int quantidadeEsperada = 1;
         Tipo tipoEsperado = new Tipo("Normal");
         tipoRepository.save(tipoEsperado);

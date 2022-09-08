@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.tipo;
 
-import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.NotAcceptableStatusException;
 import org.webjars.NotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,7 +76,7 @@ public class TipoController {
     @Operation(summary = "Deletar um Tipo pelo seu id")
     @ApiResponse(responseCode = "204")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> removerTipoPorId(@PathVariable Long id) {
+    public ResponseEntity<Void> removerTipoPorId(@PathVariable Long id) {
         tipoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -87,7 +85,7 @@ public class TipoController {
     @ApiResponse(responseCode = "204")
     @DeleteMapping
     @Transactional
-    public ResponseEntity<?> removerTipoPorNome(@RequestParam(required = true) String termo) {
+    public ResponseEntity<Void> removerTipoPorNome(@RequestParam(required = true) String termo) {
         tipoRepository.deleteByNomeContaining(termo);
         return ResponseEntity.noContent().build();
     }
