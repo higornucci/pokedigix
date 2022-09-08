@@ -7,6 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
+import br.com.digix.pokedigix.PokedigixApplication;
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
+import br.com.digix.pokedigix.utils.JsonUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,11 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import br.com.digix.pokedigix.PokedigixApplication;
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.utils.JsonUtil;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
@@ -35,12 +35,13 @@ public class AtaqueControllerTest {
     
     @Autowired
     private TipoRepository tipoRepository;
-
+    
+    @BeforeEach
     @AfterEach
     public void resetDb() {
         ataqueRepository.deleteAll();
+        tipoRepository.deleteAll();
     }
-
     @Test
     public void deve_adicionar_um_ataque() throws Exception {
         String ataqueEsperado = "Choque do Trovao";
@@ -84,7 +85,6 @@ public class AtaqueControllerTest {
         int quantidadeEsperada = 0;
 
         Tipo tipo = new Tipo("Eletrico");
-        tipoRepository.save(tipo);
 
         Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
         ataqueRepository.save(ataque);
