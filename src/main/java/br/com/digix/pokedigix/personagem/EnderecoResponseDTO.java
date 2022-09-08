@@ -3,15 +3,15 @@ package br.com.digix.pokedigix.personagem;
 public class EnderecoResponseDTO {
 
     private Long id;
-    private String regiao;
     private String cidade;
+    private String regiao;
     
     public EnderecoResponseDTO(){}
     
     public EnderecoResponseDTO(Long id, String regiao, String cidade) {
         this.id = id;
-        this.regiao = regiao;
         this.cidade = cidade;
+        this.regiao = regiao;
     }
 
     public Long getId() {

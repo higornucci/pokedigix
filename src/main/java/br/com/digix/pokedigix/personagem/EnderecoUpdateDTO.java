@@ -8,8 +8,8 @@ public class EnderecoUpdateDTO {
     }
     
     public EnderecoUpdateDTO(String regiao, String cidade) {
-        this.regiao = regiao;
         this.cidade = cidade;
+        this.regiao = regiao;
     }
 
     public String getCidade() {

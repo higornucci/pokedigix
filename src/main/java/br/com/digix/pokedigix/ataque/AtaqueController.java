@@ -38,11 +38,10 @@ public class AtaqueController {
   @GetMapping(path = "/{id}")
   public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
     Ataque ataque = new Ataque();
-   Optional<Ataque> value = ataqueRepository.findById(id);
-   
-if (value.isPresent()) {
-    ataque = value.get();
-}
+    Optional<Ataque> value = ataqueRepository.findById(id);
+    if (value.isPresent()) {
+      ataque = value.get();
+    }
     TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
       ataque.getTipo().getId(),
       ataque.getTipo().getNome()
@@ -69,7 +68,11 @@ if (value.isPresent()) {
     @RequestBody AtaqueRequestDTO novoAtaque
   )
     throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-    Tipo tipo = tipoRepository.findById(novoAtaque.getTipoId()).get();
+    Tipo tipo = new Tipo();
+    Optional<Tipo> value = tipoRepository.findById(novoAtaque.getTipoId());
+    if (value.isPresent()) {
+      tipo = value.get();
+    }
     Ataque ataque = new Ataque(
       novoAtaque.getForca(),
       novoAtaque.getAcuracia(),
@@ -98,37 +101,48 @@ if (value.isPresent()) {
   }
 
   @Operation(summary = "Atualizar um Ataque")
-	@ApiResponse(responseCode = "200")
-	@PutMapping(path = "/{id}", consumes = "application/json")
-	public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
-			@PathVariable Long id) {
-		Ataque ataque = ataqueRepository.findById(id).get();
-		ataque.setNome(ataqueRequestDTO.getNome());
-		ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
-		ataque.setCategoria(ataqueRequestDTO.getCategoria());
-		ataque.setDescricao(ataqueRequestDTO.getDescricao());
-		ataque.setForca(ataqueRequestDTO.getForca());
-		ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
+  @ApiResponse(responseCode = "200")
+  @PutMapping(path = "/{id}", consumes = "application/json")
+  public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(
+    @RequestBody AtaqueRequestDTO ataqueRequestDTO,
+    @PathVariable Long id
+  ) {
+    Ataque ataque = new Ataque();
+    Optional<Ataque> value = ataqueRepository.findById(id);
+    if (value.isPresent()) {
+      ataque = value.get();
+    }
+    ataque.setNome(ataqueRequestDTO.getNome());
+    ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
+    ataque.setCategoria(ataqueRequestDTO.getCategoria());
+    ataque.setDescricao(ataqueRequestDTO.getDescricao());
+    ataque.setForca(ataqueRequestDTO.getForca());
+    ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
 
-		ataqueRepository.save(ataque);
-    TipoResponseDTO tipoDTO = new TipoResponseDTO(ataque.getId(), ataque.getNome());
+    ataqueRepository.save(ataque);
+    TipoResponseDTO tipoDTO = new TipoResponseDTO(
+      ataque.getId(),
+      ataque.getNome()
+    );
 
-		return ResponseEntity.ok(new AtaqueResponseDTO(
-				ataque.getId(),
-				ataque.getForca(),
-				ataque.getAcuracia(),
-				ataque.getPontosDePoder(),
-				ataque.getCategoria(),
+    return ResponseEntity.ok(
+      new AtaqueResponseDTO(
+        ataque.getId(),
+        ataque.getForca(),
+        ataque.getAcuracia(),
+        ataque.getPontosDePoder(),
+        ataque.getCategoria(),
         ataque.getNome(),
-				ataque.getDescricao(),
+        ataque.getDescricao(),
         tipoDTO
-        ));
+      )
+    );
+  }
 
-	}
   @Operation(summary = "Deletar um Ataque pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerAtaqueId(@PathVariable Long id) {
+  public ResponseEntity<Void> removerAtaqueId(@PathVariable Long id) {
       ataqueRepository.deleteById(id);
       return ResponseEntity.noContent().build();
   }
