@@ -3,7 +3,7 @@ package br.com.digix.pokedigix.tipo;
 public class TipoRequestDTO {
 
     private String nome;
-    
+
     public TipoRequestDTO(String nome) {
         this.nome = nome;
     }

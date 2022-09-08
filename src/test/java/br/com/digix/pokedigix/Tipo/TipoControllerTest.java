@@ -204,4 +204,28 @@ class TipoControllerTest {
                 Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
                 assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeNovo);
         }
+
+        @Test
+        void deve_atualizar_um_tipo() throws Exception {
+                // Arrange
+                String nomeAlterado = "Charmander";
+                String nome = "Fire";
+                Tipo tipo = new Tipo(nome);
+                tipoRepository.save(tipo);
+
+                TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeAlterado);
+
+                // Action
+                mvc
+                                .perform(
+                                                put("/api/v1/tipos/" + tipo.getId())
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(JsonUtil.toJson(tipoRequestDTO)))
+                                .andExpect(status().isOk());
+
+                // Asserts
+                Tipo tiposEncontrados = tipoRepository.findById(tipo.getId()).get();
+
+                assertThat(tiposEncontrados.getNome()).isEqualTo(nomeAlterado);
+        }
 }

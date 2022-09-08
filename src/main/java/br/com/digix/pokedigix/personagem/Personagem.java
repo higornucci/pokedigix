@@ -34,7 +34,7 @@ public abstract class Personagem {
     protected Personagem() {
     }
 
-    public Personagem(String nome, Endereco endereco) {
+    protected Personagem(String nome, Endereco endereco) {
         this.nome = nome;
         this.endereco = endereco;
         this.pokemons = new ArrayList<>();

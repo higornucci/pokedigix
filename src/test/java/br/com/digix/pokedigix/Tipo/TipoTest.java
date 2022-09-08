@@ -10,8 +10,8 @@ class TipoTest {
 
         String nomeEsperado = "Fantasma";
 
-        Tipo tipo = new Tipo(nomeEsperado);
+    Tipo tipo = new Tipo(nomeEsperado);
 
-        assertEquals(nomeEsperado, tipo.getNome());
-    }
+    assertEquals(nomeEsperado, tipo.getNome());
+  }
 }
