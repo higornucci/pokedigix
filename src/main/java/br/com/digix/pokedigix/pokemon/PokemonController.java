@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.pokemon;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -69,13 +70,21 @@ public class PokemonController {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
     for (Long ataqueId : novoPokemon.getAtaquesIds()) {
-      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      Optional<Ataque> value = ataqueRepository.findById(ataqueId);
+      Ataque ataque = new Ataque();
+      if (value.isPresent()) {
+        ataque = value.get();
+      }
       ataques.add(ataque);
     }
     for (Long tipoId : novoPokemon.getTiposIds()) {
-      Tipo tipo = tipoRepository.findById(tipoId).get();
-      tipos.add(tipo);
-    }
+        Optional<Tipo> value = tipoRepository.findById(tipoId);
+        Tipo tipo = new Tipo();
+        if (value.isPresent()) {
+          tipo = value.get();
+        }
+        tipo.add(tipo);
+      }
     Pokemon pokemon = new Pokemon(
         novoPokemon.getNome(),
         novoPokemon.getAltura(),
@@ -134,14 +143,25 @@ public class PokemonController {
       LimiteDeAtaquePokemonException {
     Collection<Tipo> tipos = new ArrayList<>();
     Collection<Ataque> ataques = new ArrayList<>();
+
     for (Long ataqueId : pokemonAtt.getAtaquesIds()) {
-      Ataque ataque = ataqueRepository.findById(ataqueId).get();
+      Optional<Ataque> value = ataqueRepository.findById(ataqueId);
+      Ataque ataque = new Ataque();
+      if (value.isPresent()) {
+        ataque = value.get();
+      }
       ataques.add(ataque);
     }
+
     for (Long tipoId : pokemonAtt.getTiposIds()) {
-      Tipo tipo = tipoRepository.findById(tipoId).get();
-      tipos.add(tipo);
+      Optional<Tipo> value = tipoRepository.findById(tipoId);
+      Tipo tipo = new Tipo();
+      if (value.isPresent()) {
+        tipo = value.get();
+      }
+      tipo.add(tipo);
     }
+
     Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
     for (Ataque ataque : ataques) {
       AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
@@ -160,11 +180,17 @@ public class PokemonController {
     Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
     for (Tipo tipo : tipos) {
       TipoResponseDTO tipoDTO = new TipoResponseDTO(
-          tipo.getId(),
-          tipo.getNome());
-      tiposDTOs.add(tipoDTO);
-    }
-    Pokemon alterarPokemon = pokemonRepository.findById(id).get();
+        tipo.getId(),
+        tipo.getNome());
+        tiposDTOs.add(tipoDTO);
+      }
+    
+      Pokemon alterarPokemon = new Pokemon();
+      Optional<Pokemon> value = pokemonRepository.findById(id);
+      if (value.isPresent()) {
+        alterarPokemon = value.get();
+      }
+
     alterarPokemon.setNome(pokemonAtt.getNome());
     alterarPokemon.setAltura(pokemonAtt.getAltura());
     alterarPokemon.setPeso(pokemonAtt.getPeso());

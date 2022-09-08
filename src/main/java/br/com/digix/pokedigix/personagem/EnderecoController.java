@@ -28,7 +28,7 @@ public class EnderecoController {
     @Operation(summary = "Deletar um Endereço pelo seu id")
     @ApiResponse(responseCode = "204")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> removerEnderecoId(@PathVariable Long id) {
+    public ResponseEntity<Void> removerEnderecoId(@PathVariable Long id) {
         enderecoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -39,8 +39,8 @@ public class EnderecoController {
     public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
             @RequestBody EnderecoRequestDTO novoEndereco) {
         Endereco endereco = new Endereco(
-                novoEndereco.getCidade(),
-                novoEndereco.getRegiao());
+                novoEndereco.getRegiao(),
+                novoEndereco.getCidade());
         enderecoRepository.save(endereco);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
