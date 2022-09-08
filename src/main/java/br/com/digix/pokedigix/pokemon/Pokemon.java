@@ -38,7 +38,7 @@ public class Pokemon {
   private double peso;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 10, nullable = true) // permiti que possa não receber genero
+  @Column(length = 10, nullable = true)
   private Genero genero;
 
   @Column(nullable = false)
@@ -65,7 +65,7 @@ public class Pokemon {
   @JoinTable(name = "pokemon_ataque", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "ataque_id"))
   private Collection<Ataque> ataques;
 
-  protected Pokemon() {
+  public Pokemon() {
   }
 
   public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,

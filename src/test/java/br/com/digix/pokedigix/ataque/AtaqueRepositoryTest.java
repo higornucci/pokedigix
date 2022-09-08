@@ -4,24 +4,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
 import java.util.Collection;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoRepository;
-
 @DataJpaTest
 class AtaqueRepositoryTest {
+<<<<<<< HEAD
     
     @Autowired
     private AtaqueRepository ataqueRepository;
+=======
+>>>>>>> dev
 
-    @Autowired
-    private TipoRepository tipoRepository;
+  @Autowired
+  private AtaqueRepository ataqueRepository;
 
+<<<<<<< HEAD
     @Test
     void deve_salvar_um_ataque() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         int forca = 40;
@@ -32,12 +34,34 @@ class AtaqueRepositoryTest {
         String descricao = "O usuario ataque antes do oponente.";
         Tipo tipo = new Tipo("Normal");
         Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
+=======
+  @Autowired
+  private TipoRepository tipoRepository;
+>>>>>>> dev
 
-        ataqueRepository.save(ataque);
+  @Test
+  void deve_salvar_um_ataque()
+    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    int forca = 40;
+    int acuracia = 100;
+    int pontosDePoder = 35;
+    Categoria categoria = Categoria.FISICO;
+    String nome = "Ataque Rapido";
+    String descricao = "O usuario ataque antes do oponente.";
+    Tipo tipo = new Tipo("Normal");
+    Ataque ataque = new Ataque(
+      forca,
+      acuracia,
+      pontosDePoder,
+      categoria,
+      nome,
+      descricao,
+      tipo
+    );
 
-        assertNotNull(ataque.getId());
-    }
+    ataqueRepository.save(ataque);
 
+<<<<<<< HEAD
     @Test
     void deve_salvar_um_tipo_para_um_ataque() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         int forca = 40;
@@ -50,13 +74,36 @@ class AtaqueRepositoryTest {
         Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
         tipoRepository.save(tipo);
         ataqueRepository.save(ataque);
+=======
+    assertNotNull(ataque.getId());
+  }
+>>>>>>> dev
 
-        Ataque ataqueRetornado = ataqueRepository.findById(ataque.getId()).get();
+  @Test
+  void deve_salvar_um_tipo_para_um_ataque()
+    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    int forca = 40;
+    int acuracia = 100;
+    int pontosDePoder = 35;
+    Categoria categoria = Categoria.FISICO;
+    String nome = "Ataque Rapido";
+    String descricao = "O usuario ataque antes do oponente.";
+    Tipo tipo = new Tipo("Normal");
+    Ataque ataque = new Ataque(
+      forca,
+      acuracia,
+      pontosDePoder,
+      categoria,
+      nome,
+      descricao,
+      tipo
+    );
+    tipoRepository.save(tipo);
+    ataqueRepository.save(ataque);
 
-        assertEquals(tipo.getNome(), ataqueRetornado.getTipo().getNome());
-        assertNotNull(ataqueRetornado.getTipo().getId());
-    }
+    Ataque ataqueRetornado = ataqueRepository.findById(ataque.getId()).get();
 
+<<<<<<< HEAD
     @Test
     void deve_um_ataque_pelo_seu_tipo() throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         int forca = 40;
@@ -69,9 +116,36 @@ class AtaqueRepositoryTest {
         Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
         tipoRepository.save(tipo);
         ataqueRepository.save(ataque);
+=======
+    assertEquals(tipo.getNome(), ataqueRetornado.getTipo().getNome());
+    assertNotNull(ataqueRetornado.getTipo().getId());
+  }
+>>>>>>> dev
 
-        Collection<Ataque> ataquesRetornados = ataqueRepository.findByTipo(tipo);
+  @Test
+  void deve_um_ataque_pelo_seu_tipo()
+    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    int forca = 40;
+    int acuracia = 100;
+    int pontosDePoder = 35;
+    Categoria categoria = Categoria.FISICO;
+    String nome = "Ataque Rapido";
+    String descricao = "O usuario ataque antes do oponente.";
+    Tipo tipo = new Tipo("Normal");
+    Ataque ataque = new Ataque(
+      forca,
+      acuracia,
+      pontosDePoder,
+      categoria,
+      nome,
+      descricao,
+      tipo
+    );
+    tipoRepository.save(tipo);
+    ataqueRepository.save(ataque);
 
-        assertTrue(ataquesRetornados.contains(ataque));
-    }
+    Collection<Ataque> ataquesRetornados = ataqueRepository.findByTipo(tipo);
+
+    assertTrue(ataquesRetornados.contains(ataque));
+  }
 }

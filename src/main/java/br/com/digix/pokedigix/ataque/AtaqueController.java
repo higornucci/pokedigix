@@ -40,7 +40,6 @@ public class AtaqueController {
       throw new NotFoundException(null);
     }
     Ataque ataque = ataqueOptional.get();
-
     TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
         ataque.getTipo().getId(),
         ataque.getTipo().getNome());

@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.ataque;
 
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -40,13 +41,13 @@ public class Ataque {
     @Column(nullable = false)
     private String descricao;
 
-    @ManyToOne    
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Tipo tipo;
 
     @ManyToMany(mappedBy = "ataques")
     private Collection<Pokemon> pokemons;
 
-    protected Ataque() {}
+    public Ataque() {}
 
     public Ataque(int forca, 
                 int acuracia, 

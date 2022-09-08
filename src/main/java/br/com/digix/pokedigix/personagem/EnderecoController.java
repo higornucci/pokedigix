@@ -21,38 +21,44 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@RequestMapping(path = { "/api/v1/enderecos" }, produces = { "application/json" })
+@RequestMapping(
+  path = { "/api/v1/enderecos" },
+  produces = { "application/json" }
+)
 public class EnderecoController {
 
-    @Autowired
-    private EnderecoRepository enderecoRepository;
+  @Autowired
+  private EnderecoRepository enderecoRepository;
 
-    @Operation(summary = "Deletar um Endereço pelo seu id")
-    @ApiResponse(responseCode = "204")
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> removerEnderecoId(@PathVariable Long id) {
-        enderecoRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+  @Operation(summary = "Deletar um Endereço pelo seu id")
+  @ApiResponse(responseCode = "204")
+  @DeleteMapping(path = "/{id}")
+  public ResponseEntity<Void> removerEnderecoId(@PathVariable Long id) {
+    enderecoRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
+  }
 
-    @Operation(summary = "Cadastrar um novo endereço")
-    @ApiResponse(responseCode = "201")
-    @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
-            @RequestBody EnderecoRequestDTO novoEndereco) {
-        Endereco endereco = new Endereco(
-                novoEndereco.getCidade(),
-                novoEndereco.getRegiao());
-        enderecoRepository.save(endereco);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        new EnderecoResponseDTO(
-                                endereco.getId(),
-                                endereco.getCidade(),
-                                endereco.getRegiao()));
-
-    }
+  @Operation(summary = "Cadastrar um novo endereço")
+  @ApiResponse(responseCode = "201")
+  @PostMapping(consumes = { "application/json" })
+  public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
+    @RequestBody EnderecoRequestDTO novoEndereco
+  ) {
+    Endereco endereco = new Endereco(
+      novoEndereco.getRegiao(),
+      novoEndereco.getCidade()
+    );
+    enderecoRepository.save(endereco);
+    return ResponseEntity
+      .status(HttpStatus.CREATED)
+      .body(
+        new EnderecoResponseDTO(
+          endereco.getId(),
+          endereco.getCidade(),
+          endereco.getRegiao()
+        )
+      );
+  }
 
     @Operation(summary = "Buscar um endereço pelo seu id")
     @ApiResponse(responseCode = "200", description = "Retorna o endereço solicitado")
@@ -93,24 +99,32 @@ public class EnderecoController {
         return ResponseEntity.ok(enderecosRetornados);
     }
 
-    @Operation(summary = "Buscar um endereço pelo nome da região")
-    @ApiResponse(responseCode = "200", description = "Retorna o endereço solicitado")
-    @GetMapping(path = "/regiao")
-    public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorRegiao(
-            @RequestParam(required = false, name = "termo") String regiao) {
-        Iterable<Endereco> enderecos;
-        if (regiao != null) {
-            enderecos = enderecoRepository.findByRegiaoContaining(regiao);
-        } else {
-            enderecos = enderecoRepository.findAll();
-        }
-        Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
-
-        for (Endereco endereco : enderecos) {
-            enderecosRetornados
-                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getCidade(), endereco.getRegiao()));
-        }
-        return ResponseEntity.ok(enderecosRetornados);
-
+  @Operation(summary = "Buscar um endereço pelo nome da região")
+  @ApiResponse(
+    responseCode = "200",
+    description = "Retorna o endereço solicitado"
+  )
+  @GetMapping(path = "/regiao")
+  public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorRegiao(
+    @RequestParam(required = false, name = "termo") String regiao
+  ) {
+    Iterable<Endereco> enderecos;
+    if (regiao != null) {
+      enderecos = enderecoRepository.findByRegiaoContaining(regiao);
+    } else {
+      enderecos = enderecoRepository.findAll();
     }
+    Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
+
+    for (Endereco endereco : enderecos) {
+      enderecosRetornados.add(
+        new EnderecoResponseDTO(
+          endereco.getId(),
+          endereco.getCidade(),
+          endereco.getRegiao()
+        )
+      );
+    }
+    return ResponseEntity.ok(enderecosRetornados);
+  }
 }
