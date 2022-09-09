@@ -157,7 +157,6 @@ class TreinadorControllerTest {
         @Test
         void deve_buscar_um_treinador_pelo_id() throws Exception {
                 // Arrange
-                String nome = "Flavio";
                 Endereco endereco = new Endereco("centro-oeste", "Campo-Grande");
                 enderecoRepository.save(endereco);
                 Tipo tipo = new Tipo("Agua");
@@ -205,7 +204,7 @@ class TreinadorControllerTest {
                                 resultado.getResponse().getContentAsString(),
                                 PokemonResponseDTO[].class);
 
-                assertThat(pokemonsRetornadDtos.length).isEqualTo(quantidadeEsperada);
+                assertThat(pokemonsRetornadDtos).hasSize(quantidadeEsperada);
                 assertThat(pokemonsRetornadDtos).extracting("nome").contains(pokemon.getNome());
         }
 }
