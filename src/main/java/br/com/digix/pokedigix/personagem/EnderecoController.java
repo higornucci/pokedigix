@@ -125,7 +125,6 @@ public class EnderecoController {
         if (enderecoOptional.isEmpty()) {
             throw new NotFoundException(null);
         }
-
         Endereco endereco = enderecoOptional.get();
         endereco.setRegiao(enderecoRequestDTO.getRegiao());
         endereco.setCidade(enderecoRequestDTO.getCidade());
