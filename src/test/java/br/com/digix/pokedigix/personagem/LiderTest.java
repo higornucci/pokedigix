@@ -36,4 +36,18 @@ public class LiderTest {
        
         
     }
+
+    public void deve_ter_insignia() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
+        // Arrage
+        int insigniaEsperada = 1;
+        Insignia insignia = Insignia.ARCO_IRIS;
+        
+        // Action
+        Lider lider = new LiderBuilder().comInsignia(insignia).construir();
+        Collection<Insignia> listaDeInsignias = new ArrayList<>();
+        listaDeInsignias.add(lider.getInsignia());
+
+        // Assert
+        assertThat(insigniaEsperada).isEqualTo(listaDeInsignias.size());
+    }
 }

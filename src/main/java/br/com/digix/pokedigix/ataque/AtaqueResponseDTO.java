@@ -13,6 +13,8 @@ public class AtaqueResponseDTO {
     private String descricao;
     private TipoResponseDTO tipo;
 
+    public AtaqueResponseDTO(){}
+    
     public AtaqueResponseDTO(
             Long id,
             int forca,
@@ -22,7 +24,7 @@ public class AtaqueResponseDTO {
             String nome,
             String descricao,
             TipoResponseDTO tipo) {
-                
+
         this.id = id;
         this.forca = forca;
         this.acuracia = acuracia;

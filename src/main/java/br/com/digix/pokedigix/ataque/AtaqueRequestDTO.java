@@ -9,7 +9,21 @@ public class AtaqueRequestDTO {
     private String nome;
     private String descricao;
 
-   
+    public AtaqueRequestDTO(){}
+
+    public AtaqueRequestDTO(int forca
+    , int acuracia, 
+    int pontosDePoder, 
+    Long tipoId, 
+    Categoria categoria, String nome, String descricao) {
+        this.forca = forca;
+        this.acuracia = acuracia;
+        this.pontosDePoder = pontosDePoder;
+        this.tipoId = tipoId;
+        this.categoria = categoria;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
 
     public int getForca() {
         return forca;

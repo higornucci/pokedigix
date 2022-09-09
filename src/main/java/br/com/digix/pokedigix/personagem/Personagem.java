@@ -27,14 +27,14 @@ public abstract class Personagem {
    
     @ManyToOne
     private Endereco endereco;
-  
 
     @OneToMany (mappedBy = "treinador")
     protected Collection<Pokemon> pokemons;
 
-    protected Personagem() {}
+    protected Personagem() {
+    }
 
-    public Personagem(String nome, Endereco endereco) {
+    protected Personagem(String nome, Endereco endereco) {
         this.nome = nome;
         this.endereco = endereco;
         this.pokemons = new ArrayList<>();
@@ -56,7 +56,6 @@ public abstract class Personagem {
         this.nome = nome;
     }
 
-
     public Endereco getEndereco() {
         return endereco;
     }
@@ -69,5 +68,4 @@ public abstract class Personagem {
         return pokemons;
     }
 
-    
 }

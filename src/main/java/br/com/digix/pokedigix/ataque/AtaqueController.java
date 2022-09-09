@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.ataque;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.webjars.NotFoundException;
 
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
@@ -29,21 +32,87 @@ public class AtaqueController {
   private TipoRepository tipoRepository;
 
   @Operation(summary = "Buscar um ataque pelo seu id")
-  @ApiResponse(
-    responseCode = "200",
-    description = "Retorna os dados do ataque solicitado"
-  )
+  @ApiResponse(responseCode = "200", description = "Retorna os dados do ataque solicitado")
   @GetMapping(path = "/{id}")
   public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
-    Ataque ataque = ataqueRepository.findById(id).get();
-
+    Optional<Ataque> ataqueOptional = ataqueRepository.findById(id);
+    if (ataqueOptional.isEmpty()) {
+      throw new NotFoundException(null);
+    }
+    Ataque ataque = ataqueOptional.get();
     TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
-      ataque.getTipo().getId(),
-      ataque.getTipo().getNome()
-    );
+        ataque.getTipo().getId(),
+        ataque.getTipo().getNome());
 
     return ResponseEntity.ok(
-      new AtaqueResponseDTO(
+        new AtaqueResponseDTO(
+            ataque.getId(),
+            ataque.getForca(),
+            ataque.getAcuracia(),
+            ataque.getPontosDePoder(),
+            ataque.getCategoria(),
+            ataque.getNome(),
+            ataque.getDescricao(),
+            tipoResponseDTO));
+  }
+
+  @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
+  @ApiResponse(responseCode = "201")
+  @PostMapping(consumes = { "application/json" })
+  public ResponseEntity<AtaqueResponseDTO> criar(
+      @RequestBody AtaqueRequestDTO novoAtaque)
+      throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    Optional<Tipo> tipoOptional = tipoRepository.findById(novoAtaque.getTipoId());
+    if (tipoOptional.isEmpty()) {
+      throw new NotFoundException(null);
+    }
+    Tipo tipo = tipoOptional.get();
+    Ataque ataque = new Ataque(
+        novoAtaque.getForca(),
+        novoAtaque.getAcuracia(),
+        novoAtaque.getPontosDePoder(),
+        novoAtaque.getCategoria(),
+        novoAtaque.getNome(),
+        novoAtaque.getDescricao(),
+        tipo);
+    ataqueRepository.save(ataque);
+    TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .body(
+            new AtaqueResponseDTO(
+                ataque.getId(),
+                ataque.getForca(),
+                ataque.getAcuracia(),
+                ataque.getPontosDePoder(),
+                ataque.getCategoria(),
+                ataque.getNome(),
+                ataque.getDescricao(),
+                tipoDTO));
+  }
+
+  @Operation(summary = "Atualizar um Ataque")
+  @ApiResponse(responseCode = "200")
+  @PutMapping(path = "/{id}", consumes = "application/json")
+
+  public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
+      @PathVariable Long id) {
+    Optional<Ataque> ataqueOptional = ataqueRepository.findById(id);
+    if (ataqueOptional.isEmpty()) {
+      throw new NotFoundException(null);
+    }
+    Ataque ataque = ataqueOptional.get();
+    ataque.setNome(ataqueRequestDTO.getNome());
+    ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
+    ataque.setCategoria(ataqueRequestDTO.getCategoria());
+    ataque.setDescricao(ataqueRequestDTO.getDescricao());
+    ataque.setForca(ataqueRequestDTO.getForca());
+    ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
+
+    ataqueRepository.save(ataque);
+    TipoResponseDTO tipoDTO = new TipoResponseDTO(ataque.getId(), ataque.getNome());
+
+    return ResponseEntity.ok(new AtaqueResponseDTO(
         ataque.getId(),
         ataque.getForca(),
         ataque.getAcuracia(),
@@ -51,79 +120,15 @@ public class AtaqueController {
         ataque.getCategoria(),
         ataque.getNome(),
         ataque.getDescricao(),
-        tipoResponseDTO
-      )
-    );
+        tipoDTO));
+
   }
 
-  @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
-  @ApiResponse(responseCode = "201")
-  @PostMapping(consumes = { "application/json" })
-  public ResponseEntity<AtaqueResponseDTO> criar(
-    @RequestBody AtaqueRequestDTO novoAtaque
-  )
-    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-    Tipo tipo = tipoRepository.findById(novoAtaque.getTipoId()).get();
-    Ataque ataque = new Ataque(
-      novoAtaque.getForca(),
-      novoAtaque.getAcuracia(),
-      novoAtaque.getPontosDePoder(),
-      novoAtaque.getCategoria(),
-      novoAtaque.getNome(),
-      novoAtaque.getDescricao(),
-      tipo
-    );
-    ataqueRepository.save(ataque);
-    TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
-    return ResponseEntity
-      .status(HttpStatus.CREATED)
-      .body(
-        new AtaqueResponseDTO(
-          ataque.getId(),
-          ataque.getForca(),
-          ataque.getAcuracia(),
-          ataque.getPontosDePoder(),
-          ataque.getCategoria(),
-          ataque.getNome(),
-          ataque.getDescricao(),
-          tipoDTO
-        )
-      );
-  }
-
-  @Operation(summary = "Atualizar um Ataque")
-	@ApiResponse(responseCode = "200")
-	@PutMapping(path = "/{id}", consumes = "application/json")
-	public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
-			@PathVariable Long id) {
-		Ataque ataque = ataqueRepository.findById(id).get();
-		ataque.setNome(ataqueRequestDTO.getNome());
-		ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
-		ataque.setCategoria(ataqueRequestDTO.getCategoria());
-		ataque.setDescricao(ataqueRequestDTO.getDescricao());
-		ataque.setForca(ataqueRequestDTO.getForca());
-		ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
-
-		ataqueRepository.save(ataque);
-    TipoResponseDTO tipoDTO = new TipoResponseDTO(ataque.getId(), ataque.getNome());
-
-		return ResponseEntity.ok(new AtaqueResponseDTO(
-				ataque.getId(),
-				ataque.getForca(),
-				ataque.getAcuracia(),
-				ataque.getPontosDePoder(),
-				ataque.getCategoria(),
-        ataque.getNome(),
-				ataque.getDescricao(),
-        tipoDTO
-        ));
-
-	}
   @Operation(summary = "Deletar um Ataque pelo seu id")
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<?> removerAtaqueId(@PathVariable Long id) {
-      ataqueRepository.deleteById(id);
-      return ResponseEntity.noContent().build();
+  public ResponseEntity<Void> removerAtaqueId(@PathVariable Long id) {
+    ataqueRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
   }
 }

@@ -4,19 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonBuilder;
+import org.junit.jupiter.api.Test;
 
- class TreinadorTest {
-    
+class TreinadorTest {
     @Test
-     void deve_comecar_com_um_pokemon() throws Exception {
+    void deve_comecar_com_um_pokemon() throws Exception {
         // Arrange
         int quantidadeDePokemonsEsperada = 1;
         Pokemon pokemonInicial = new PokemonBuilder().construir();
-        
+
         // Action
         Treinador treinador = new TreinadorBuilder()
                 .comPokemonInicial(pokemonInicial)
@@ -33,9 +31,9 @@ import br.com.digix.pokedigix.pokemon.PokemonBuilder;
         Pokemon pokemonACapturar = new PokemonBuilder().construir();
 
         Treinador treinador = new TreinadorBuilder().construir();
-        //Action
+        // Action
         treinador.capturar(pokemonACapturar);
-        
+
         assertTrue(treinador.getPokemons().contains(pokemonACapturar));
         assertEquals(quantidadeDePokemonsEsperada, treinador.getPokemons().size());
     }
@@ -43,13 +41,15 @@ import br.com.digix.pokedigix.pokemon.PokemonBuilder;
     @Test
      void nao_pode_ter_mais_que_seis_pokemons_ao_mesmo_tempo() throws Exception {
         Treinador treinador = new TreinadorBuilder().construir();
-        for(int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 5; i++) {
             treinador.capturar(new PokemonBuilder().construir());
         }
 
-        assertThrows(LimiteDePokemonException.class, () -> {
-            treinador.capturar(new PokemonBuilder().construir());
-        });
+        assertThrows(
+                LimiteDePokemonException.class,
+                () -> {
+                    treinador.capturar(new PokemonBuilder().construir());
+                });
     }
 
     @Test
@@ -62,4 +62,6 @@ import br.com.digix.pokedigix.pokemon.PokemonBuilder;
 
         assertEquals(quantidadeDePokemonsEsperada, treinador.getPokemons().size());
     }
+
+    
 }
