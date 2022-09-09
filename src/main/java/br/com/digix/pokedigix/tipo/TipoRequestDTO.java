@@ -4,6 +4,12 @@ public class TipoRequestDTO {
 
     private String nome;
 
+    protected TipoRequestDTO(){}
+    
+    public TipoRequestDTO(String nome) {
+        this.nome = nome;
+    }
+
     public String getNome() {
         return nome;
     }

@@ -5,19 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class TipoRepositoryTest {
+class TipoRepositoryTest {
 
     @Autowired
     private TipoRepository tipoRepository;
 
     @Test
-    public void deve_salvar_um_tipo() {
+    void deve_salvar_um_tipo() {
         String nomeEsperado = "Fantasma";
         Tipo tipo = new Tipo(nomeEsperado);
 
@@ -27,30 +26,32 @@ public class TipoRepositoryTest {
     }
 
     @Test
-    public void deve_buscar_um_tipo_pelo_nome() {
+    void deve_buscar_um_tipo_pelo_nome() {
         String nome = "Eletrico";
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
 
-        Collection<Tipo> tiposRetornados = tipoRepository.findByNomeContaining(nome);
+        Collection<Tipo> tiposRetornados = tipoRepository.findByNomeContaining(
+                nome);
 
         assertTrue(tiposRetornados.contains(tipo));
     }
 
     @Test
-    public void deve_buscar_um_tipo_pelo_nome_parcial() {
+    void deve_buscar_um_tipo_pelo_nome_parcial() {
         String nome = "Eletrico";
         String nomeParcial = "Ele";
         Tipo tipo = new Tipo(nome);
         tipoRepository.save(tipo);
 
-        Collection<Tipo> tiposRetornados = tipoRepository.findByNomeContaining(nomeParcial);
+        Collection<Tipo> tiposRetornados = tipoRepository.findByNomeContaining(
+                nomeParcial);
 
         assertTrue(tiposRetornados.contains(tipo));
     }
 
     @Test
-    public void deve_poder_remover_pelo_nome() {
+    void deve_poder_remover_pelo_nome() {
         String fada = "Fada";
         String fantasma = "Fantasma";
         tipoRepository.save(new Tipo(fada));
@@ -62,4 +63,5 @@ public class TipoRepositoryTest {
 
         assertEquals(quantidadeEsperada, quantidadeRemovida);
     }
+
 }
