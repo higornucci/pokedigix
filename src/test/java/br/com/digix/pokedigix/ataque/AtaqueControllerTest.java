@@ -3,6 +3,7 @@ package br.com.digix.pokedigix.ataque;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -131,5 +132,23 @@ class AtaqueControllerTest {
                 Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
                 assertThat(ataquesEncontrados).extracting(Ataque::getNome)
                                 .containsOnly(novoAtaque);
+        }
+
+        @Test
+        void deve_buscar_um_ataque_pelo_id() throws Exception {
+                Ataque ataque = new AtaqueBuilder().construir();
+                ataqueRepository.save(ataque);
+
+                // Action
+                MvcResult mvcResult = mvc.perform(get("/api/v1/ataques/" + ataque.getId())).andReturn();
+
+                // Assert
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
+
+                String content = mvcResult.getResponse().getContentAsString();
+                AtaqueResponseDTO ataqueDTO = JsonUtil.mapFromJson(content, AtaqueResponseDTO.class);
+
+                assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
         }
 }
