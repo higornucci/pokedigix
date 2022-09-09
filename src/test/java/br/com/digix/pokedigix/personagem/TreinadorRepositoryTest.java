@@ -13,7 +13,7 @@ class TreinadorRepositoryTest {
     private TreinadorRepository treinadorRepository;
 
     @Test
-    void deve_salvar_um_treinador() throws Exception {
+     void deve_salvar_um_treinador() throws Exception {
         Treinador treinador = new TreinadorBuilder().construir();
 
         treinadorRepository.save(treinador);

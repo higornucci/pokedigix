@@ -1,18 +1,22 @@
 package br.com.digix.pokedigix.pokemon;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.ataque.AtaqueBuilder;
-import br.com.digix.pokedigix.tipo.Tipo;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
-class PokemonTest {
+import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueBuilder;
+import br.com.digix.pokedigix.personagem.Treinador;
+import br.com.digix.pokedigix.personagem.TreinadorBuilder;
+import br.com.digix.pokedigix.tipo.Tipo;
 
+class PokemonTest {
     @Test
     void deve_criar_um_pokemon() throws Exception {
         String nome = "Gastly";
@@ -58,34 +62,33 @@ class PokemonTest {
 
     @Test
     void nao_deve_possuir_mais_que_dois_tipos() throws Exception {
-        assertThrows(
-                LimiteDeTipoPokemonException.class,
-                () -> {
-                    new PokemonBuilder()
-                            .comTipo(new Tipo("Fogo"))
-                            .comTipo(new Tipo("Fantasma"))
-                            .comTipo(new Tipo("Planta"))
-                            .construir();
-                });
+
+        assertThrows(LimiteDeTipoPokemonException.class, () -> {
+            new PokemonBuilder()
+                    .comTipo(new Tipo("Fogo"))
+                    .comTipo(new Tipo("Fantasma"))
+                    .comTipo(new Tipo("Planta"))
+                    .construir();
+        });
     }
 
     @Test
     void nao_deve_possuir_mais_que_quatro_ataques() throws Exception {
-        assertThrows(
-                LimiteDeAtaquePokemonException.class,
-                () -> {
-                    new PokemonBuilder()
-                            .comAtaque(new AtaqueBuilder().construir())
-                            .comAtaque(new AtaqueBuilder().construir())
-                            .comAtaque(new AtaqueBuilder().construir())
-                            .comAtaque(new AtaqueBuilder().construir())
-                            .comAtaque(new AtaqueBuilder().construir())
-                            .construir();
-                });
+
+        assertThrows(LimiteDeAtaquePokemonException.class, () -> {
+            new PokemonBuilder()
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .comAtaque(new AtaqueBuilder().construir())
+                    .construir();
+        });
     }
 
     @Test
     void deve_permitir_ter_ate_dois_tipos() throws Exception {
+
         int quantidadeDeAtaquesEsperada = 2;
         Pokemon pokemon = new PokemonBuilder()
                 .comTipo(new Tipo("Fogo"))
@@ -157,6 +160,21 @@ class PokemonTest {
                 .construir();
 
         assertEquals(felicidadeMinima, pokemon.getFelicidade());
+    }
+
+    @Test
+    void deve_ser_pokemon_selvagem() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().construir();
+
+        assertTrue(pokemon.isSelvagem());
+    }
+
+    @Test
+    void deve_verificar_se_pokemon_nao_eh_selvagem() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().construir();
+        Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).construir();
+
+        assertFalse(pokemon.isSelvagem());
     }
 
     @Test

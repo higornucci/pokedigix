@@ -107,7 +107,6 @@ class PokemonControllerTest {
                                 PokemonResponseDTO[].class);
 
                 assertThat(pokemonRetornados).extracting(PokemonResponseDTO::getNome).containsOnly(nome);
-
         }
 
         @Test

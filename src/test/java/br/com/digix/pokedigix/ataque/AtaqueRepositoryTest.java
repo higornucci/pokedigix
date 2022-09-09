@@ -22,7 +22,7 @@ class AtaqueRepositoryTest {
 
   @Test
   void deve_salvar_um_ataque()
-    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+      throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
     int forca = 40;
     int acuracia = 100;
     int pontosDePoder = 35;
@@ -30,15 +30,7 @@ class AtaqueRepositoryTest {
     String nome = "Ataque Rapido";
     String descricao = "O usuario ataque antes do oponente.";
     Tipo tipo = new Tipo("Normal");
-    Ataque ataque = new Ataque(
-      forca,
-      acuracia,
-      pontosDePoder,
-      categoria,
-      nome,
-      descricao,
-      tipo
-    );
+    Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
 
     ataqueRepository.save(ataque);
 
@@ -47,7 +39,7 @@ class AtaqueRepositoryTest {
 
   @Test
   void deve_salvar_um_tipo_para_um_ataque()
-    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+      throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
     int forca = 40;
     int acuracia = 100;
     int pontosDePoder = 35;
@@ -55,15 +47,7 @@ class AtaqueRepositoryTest {
     String nome = "Ataque Rapido";
     String descricao = "O usuario ataque antes do oponente.";
     Tipo tipo = new Tipo("Normal");
-    Ataque ataque = new Ataque(
-      forca,
-      acuracia,
-      pontosDePoder,
-      categoria,
-      nome,
-      descricao,
-      tipo
-    );
+    Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
     tipoRepository.save(tipo);
     ataqueRepository.save(ataque);
 
@@ -74,7 +58,7 @@ class AtaqueRepositoryTest {
 
   @Test
   void deve_um_ataque_pelo_seu_tipo()
-    throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+      throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
     int forca = 40;
     int acuracia = 100;
     int pontosDePoder = 35;
@@ -82,15 +66,7 @@ class AtaqueRepositoryTest {
     String nome = "Ataque Rapido";
     String descricao = "O usuario ataque antes do oponente.";
     Tipo tipo = new Tipo("Normal");
-    Ataque ataque = new Ataque(
-      forca,
-      acuracia,
-      pontosDePoder,
-      categoria,
-      nome,
-      descricao,
-      tipo
-    );
+    Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
     tipoRepository.save(tipo);
     ataqueRepository.save(ataque);
 

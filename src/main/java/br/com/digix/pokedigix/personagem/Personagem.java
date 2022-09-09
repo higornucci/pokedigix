@@ -28,7 +28,7 @@ public abstract class Personagem {
     @ManyToOne
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "treinador")
+    @OneToMany (mappedBy = "treinador")
     protected Collection<Pokemon> pokemons;
 
     protected Personagem() {
@@ -42,10 +42,6 @@ public abstract class Personagem {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNome() {

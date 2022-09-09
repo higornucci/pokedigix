@@ -63,4 +63,5 @@ class TipoRepositoryTest {
 
         assertEquals(quantidadeEsperada, quantidadeRemovida);
     }
+
 }

@@ -57,17 +57,18 @@ public class TreinadorController {
 				treinador.getNome(), treinador.getInsignias(),
 				treinador.getNivel(),
 				treinador.getDinheiro()));
+	
 	}
 
 	@Operation(summary = "Buscar pokemons do treinador pelo id do treinador")
 	@ApiResponse(responseCode = "200", description = "Retorna uma lista contendo os pokemons do treinador")
 	@GetMapping(path = "/{id}/pokemons")
 	public ResponseEntity<Collection<PokemonResponseDTO>> buscarPorPokemons(@PathVariable Long id) {
-		Optional<Treinador> treinadorOptional = treinadorRepository.findById(id);
-		if (treinadorOptional.isEmpty()) {
-			throw new NotFoundException(null);
+		Treinador treinador = new Treinador();
+		Optional<Treinador> value  = treinadorRepository.findById(id);
+		if(value.isPresent()){ 
+			 treinador = value.get();
 		}
-		Treinador treinador = treinadorOptional.get();
 
 		Collection<PokemonResponseDTO> pokemonsDTO = new ArrayList<>();
 		for (Pokemon pokemon : treinador.getPokemons()) {
@@ -131,15 +132,15 @@ public class TreinadorController {
 
 		treinadorRepository.save(treinador);
 
-    return ResponseEntity.ok(
-        new TreinadorResponseDTO(
-            treinador.getId(),
-            treinador.getEndereco(),
-            treinador.getNome(),
-            treinador.getInsignias(),
-            treinador.getNivel(),
-            treinador.getDinheiro()));
-  }
+		return ResponseEntity.ok(
+				new TreinadorResponseDTO(
+						treinador.getId(),
+						treinador.getEndereco(),
+						treinador.getNome(),
+						treinador.getInsignias(),
+						treinador.getNivel(),
+						treinador.getDinheiro()));
+	}
 
 	@Operation(summary = "Treinador capturar um Pokemon")
 	@ApiResponse(responseCode = "200")
@@ -152,8 +153,8 @@ public class TreinadorController {
 		}
 		Treinador treinador = treinadorOptional.get();
 
-		Optional <Pokemon> pokemonOptional = pokemonRepository.findById(idPokemon);
-		if(pokemonOptional.isEmpty()){
+		Optional<Pokemon> pokemonOptional = pokemonRepository.findById(idPokemon);
+		if (pokemonOptional.isEmpty()) {
 			throw new NotFoundException(null);
 		}
 		Pokemon pokemon = pokemonOptional.get();
@@ -185,16 +186,16 @@ public class TreinadorController {
 	@PostMapping(consumes = { "application/json" })
 	public ResponseEntity<TreinadorResponseDTO> cadastrarTreinador(@RequestBody TreinadorRequestDTO novoTreinador)
 			throws LimiteDePokemonException {
-		Optional <Endereco> enderecoOptional = enderecoRepository.findById(novoTreinador.getIdEndereco());
-		if(enderecoOptional.isEmpty()){
+		Optional<Endereco> enderecoOptional = enderecoRepository.findById(novoTreinador.getIdEndereco());
+		if (enderecoOptional.isEmpty()) {
 			throw new NotFoundException(null);
 		}
 		Endereco endereco = enderecoOptional.get();
 
 		Optional<Pokemon> pokemoOptional = pokemonRepository.findById(novoTreinador.getIdPrimeiroPokemon());
-		if(pokemoOptional.isEmpty()){
+		if (pokemoOptional.isEmpty()) {
 			throw new NotFoundException(null);
-		}	
+		}
 		Pokemon pokemon = pokemoOptional.get();
 		Treinador treinador = new Treinador(novoTreinador.getNome(), endereco, pokemon);
 		treinadorRepository.save(treinador);
@@ -202,5 +203,4 @@ public class TreinadorController {
 				.body(new TreinadorResponseDTO(treinador.getId(), treinador.getEndereco(), treinador.getNome(),
 						treinador.getInsignias(), treinador.getDinheiro(), treinador.getNivel()));
 	}
-
 }

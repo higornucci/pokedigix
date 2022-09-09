@@ -3,6 +3,7 @@ package br.com.digix.pokedigix.personagem;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,6 +100,31 @@ class EnderecoControllerTest {
     assertThat(enderecosEncontrados)
         .extracting(Endereco::getRegiao)
         .containsOnly(regiaoEsperada);
+  }
+
+  @Test
+  void deve_atualizar_um_endereco() throws Exception {
+    String regiao = "Centro Oeste";
+    String regiaoAtualizada = "Sul";
+    String cidade = "Campo Grande";
+    Endereco endereco = new Endereco(regiao, cidade);
+    enderecoRepository.save(endereco);
+    int quantidadeEsperada = 1;
+    EnderecoUpdateDTO tipoRequestDTO = new EnderecoUpdateDTO(regiaoAtualizada, cidade);
+
+    // Action
+    String url = "/api/v1/enderecos/" + endereco.getId();
+    mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO)))
+        .andExpect(status().isOk());
+
+    // Assert
+    Iterable<Endereco> enderecoEnconrados = enderecoRepository.findAll();
+    long quantidadeEncontrada = enderecoEnconrados.spliterator().getExactSizeIfKnown();
+
+    assertThat(quantidadeEncontrada)
+        .isEqualTo(quantidadeEsperada);
+
+    assertThat(enderecoEnconrados).extracting(Endereco::getRegiao).containsOnly(regiaoAtualizada);
   }
 
 }

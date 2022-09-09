@@ -3,11 +3,14 @@ package br.com.digix.pokedigix.personagem;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +32,7 @@ import br.com.digix.pokedigix.ataque.AtaqueRepository;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonBuilder;
 import br.com.digix.pokedigix.pokemon.PokemonRepository;
+import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
 import br.com.digix.pokedigix.utils.JsonUtil;
@@ -126,7 +130,6 @@ class TreinadorControllerTest {
                 Tipo tipo = new Tipo("eletrico");
                 Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
                 Pokemon pikachu = new PokemonBuilder().comNome(nome).comTipo(tipo).comAtaque(ataque).construir();
-                pokemonRepository.save(pikachu);
                 Endereco endereco = new Endereco(regiao, cidade);
                 enderecoRepository.save(endereco);
                 Treinador treinador = new Treinador(nome, endereco, pikachu);
@@ -149,5 +152,59 @@ class TreinadorControllerTest {
                 Iterable<Treinador> treinadoresEncontrados = treinadorRepository.findAll();
                 assertThat(treinadoresEncontrados).extracting(Treinador::getNome)
                                 .containsOnly(treinadorNovo);
+        }
+
+        @Test
+        void deve_buscar_um_treinador_pelo_id() throws Exception {
+                // Arrange
+                Endereco endereco = new Endereco("centro-oeste", "Campo-Grande");
+                enderecoRepository.save(endereco);
+                Tipo tipo = new Tipo("Agua");
+                Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
+                Pokemon primeriPokemon = new PokemonBuilder().comAtaque(ataque).comTipo(tipo).construir();
+                Treinador treinador = new TreinadorBuilder().comPokemonInicial(primeriPokemon).comEndereco(endereco)
+                                .construir();
+                treinadorRepository.save(treinador);
+
+                // Action
+                MvcResult mvcResult = mvc.perform(get("/api/v1/treinadores/" + treinador.getId())).andReturn();
+
+                // Assert
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
+
+                String content = mvcResult.getResponse().getContentAsString();
+                TreinadorResponseDTO treinadorDTO = JsonUtil.mapFromJson(content, TreinadorResponseDTO.class);
+
+                assertThat(treinadorDTO.getId()).isEqualTo(treinador.getId());
+        }
+
+        @Test
+        @Transactional
+        public void deve_buscar_os_pokemons_do_treinador() throws Exception {
+                // Arrange
+                int quantidadeEsperada = 1;
+                Tipo tipo = new Tipo("Eletrico");
+                Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
+                Pokemon pokemon = new PokemonBuilder().comAtaque(ataque).comTipo(tipo).construir();
+                Endereco endereco = new Endereco("Kanto", "Pallet");
+                enderecoRepository.save(endereco);
+                Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).comEndereco(endereco)
+                                .construir();
+                treinadorRepository.save(treinador);
+
+                // Action
+                MvcResult resultado = mvc.perform(get("/api/v1/treinadores/" + treinador.getId() + "/pokemons"))
+                                .andReturn();
+
+                // Assert
+                assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
+
+                PokemonResponseDTO[] pokemonsRetornadDtos = JsonUtil.mapFromJson(
+                                resultado.getResponse().getContentAsString(),
+                                PokemonResponseDTO[].class);
+
+                assertThat(pokemonsRetornadDtos).hasSize(quantidadeEsperada);
+                assertThat(pokemonsRetornadDtos).extracting("nome").contains(pokemon.getNome());
         }
 }

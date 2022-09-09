@@ -17,6 +17,7 @@ public class Lider extends Personagem {
     @Column(nullable = false)
     private Insignia insignia;
 
+
     public Lider(String nome, Endereco endereco, Collection<Pokemon> pokemons, Insignia insignia) {
         super(nome, endereco);
         super.pokemons = pokemons;
@@ -38,3 +39,4 @@ public class Lider extends Personagem {
     }
     
 }
+
