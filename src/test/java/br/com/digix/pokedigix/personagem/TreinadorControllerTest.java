@@ -181,7 +181,7 @@ class TreinadorControllerTest {
 
         @Test
         @Transactional
-        public void deve_buscar_os_pokemons_do_treinador() throws Exception {
+        void deve_buscar_os_pokemons_do_treinador() throws Exception {
                 // Arrange
                 int quantidadeEsperada = 1;
                 Tipo tipo = new Tipo("Eletrico");
