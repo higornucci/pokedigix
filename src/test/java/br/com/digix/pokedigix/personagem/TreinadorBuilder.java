@@ -13,7 +13,8 @@ public class TreinadorBuilder {
     private Endereco endereco;
     private Pokemon pokemon;
 
-    public TreinadorBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
+    public TreinadorBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException,
+            LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
         this.nome = "Ash";
         this.endereco = new EnderecoBuilder().construir();
         this.pokemon = new PokemonBuilder().construir();

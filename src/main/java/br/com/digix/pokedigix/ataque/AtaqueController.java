@@ -94,12 +94,13 @@ public class AtaqueController {
   @Operation(summary = "Atualizar um Ataque")
   @ApiResponse(responseCode = "200")
   @PutMapping(path = "/{id}", consumes = "application/json")
+
   public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
       @PathVariable Long id) {
-        Optional <Ataque> ataqueOptional = ataqueRepository.findById(id);
-        if(ataqueOptional.isEmpty()){
-          throw new NotFoundException(null);
-        }
+    Optional<Ataque> ataqueOptional = ataqueRepository.findById(id);
+    if (ataqueOptional.isEmpty()) {
+      throw new NotFoundException(null);
+    }
     Ataque ataque = ataqueOptional.get();
     ataque.setNome(ataqueRequestDTO.getNome());
     ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
@@ -127,7 +128,7 @@ public class AtaqueController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<Void> removerAtaqueId(@PathVariable Long id) {
-      ataqueRepository.deleteById(id);
-      return ResponseEntity.noContent().build();
+    ataqueRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
   }
 }

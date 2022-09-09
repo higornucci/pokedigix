@@ -14,22 +14,22 @@ public class PokemonRequestDTO {
     private Collection<Long> tiposIds;
     private Collection<Long> ataquesIds;
 
-	public PokemonRequestDTO(){}
+	protected PokemonRequestDTO(){}
 	
     public PokemonRequestDTO(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
-			int felicidade, Collection<Long> tiposIds, Collection<Long> ataquesIds) {
-		this.nome = nome;
-		this.altura = altura;
-		this.peso = peso;
-		this.genero = genero;
-		this.nivel = nivel;
-		this.numeroPokedex = numeroPokedex;
-		this.felicidade = felicidade;
-		this.tiposIds = tiposIds;
-		this.ataquesIds = ataquesIds;
-	}
+            int felicidade, Collection<Long> tiposIds, Collection<Long> ataquesIds) {
+        this.nome = nome;
+        this.altura = altura;
+        this.peso = peso;
+        this.genero = genero;
+        this.nivel = nivel;
+        this.numeroPokedex = numeroPokedex;
+        this.felicidade = felicidade;
+        this.tiposIds = tiposIds;
+        this.ataquesIds = ataquesIds;
+    }
 
-	public String getNome() {
+    public String getNome() {
         return nome;
     }
 

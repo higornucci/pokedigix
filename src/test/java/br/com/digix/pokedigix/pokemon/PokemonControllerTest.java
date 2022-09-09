@@ -3,10 +3,10 @@ package br.com.digix.pokedigix.pokemon;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,196 +35,189 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class PokemonControllerTest {
-    @Autowired
-    private MockMvc mvc;
+class PokemonControllerTest {
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private TipoRepository tipoRepository;
+        @Autowired
+        private TipoRepository tipoRepository;
 
-    @Autowired
-    private PokemonRepository pokemonRepository;
+        @Autowired
+        private PokemonRepository pokemonRepository;
 
-    @Autowired
-    private AtaqueRepository ataqueRepository;
+        @Autowired
+        private AtaqueRepository ataqueRepository;
 
-    @BeforeEach
-    @AfterEach
-    void resetDb() {
-        pokemonRepository.deleteAll();
-        ataqueRepository.deleteAll();
-        tipoRepository.deleteAll();
-    }
-
-    @Test
-    void deve_buscar_um_pokemon_pelo_id_do_tipo() throws Exception {
-        // Arrange
-        String nome = "Ghost";
-        Tipo tipoEsperado = new Tipo(nome);
-        Ataque ataque = new AtaqueBuilder().comTipo(tipoEsperado).construir();
-        Pokemon pokemon = new PokemonBuilder().comTipo(tipoEsperado).comAtaque(ataque).construir();
-        pokemonRepository.save(pokemon);
-        Collection<Tipo> tipos = pokemon.getTipos();
-        long idEsperado = 1;
-
-        for (Tipo tipo : tipos) {
-            idEsperado = tipo.getId();
+        @BeforeEach
+        @AfterEach
+        void resetDb() {
+                pokemonRepository.deleteAll();
+                ataqueRepository.deleteAll();
+                tipoRepository.deleteAll();
         }
 
-        // Action
-        MvcResult mvcResult = mvc.perform(get("/api/v1/pokemons/tipo/" + idEsperado)).andReturn();
+        @Test
+        void deve_buscar_um_pokemon_pelo_id_do_tipo() throws Exception {
+                // Arrange
+                String nome = "Ghost";
+                Tipo tipoEsperado = new Tipo(nome);
+                Ataque ataque = new AtaqueBuilder().comTipo(tipoEsperado).construir();
+                Pokemon pokemon = new PokemonBuilder().comTipo(tipoEsperado).comAtaque(ataque).construir();
+                pokemonRepository.save(pokemon);
+                Collection<Tipo> tipos = pokemon.getTipos();
+                long idEsperado = 1;
 
-        // Assert
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(HttpStatus.OK.value(), status);
+                for (Tipo tipo : tipos) {
+                        idEsperado = tipo.getId();
+                }
 
-        PokemonResponseDTO[] pokemonRetornados = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(),
-                PokemonResponseDTO[].class);
+                // Action
+                MvcResult mvcResult = mvc.perform(get("/api/v1/pokemons/tipo/" + idEsperado)).andReturn();
 
-        assertThat(pokemonRetornados).extracting(PokemonResponseDTO::getNome).containsOnly(pokemon.getNome());
-    }
+                // Assert
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
 
-    @Test
-    void deve_buscar_um_pokemon_pelo_nome() throws Exception {
-        // Arrange
-        String nome = "Ghost";
-        Tipo tipoEsperado = new Tipo(nome);
-        Ataque ataque = new AtaqueBuilder().comTipo(tipoEsperado).construir();
-        Pokemon pokemon = new PokemonBuilder().comNome(nome).comTipo(tipoEsperado).comAtaque(ataque).construir();
-        pokemonRepository.save(pokemon);
+                PokemonResponseDTO[] pokemonRetornados = JsonUtil.mapFromJson(
+                                mvcResult.getResponse().getContentAsString(),
+                                PokemonResponseDTO[].class);
 
-        // Action
-        MvcResult mvcResult = mvc.perform(get("/api/v1/pokemons")).andReturn();
+                assertThat(pokemonRetornados).extracting(PokemonResponseDTO::getNome).containsOnly(pokemon.getNome());
+        }
 
-        // Assert
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(HttpStatus.OK.value(), status);
+        @Test
+        void deve_buscar_um_pokemon_pelo_nome() throws Exception {
+                // Arrange
+                String nome = "Ghost";
+                Tipo tipoEsperado = new Tipo(nome);
+                Ataque ataque = new AtaqueBuilder().comTipo(tipoEsperado).construir();
+                Pokemon pokemon = new PokemonBuilder().comNome(nome).comTipo(tipoEsperado).comAtaque(ataque)
+                                .construir();
+                pokemonRepository.save(pokemon);
 
-        PokemonResponseDTO[] pokemonRetornados = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(),
-                PokemonResponseDTO[].class);
+                // Action
+                MvcResult mvcResult = mvc.perform(get("/api/v1/pokemons")).andReturn();
 
-        assertThat(pokemonRetornados).extracting(PokemonResponseDTO::getNome).containsOnly(nome);
+                // Assert
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
 
-    }
+                PokemonResponseDTO[] pokemonRetornados = JsonUtil.mapFromJson(
+                                mvcResult.getResponse().getContentAsString(),
+                                PokemonResponseDTO[].class);
 
-    @Test
-    public void deve_excluir_um_pokemon() throws Exception {
-        // Teste do código Do Enzão
-        int quantidadeEsperada = 0;
+                assertThat(pokemonRetornados).extracting(PokemonResponseDTO::getNome).containsOnly(nome);
 
-        Pokemon pokemon = new PokemonBuilder().construir();
-        pokemonRepository.save(pokemon);
+        }
 
-        String url = "/api/v1/pokemons/" + pokemon.getId();
-        MvcResult resultado = mvc.perform(delete(url)).andReturn();
+        @Test
+        void deve_excluir_um_pokemon() throws Exception {
+                // Teste do código Do Enzão
+                int quantidadeEsperada = 0;
 
-        Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
-        long quantidadeEncontrada = pokemonsEncontrados.spliterator().getExactSizeIfKnown();
+                Pokemon pokemon = new PokemonBuilder().construir();
+                pokemonRepository.save(pokemon);
 
-        assertEquals(quantidadeEsperada, quantidadeEncontrada);
-    }
+                String url = "/api/v1/pokemons/" + pokemon.getId();
+                mvc.perform(delete(url)).andReturn();
 
-    @Test
-    void deve_criar_um_pokemon() throws Exception {
-        String tipao = "Agua";
+                Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
+                long quantidadeEncontrada = pokemonsEncontrados.spliterator().getExactSizeIfKnown();
 
-        Tipo tipo = new Tipo(tipao);
-        Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-        Pokemon pokemon = new PokemonBuilder()
-                .comAtaque(ataque)
-                .comTipo(tipo)
-                .construir();
-        pokemonRepository.save(pokemon);
-        Collection<Long> ataquesIds = new ArrayList<>();
-        ataquesIds.add(ataque.getId());
-        Collection<Long> tiposIds = new ArrayList<>();
-        tiposIds.add(tipo.getId());
+                assertEquals(quantidadeEsperada, quantidadeEncontrada);
+        }
 
-        PokemonRequestDTO pokemonRequestDTO = new PokemonRequestDTO(
-                pokemon.getNome(),
-                pokemon.getAltura(),
-                pokemon.getPeso(),
-                pokemon.getGenero(),
-                pokemon.getNivel(),
-                pokemon.getNumeroPokedex(),
-                pokemon.getFelicidade(),
-                tiposIds,
-                ataquesIds);
+        @Test
+        void deve_criar_um_pokemon() throws Exception {
+                String tipao = "Agua";
 
-        mvc
-                .perform(
-                        post("/api/v1/pokemons")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(JsonUtil.toJson(pokemonRequestDTO)))
-                .andExpect(status().isCreated());
+                Tipo tipo = new Tipo(tipao);
+                Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
+                Pokemon pokemon = new PokemonBuilder()
+                                .comAtaque(ataque)
+                                .comTipo(tipo)
+                                .construir();
+                pokemonRepository.save(pokemon);
+                Collection<Long> ataquesIds = new ArrayList<>();
+                ataquesIds.add(ataque.getId());
+                Collection<Long> tiposIds = new ArrayList<>();
+                tiposIds.add(tipo.getId());
 
-        Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
+                PokemonRequestDTO pokemonRequestDTO = new PokemonRequestDTO(
+                                pokemon.getNome(),
+                                pokemon.getAltura(),
+                                pokemon.getPeso(),
+                                pokemon.getGenero(),
+                                pokemon.getNivel(),
+                                pokemon.getNumeroPokedex(),
+                                pokemon.getFelicidade(),
+                                tiposIds,
+                                ataquesIds);
 
-        assertThat(pokemonsEncontrados)
-                .extracting("nome")
-                .containsOnly(pokemon.getNome());
-        assertThat(pokemonsEncontrados)
-                .extracting("altura")
-                .containsOnly(pokemon.getAltura());
-        assertThat(pokemonsEncontrados)
-                .extracting("peso")
-                .containsOnly(pokemon.getPeso());
-        assertThat(pokemonsEncontrados)
-                .extracting("genero")
-                .containsOnly(pokemon.getGenero());
-        assertThat(pokemonsEncontrados)
-                .extracting("nivel")
-                .containsOnly(pokemon.getNivel());
-        assertThat(pokemonsEncontrados)
-                .extracting("numeroPokedex")
-                .containsOnly(pokemon.getNumeroPokedex());
-        assertThat(pokemonsEncontrados)
-                .extracting("felicidade")
-                .containsOnly(pokemon.getFelicidade());
-    }
+                mvc.perform(post("/api/v1/pokemons").contentType(MediaType.APPLICATION_JSON)
+                                .content(JsonUtil.toJson(pokemonRequestDTO))).andExpect(status().isCreated());
 
-  @Test
-  void deve_atualizar_um_Pokemon() throws Exception {
-    //Arrange
-    String nomeAlterado = "Eeve";
-    String tipao = "Fogo";
+                Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
 
-    Tipo tipo = new Tipo(tipao);
-    Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
-    Pokemon pokemon = new PokemonBuilder()
-      .comAtaque(ataque)
-      .comTipo(tipo)
-      .construir();
-    pokemonRepository.save(pokemon);
-    Collection<Long> ataquesIds = new ArrayList<>();
-    ataquesIds.add(ataque.getId());
-    Collection<Long> tiposIds = new ArrayList<>();
-    tiposIds.add(tipo.getId());
+                assertThat(pokemonsEncontrados)
+                                .extracting("nome")
+                                .containsOnly(pokemon.getNome());
+                assertThat(pokemonsEncontrados)
+                                .extracting("altura")
+                                .containsOnly(pokemon.getAltura());
+                assertThat(pokemonsEncontrados)
+                                .extracting("peso")
+                                .containsOnly(pokemon.getPeso());
+                assertThat(pokemonsEncontrados)
+                                .extracting("genero")
+                                .containsOnly(pokemon.getGenero());
+                assertThat(pokemonsEncontrados)
+                                .extracting("nivel")
+                                .containsOnly(pokemon.getNivel());
+                assertThat(pokemonsEncontrados)
+                                .extracting("numeroPokedex")
+                                .containsOnly(pokemon.getNumeroPokedex());
+                assertThat(pokemonsEncontrados)
+                                .extracting("felicidade")
+                                .containsOnly(pokemon.getFelicidade());
+        }
 
-    PokemonRequestDTO pokemonRequestDTO = new PokemonRequestDTO(
-      nomeAlterado,
-      pokemon.getAltura(),
-      pokemon.getPeso(),
-      pokemon.getGenero(),
-      pokemon.getNivel(),
-      pokemon.getNumeroPokedex(),
-      pokemon.getFelicidade(),
-      tiposIds,
-      ataquesIds
-    );
+        @Test
+        void deve_atualizar_um_Pokemon() throws Exception {
+                // Arrange
+                String nomeAlterado = "Eeve";
+                String tipao = "Fogo";
 
-    mvc
-      .perform(
-        put("/api/v1/pokemons/" + pokemon.getId())
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(JsonUtil.toJson(pokemonRequestDTO))
-      )
-      .andExpect(status().isOk());
+                Tipo tipo = new Tipo(tipao);
+                Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
+                Pokemon pokemon = new PokemonBuilder()
+                                .comAtaque(ataque)
+                                .comTipo(tipo)
+                                .construir();
+                pokemonRepository.save(pokemon);
+                Collection<Long> ataquesIds = new ArrayList<>();
+                ataquesIds.add(ataque.getId());
+                Collection<Long> tiposIds = new ArrayList<>();
+                tiposIds.add(tipo.getId());
 
-    Pokemon pokemonsEncontrados = pokemonRepository
-      .findById(pokemon.getId())
-      .get();
+                PokemonRequestDTO pokemonRequestDTO = new PokemonRequestDTO(
+                                nomeAlterado,
+                                pokemon.getAltura(),
+                                pokemon.getPeso(),
+                                pokemon.getGenero(),
+                                pokemon.getNivel(),
+                                pokemon.getNumeroPokedex(),
+                                pokemon.getFelicidade(),
+                                tiposIds,
+                                ataquesIds);
 
-    assertThat(pokemonsEncontrados.getNome()).isEqualTo(nomeAlterado);
-  }
+                mvc.perform(put("/api/v1/pokemons/" + pokemon.getId()).contentType(MediaType.APPLICATION_JSON)
+                                .content(JsonUtil.toJson(pokemonRequestDTO))).andExpect(status().isOk());
+
+                Pokemon pokemonsEncontrados = pokemonRepository
+                                .findById(pokemon.getId())
+                                .get();
+
+                assertThat(pokemonsEncontrados.getNome()).isEqualTo(nomeAlterado);
+        }
 }

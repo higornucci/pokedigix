@@ -1,18 +1,11 @@
 package br.com.digix.pokedigix.personagem;
 
-import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
-import br.com.digix.pokedigix.pokemon.Pokemon;
-import br.com.digix.pokedigix.pokemon.PokemonRepository;
-import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
+
+import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.pokemon.Pokemon;
+import br.com.digix.pokedigix.pokemon.PokemonRepository;
+import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoResponseDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping(path = { "/api/v1/treinadores" }, produces = { "application/json" })
@@ -129,15 +132,14 @@ public class TreinadorController {
 		treinadorRepository.save(treinador);
 
     return ResponseEntity.ok(
-      new TreinadorResponseDTO(
-        treinador.getId(),
-        treinador.getEndereco(),
-        treinador.getNome(),
-        treinador.getInsignias(),
-        treinador.getNivel(),
-				treinador.getDinheiro()));
-
-	}
+        new TreinadorResponseDTO(
+            treinador.getId(),
+            treinador.getEndereco(),
+            treinador.getNome(),
+            treinador.getInsignias(),
+            treinador.getNivel(),
+            treinador.getDinheiro()));
+  }
 
 	@Operation(summary = "Treinador capturar um Pokemon")
 	@ApiResponse(responseCode = "200")
