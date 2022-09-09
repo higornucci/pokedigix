@@ -121,9 +121,12 @@ public class EnderecoController {
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoUpdateDTO enderecoRequestDTO,
             @PathVariable Long id) {
+        Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
+        if (enderecoOptional.isEmpty()) {
+            throw new NotFoundException(null);
+        }
 
-        Endereco endereco = enderecoRepository.findById(id).get();
-
+        Endereco endereco = enderecoOptional.get();
         endereco.setRegiao(enderecoRequestDTO.getRegiao());
         endereco.setCidade(enderecoRequestDTO.getCidade());
         enderecoRepository.save(endereco);
