@@ -2,10 +2,8 @@ package br.com.digix.pokedigix.tipo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,15 +37,15 @@ class TipoControllerTest {
 
         @BeforeEach
         @AfterEach
-        public void resetDb() {
+        void resetDb() {
                 tipoRepository.deleteAll();
         }
 
-    @Test
-     void deve_adicionar_um_tipo() throws Exception {
-        String nomeEsperado = "Fire";
-        int quantidadeEsperada = 1;
-        TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
+        @Test
+        void deve_adicionar_um_tipo() throws Exception {
+                String nomeEsperado = "Fire";
+                int quantidadeEsperada = 1;
+                TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
 
                 // Action
                 mvc.perform(post("/api/v1/tipos")
@@ -61,14 +59,14 @@ class TipoControllerTest {
 
                 assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
                 assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
-     }
+        }
 
-    @Test
-     void deve_buscar_um_tipo_pelo_id() throws Exception {
-        // Arrange
-        String nome = "Fire";
-        Tipo tipo = new Tipo(nome);
-        tipoRepository.save(tipo);
+        @Test
+        void deve_buscar_um_tipo_pelo_id() throws Exception {
+                // Arrange
+                String nome = "Fire";
+                Tipo tipo = new Tipo(nome);
+                tipoRepository.save(tipo);
 
                 // Action
                 MvcResult mvcResult = mvc.perform(get("/api/v1/tipos/" + tipo.getId())).andReturn();
@@ -205,29 +203,30 @@ class TipoControllerTest {
                 Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
                 assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeNovo);
         }
+
         @Test
-     void deve_atualizar_um_tipo_pelo_id() throws Exception {
-        // Arrange
-        int quantidadeEsperada = 1;
-        String eletrico = "Eletrico";
-        Tipo tipoEletrico = new Tipo(eletrico);
-        tipoRepository.save(tipoEletrico);
-       
-        String agua = "agua";
-        TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(agua);
+        void deve_atualizar_um_tipo_pelo_id() throws Exception {
+                // Arrange
+                int quantidadeEsperada = 1;
+                String eletrico = "Eletrico";
+                Tipo tipoEletrico = new Tipo(eletrico);
+                tipoRepository.save(tipoEletrico);
 
-        // Action
-        String url = "/api/v1/tipos/" + tipoEletrico.getId();
-       mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO))).andExpect(status().isOk());
+                String agua = "agua";
+                TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(agua);
 
+                // Action
+                String url = "/api/v1/tipos/" + tipoEletrico.getId();
+                mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO)))
+                                .andExpect(status().isOk());
 
-        // Assert
-        Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
-        long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
+                // Assert
+                Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+                long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
 
-        assertThat(quantidadeEncontrada)
-                .isEqualTo(quantidadeEsperada);
+                assertThat(quantidadeEncontrada)
+                                .isEqualTo(quantidadeEsperada);
 
-        assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(agua);
-    }
+                assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(agua);
+        }
 }
