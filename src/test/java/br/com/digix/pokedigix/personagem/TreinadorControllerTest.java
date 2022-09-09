@@ -116,6 +116,30 @@ class TreinadorControllerTest {
 
                 assertEquals(quantidadeEsperada, quantidadeEncontrada);
         }
+        @Test
+        void deve_deletar_um_treinador_pelo_nome() throws Exception {
+                // Arrange
+                int quantidadeEsperada = 0;
+
+                Pokemon pokemonInicial = new PokemonBuilder().construir();
+                pokemonRepository.save(pokemonInicial);
+
+                Endereco endereco = new Endereco("Kanto", "Pallet");
+                enderecoRepository.save(endereco);
+                Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemonInicial).comEndereco(endereco)
+                                .construir();
+                treinadorRepository.save(treinador);
+
+                // Action
+                String url = "/api/v1/treinadores?termo=" + treinador.getNome();
+                mvc.perform(delete(url)).andReturn();
+
+                // Assert
+                Iterable<Treinador> treinadoresEncontrados = treinadorRepository.findAll();
+                long quantidadeEncontrada = treinadoresEncontrados.spliterator().getExactSizeIfKnown();
+
+                assertEquals(quantidadeEsperada, quantidadeEncontrada);
+        }
 
         @Test
         void deve_atualizar_o_Treinador() throws Exception {
