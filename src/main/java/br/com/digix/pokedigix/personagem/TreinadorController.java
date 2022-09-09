@@ -203,5 +203,4 @@ public class TreinadorController {
 				.body(new TreinadorResponseDTO(treinador.getId(), treinador.getEndereco(), treinador.getNome(),
 						treinador.getInsignias(), treinador.getDinheiro(), treinador.getNivel()));
 	}
-
 }
