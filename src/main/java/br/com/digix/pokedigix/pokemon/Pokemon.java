@@ -144,10 +144,6 @@ public class Pokemon {
     return this.id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public Collection<Tipo> getTipos() {
     return tipos;
   }
