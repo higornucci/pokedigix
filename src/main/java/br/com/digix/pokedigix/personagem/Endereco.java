@@ -7,18 +7,19 @@ import javax.persistence.Id;
 
 @Entity
 public class Endereco {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String regiao;
     private String cidade;
+    private String regiao;
 
-    protected Endereco() {}
+    protected Endereco() {
+    }
 
     public Endereco(String regiao, String cidade) {
-        this.regiao = regiao;
         this.cidade = cidade;
+        this.regiao = regiao;
     }
 
     public Long getId() {
@@ -39,6 +40,6 @@ public class Endereco {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
-    }   
-    
+    }
+
 }

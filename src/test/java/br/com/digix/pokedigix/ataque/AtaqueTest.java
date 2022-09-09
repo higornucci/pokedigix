@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.tipo.Tipo;
 
 class AtaqueTest {
@@ -22,7 +21,6 @@ class AtaqueTest {
         Tipo tipoEsperado = new Tipo("Normal");
 
         Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
-
         assertEquals(forca, ataque.getForca());
         assertEquals(acuracia, ataque.getAcuracia());
         assertEquals(pontosDePoder, ataque.getPontosDePoder());
@@ -45,16 +43,23 @@ class AtaqueTest {
         int acuracia = -1;
 
         // Assert
-        assertThrows(AcuraciaInvalidaException.class, () -> {
-            // Action
-            new AtaqueBuilder().comAcuracia(acuracia).construir();
-        });
+        assertThrows(
+                AcuraciaInvalidaException.class,
+                () -> {
+                    // Action
+                    new AtaqueBuilder().comAcuracia(acuracia).construir();
+                });
 
         // Assert
-        assertThrows(AcuraciaInvalidaException.class, () -> {
-            // Action
-            new AtaqueBuilder().comAcuracia(acuracia).comCategoriaEfeito().construir();
-        });
+        assertThrows(
+                AcuraciaInvalidaException.class,
+                () -> {
+                    // Action
+                    new AtaqueBuilder()
+                            .comAcuracia(acuracia)
+                            .comCategoriaEfeito()
+                            .construir();
+                });
     }
 
     @Test
@@ -63,23 +68,32 @@ class AtaqueTest {
         int acuracia = 101;
 
         // Assert
-        assertThrows(AcuraciaInvalidaException.class, () -> {
-            // Action
-            new AtaqueBuilder().comAcuracia(acuracia).construir();
-        });
+        assertThrows(
+                AcuraciaInvalidaException.class,
+                () -> {
+                    // Action
+                    new AtaqueBuilder().comAcuracia(acuracia).construir();
+                });
 
         // Assert
-        assertThrows(AcuraciaInvalidaException.class, () -> {
-            // Action
-            new AtaqueBuilder().comAcuracia(acuracia).comCategoriaEfeito().construir();
-        });
+        assertThrows(
+                AcuraciaInvalidaException.class,
+                () -> {
+                    // Action
+                    new AtaqueBuilder()
+                            .comAcuracia(acuracia)
+                            .comCategoriaEfeito()
+                            .construir();
+                });
     }
 
     @Test
     void deve_poder_ter_acuracia_igual_a_zero() throws Exception {
         int acuraciaEsperada = 0;
 
-        Ataque ataque = new AtaqueBuilder().comAcuracia(acuraciaEsperada).construir();
+        Ataque ataque = new AtaqueBuilder()
+                .comAcuracia(acuraciaEsperada)
+                .construir();
 
         assertEquals(acuraciaEsperada, ataque.getAcuracia());
     }
@@ -90,9 +104,7 @@ class AtaqueTest {
         int forca = 0;
         Tipo tipo = null;
 
-        Ataque ataque = new AtaqueBuilder()
-                .comCategoriaEfeito()
-                .construir();
+        Ataque ataque = new AtaqueBuilder().comCategoriaEfeito().construir();
 
         assertEquals(categoria, ataque.getCategoria());
         assertEquals(forca, ataque.getForca());
@@ -103,10 +115,11 @@ class AtaqueTest {
     void nao_deve_ter_ataque_de_categoria_fisica_sem_forca() {
         Categoria categoria = Categoria.FISICO;
         int forca = 0;
-
-        assertThrows(ForcaInvalidaParaCategoriaException.class, () -> {
-            new AtaqueBuilder().comForca(forca).comCategoria(categoria).construir();
-        });
+        assertThrows(
+                ForcaInvalidaParaCategoriaException.class,
+                () -> {
+                    new AtaqueBuilder().comForca(forca).comCategoria(categoria).construir();
+                });
     }
 
     @Test
@@ -114,9 +127,11 @@ class AtaqueTest {
         Categoria categoria = Categoria.FISICO;
         Tipo tipo = null;
 
-        assertThrows(TipoInvalidoParaCategoriaException.class, () -> {
-            new AtaqueBuilder().comTipo(tipo).comCategoria(categoria).construir();
-        });
+        assertThrows(
+                TipoInvalidoParaCategoriaException.class,
+                () -> {
+                    new AtaqueBuilder().comTipo(tipo).comCategoria(categoria).construir();
+                });
     }
 
     @Test
@@ -124,9 +139,11 @@ class AtaqueTest {
         Categoria categoria = Categoria.ESPECIAL;
         int forca = 0;
 
-        assertThrows(ForcaInvalidaParaCategoriaException.class, () -> {
-            new AtaqueBuilder().comForca(forca).comCategoria(categoria).construir();
-        });
+        assertThrows(
+                ForcaInvalidaParaCategoriaException.class,
+                () -> {
+                    new AtaqueBuilder().comForca(forca).comCategoria(categoria).construir();
+                });
     }
 
     @Test

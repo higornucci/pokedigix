@@ -2,13 +2,18 @@ package br.com.digix.pokedigix.personagem;
 
 public class EnderecoRequestDTO {
 
-  private String regiao;
   private String cidade;
+  private String regiao;
+  
+public EnderecoRequestDTO(){
 
-  public EnderecoRequestDTO(String regiao2, String cidade2) {
-  }
+}
+  public EnderecoRequestDTO(String regiao, String cidade) {
+    this.regiao = regiao;
+    this.cidade = cidade;
+}
 
-  public String getRegiao() {
+public String getRegiao() {
     return regiao;
   }
 

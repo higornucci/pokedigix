@@ -31,7 +31,8 @@ class PokemonTest {
         List<Ataque> ataques = new ArrayList<>();
         ataques.add(new AtaqueBuilder().construir());
 
-        Pokemon gastly = new Pokemon(nome,
+        Pokemon gastly = new Pokemon(
+                nome,
                 altura,
                 peso,
                 genero,
@@ -99,9 +100,9 @@ class PokemonTest {
 
     @Test
     void deve_permitir_ter_ate_quatro_ataques() throws Exception {
-
         int quantidadeDeAtaquesEsperada = 4;
-        Pokemon pokemon = new PokemonBuilder().comAtaque(new AtaqueBuilder().construir())
+        Pokemon pokemon = new PokemonBuilder()
+                .comAtaque(new AtaqueBuilder().construir())
                 .comAtaque(new AtaqueBuilder().construir())
                 .comAtaque(new AtaqueBuilder().construir())
                 .comAtaque(new AtaqueBuilder().construir())
@@ -132,25 +133,31 @@ class PokemonTest {
     void nao_pode_ter_nivel_menor_que_um() {
         int nivelInvalido = 0;
 
-        assertThrows(NivelPokemonInvalidoException.class, () -> {
-            new PokemonBuilder().comNivel(nivelInvalido).construir();
-        });
+        assertThrows(
+                NivelPokemonInvalidoException.class,
+                () -> {
+                    new PokemonBuilder().comNivel(nivelInvalido).construir();
+                });
     }
 
     @Test
     void nao_pode_ter_nivel_maior_que_cem() {
         int nivelInvalido = 101;
 
-        assertThrows(NivelPokemonInvalidoException.class, () -> {
-            new PokemonBuilder().comNivel(nivelInvalido).construir();
-        });
+        assertThrows(
+                NivelPokemonInvalidoException.class,
+                () -> {
+                    new PokemonBuilder().comNivel(nivelInvalido).construir();
+                });
     }
 
     @Test
     void deve_ter_felicidade_minima_zero() throws Exception {
         int felicidadeMinima = 0;
 
-        Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMinima).construir();
+        Pokemon pokemon = new PokemonBuilder()
+                .comFelicidade(felicidadeMinima)
+                .construir();
 
         assertEquals(felicidadeMinima, pokemon.getFelicidade());
     }
@@ -174,7 +181,9 @@ class PokemonTest {
     void deve_ter_felicidade_maxima_cem() throws Exception {
         int felicidadeMaxima = 100;
 
-        Pokemon pokemon = new PokemonBuilder().comFelicidade(felicidadeMaxima).construir();
+        Pokemon pokemon = new PokemonBuilder()
+                .comFelicidade(felicidadeMaxima)
+                .construir();
 
         assertEquals(felicidadeMaxima, pokemon.getFelicidade());
     }
@@ -183,18 +192,22 @@ class PokemonTest {
     void nao_deve_ter_felicidade_menor_que_zero() {
         int felicidadeInvalida = -1;
 
-        assertThrows(FelicidadeInvalidaException.class, () -> {
-            new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
-        });
+        assertThrows(
+                FelicidadeInvalidaException.class,
+                () -> {
+                    new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
+                });
     }
 
     @Test
     void nao_deve_ter_felicidade_maior_que_cem() {
         int felicidadeInvalida = 101;
 
-        assertThrows(FelicidadeInvalidaException.class, () -> {
-            new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
-        });
+        assertThrows(
+                FelicidadeInvalidaException.class,
+                () -> {
+                    new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
+                });
     }
 
 }
