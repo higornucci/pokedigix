@@ -154,7 +154,6 @@ class TreinadorControllerTest {
         @Test
         void deve_buscar_um_treinador_pelo_id() throws Exception {
                 // Arrange
-                String nome = "Flavio";
                 Endereco endereco = new Endereco("centro-oeste", "Campo-Grande");
                 enderecoRepository.save(endereco);
                 Tipo tipo = new Tipo("Agua");
