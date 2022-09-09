@@ -14,7 +14,7 @@ public class PokemonRequestDTO {
 	private Collection<Long> tiposIds;
 	private Collection<Long> ataquesIds;
 
-	public PokemonRequestDTO() {
+	protected PokemonRequestDTO() {
 	}
 
 	public PokemonRequestDTO(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,

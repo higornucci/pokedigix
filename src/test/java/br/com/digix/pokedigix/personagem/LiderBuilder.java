@@ -16,10 +16,10 @@ public class LiderBuilder {
     
 
     public LiderBuilder() throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
-        this.nome = "Ash";
+        this.nome = "Thor";
         this.endereco = new EnderecoBuilder().construir();
         this.pokemon = new PokemonBuilder().construir();
-        this.insignia = Insignia.ARCO_IRIS;
+        this.insignia = Insignia.TROVAO;
     }
 
 

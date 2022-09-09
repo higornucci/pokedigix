@@ -30,14 +30,7 @@ class AtaqueRepositoryTest {
 		String nome = "Ataque Rapido";
 		String descricao = "O usuario ataque antes do oponente.";
 		Tipo tipo = new Tipo("Normal");
-		Ataque ataque = new Ataque(
-				forca,
-				acuracia,
-				pontosDePoder,
-				categoria,
-				nome,
-				descricao,
-				tipo);
+		Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
 
 		ataqueRepository.save(ataque);
 
@@ -54,14 +47,7 @@ class AtaqueRepositoryTest {
 		String nome = "Ataque Rapido";
 		String descricao = "O usuario ataque antes do oponente.";
 		Tipo tipo = new Tipo("Normal");
-		Ataque ataque = new Ataque(
-				forca,
-				acuracia,
-				pontosDePoder,
-				categoria,
-				nome,
-				descricao,
-				tipo);
+		Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipo);
 		tipoRepository.save(tipo);
 		ataqueRepository.save(ataque);
 

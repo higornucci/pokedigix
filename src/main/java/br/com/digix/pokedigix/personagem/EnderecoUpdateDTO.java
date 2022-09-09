@@ -1,6 +1,7 @@
 package br.com.digix.pokedigix.personagem;
 
 public class EnderecoUpdateDTO {
+
 	private String cidade;
 	private String regiao;
 

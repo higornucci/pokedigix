@@ -35,11 +35,11 @@ public class AtaqueController {
 	@ApiResponse(responseCode = "200", description = "Retorna os dados do ataque solicitado")
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
-		Ataque ataque = new Ataque();
-		Optional<Ataque> value = ataqueRepository.findById(id);
-		if (value.isPresent()) {
-			ataque = value.get();
+		Optional<Ataque> ataqueOptional = ataqueRepository.findById(id);
+		if (ataqueOptional.isEmpty()) {
+			throw new NotFoundException(null);
 		}
+		Ataque ataque = ataqueOptional.get();
 		TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
 				ataque.getTipo().getId(),
 				ataque.getTipo().getNome());
@@ -62,11 +62,11 @@ public class AtaqueController {
 	public ResponseEntity<AtaqueResponseDTO> criar(
 			@RequestBody AtaqueRequestDTO novoAtaque)
 			throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-		Tipo tipo = new Tipo();
-		Optional<Tipo> value = tipoRepository.findById(novoAtaque.getTipoId());
-		if (value.isPresent()) {
-			tipo = value.get();
+		Optional<Tipo> tipoOptional = tipoRepository.findById(novoAtaque.getTipoId());
+		if (tipoOptional.isEmpty()) {
+			throw new NotFoundException(null);
 		}
+		Tipo tipo = tipoOptional.get();
 		Ataque ataque = new Ataque(
 				novoAtaque.getForca(),
 				novoAtaque.getAcuracia(),
@@ -94,14 +94,14 @@ public class AtaqueController {
 	@Operation(summary = "Atualizar um Ataque")
 	@ApiResponse(responseCode = "200")
 	@PutMapping(path = "/{id}", consumes = "application/json")
-	public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(
-			@RequestBody AtaqueRequestDTO ataqueRequestDTO,
+
+	public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
 			@PathVariable Long id) {
-		Ataque ataque = new Ataque();
-		Optional<Ataque> value = ataqueRepository.findById(id);
-		if (value.isPresent()) {
-			ataque = value.get();
+		Optional<Ataque> ataqueOptional = ataqueRepository.findById(id);
+		if (ataqueOptional.isEmpty()) {
+			throw new NotFoundException(null);
 		}
+		Ataque ataque = ataqueOptional.get();
 		ataque.setNome(ataqueRequestDTO.getNome());
 		ataque.setAcuracia(ataqueRequestDTO.getAcuracia());
 		ataque.setCategoria(ataqueRequestDTO.getCategoria());
@@ -110,20 +110,18 @@ public class AtaqueController {
 		ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
 
 		ataqueRepository.save(ataque);
-		TipoResponseDTO tipoDTO = new TipoResponseDTO(
-				ataque.getId(),
-				ataque.getNome());
+		TipoResponseDTO tipoDTO = new TipoResponseDTO(ataque.getId(), ataque.getNome());
 
-		return ResponseEntity.ok(
-				new AtaqueResponseDTO(
-						ataque.getId(),
-						ataque.getForca(),
-						ataque.getAcuracia(),
-						ataque.getPontosDePoder(),
-						ataque.getCategoria(),
-						ataque.getNome(),
-						ataque.getDescricao(),
-						tipoDTO));
+		return ResponseEntity.ok(new AtaqueResponseDTO(
+				ataque.getId(),
+				ataque.getForca(),
+				ataque.getAcuracia(),
+				ataque.getPontosDePoder(),
+				ataque.getCategoria(),
+				ataque.getNome(),
+				ataque.getDescricao(),
+				tipoDTO));
+
 	}
 
 	@Operation(summary = "Deletar um Ataque pelo seu id")

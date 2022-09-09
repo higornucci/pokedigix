@@ -34,12 +34,10 @@ public class TipoController {
   @Operation(summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
-  public ResponseEntity<TipoResponseDTO> criarTipo(
-      @RequestBody TipoRequestDTO novoTipo) {
+  public ResponseEntity<TipoResponseDTO> criarTipo(@RequestBody TipoRequestDTO novoTipo) {
     Tipo tipo = new Tipo(novoTipo.getNome());
     tipoRepository.save(tipo);
-    return ResponseEntity
-        .status(HttpStatus.CREATED)
+    return ResponseEntity.status(HttpStatus.CREATED)
         .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
   }
 

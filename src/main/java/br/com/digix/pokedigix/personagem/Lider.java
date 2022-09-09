@@ -38,4 +38,5 @@ public class Lider extends Personagem {
 	public void setInsignia(Insignia insignia) {
 		this.insignia = insignia;
 	}
+
 }

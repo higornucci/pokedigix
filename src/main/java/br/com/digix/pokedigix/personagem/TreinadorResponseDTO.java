@@ -11,6 +11,9 @@ public class TreinadorResponseDTO {
 	private int nivel;
 	private Collection<Insignia> insignias;
 
+	public TreinadorResponseDTO() {
+	}
+
 	public TreinadorResponseDTO(Long id, Endereco endereco, String nome, Collection<Insignia> insignias, int nivel,
 			int dinheiro) {
 		this.id = id;

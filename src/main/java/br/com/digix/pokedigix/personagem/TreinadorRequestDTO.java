@@ -4,6 +4,14 @@ public class TreinadorRequestDTO {
 	private Long idEndereco;
 	private String nome;
 	private Long idPrimeiroPokemon;
+	
+	public TreinadorRequestDTO() {}
+
+	public TreinadorRequestDTO(Long idEndereco, String nome, Long idPrimeiroPokemon) {
+		this.idEndereco = idEndereco;
+		this.nome = nome;
+		this.idPrimeiroPokemon = idPrimeiroPokemon;
+	}
 
 	public String getNome() {
 		return nome;

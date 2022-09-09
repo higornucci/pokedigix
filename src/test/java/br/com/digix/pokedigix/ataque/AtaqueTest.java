@@ -3,8 +3,9 @@ package br.com.digix.pokedigix.ataque;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import br.com.digix.pokedigix.tipo.Tipo;
 import org.junit.jupiter.api.Test;
+
+import br.com.digix.pokedigix.tipo.Tipo;
 
 class AtaqueTest {
 
@@ -19,15 +20,7 @@ class AtaqueTest {
 		String descricao = "O usuario ataque antes do oponente.";
 		Tipo tipoEsperado = new Tipo("Normal");
 
-		Ataque ataque = new Ataque(
-				forca,
-				acuracia,
-				pontosDePoder,
-				categoria,
-				nome,
-				descricao,
-				tipoEsperado);
-
+		Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
 		assertEquals(forca, ataque.getForca());
 		assertEquals(acuracia, ataque.getAcuracia());
 		assertEquals(pontosDePoder, ataque.getPontosDePoder());
@@ -165,6 +158,37 @@ class AtaqueTest {
 				() -> {
 					new AtaqueBuilder().comTipo(tipo).comCategoria(categoria).construir();
 				});
+	}
+
+	@Test
+	void deve_alterar_um_ataque() throws Exception {
+		Ataque ataque = new AtaqueBuilder().construir();
+		int forca = 4;
+		int acuracia = 10;
+		int pontosDePoder = 5;
+		Categoria categoria = Categoria.EFEITO;
+		String nome = "Ataque Lento";
+		String descricao = "O usuario ataque depois do oponente.";
+		Tipo tipoEsperado = new Tipo("Ghost");
+
+		ataque.setAcuracia(acuracia);
+		ataque.setCategoria(categoria);
+		ataque.setDescricao(descricao);
+		ataque.setForca(forca);
+		ataque.setPontosDePoder(pontosDePoder);
+		ataque.setTipo(tipoEsperado);
+		ataque.setNome(nome);
+
+		// Ataque ataque = new Ataque(forca, acuracia, pontosDePoder, categoria, nome,
+		// descricao, tipoEsperado);
+
+		assertEquals(forca, ataque.getForca());
+		assertEquals(acuracia, ataque.getAcuracia());
+		assertEquals(pontosDePoder, ataque.getPontosDePoder());
+		assertEquals(categoria, ataque.getCategoria());
+		assertEquals(nome, ataque.getNome());
+		assertEquals(descricao, ataque.getDescricao());
+		assertEquals(tipoEsperado, ataque.getTipo());
 	}
 
 }

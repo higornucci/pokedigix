@@ -1,15 +1,20 @@
 package br.com.digix.pokedigix.pokemon;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.com.digix.pokedigix.ataque.Ataque;
-import br.com.digix.pokedigix.ataque.AtaqueBuilder;
-import br.com.digix.pokedigix.tipo.Tipo;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
+
+import br.com.digix.pokedigix.ataque.Ataque;
+import br.com.digix.pokedigix.ataque.AtaqueBuilder;
+import br.com.digix.pokedigix.personagem.Treinador;
+import br.com.digix.pokedigix.personagem.TreinadorBuilder;
+import br.com.digix.pokedigix.tipo.Tipo;
 
 class PokemonTest {
 
@@ -159,9 +164,24 @@ class PokemonTest {
 		assertEquals(felicidadeMinima, pokemon.getFelicidade());
 	}
 
-	@Test
-	void deve_ter_felicidade_maxima_cem() throws Exception {
-		int felicidadeMaxima = 100;
+    @Test
+    void deve_ser_pokemon_selvagem() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().construir();
+
+        assertTrue(pokemon.isSelvagem());
+    }
+
+    @Test
+    void deve_ser_pokemon_nao_eh_selvagem() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().construir();
+        Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).construir();
+
+        assertFalse(pokemon.isSelvagem());
+    }
+
+    @Test
+    void deve_ter_felicidade_maxima_cem() throws Exception {
+        int felicidadeMaxima = 100;
 
 		Pokemon pokemon = new PokemonBuilder()
 				.comFelicidade(felicidadeMaxima)

@@ -47,7 +47,7 @@ public class Ataque {
 	@ManyToMany(mappedBy = "ataques")
 	private Collection<Pokemon> pokemons;
 
-	public Ataque() {
+	protected Ataque() {
 	}
 
 	public Ataque(int forca,

@@ -45,7 +45,6 @@ class TreinadorTest {
 		for (int i = 1; i <= 5; i++) {
 			treinador.capturar(new PokemonBuilder().construir());
 		}
-
 		assertThrows(
 				LimiteDePokemonException.class,
 				() -> {
@@ -63,4 +62,5 @@ class TreinadorTest {
 
 		assertEquals(quantidadeDePokemonsEsperada, treinador.getPokemons().size());
 	}
+
 }

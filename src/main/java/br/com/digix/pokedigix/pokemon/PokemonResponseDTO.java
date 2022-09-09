@@ -18,7 +18,11 @@ public class PokemonResponseDTO {
 	private Collection<AtaqueResponseDTO> ataques;
 	private Collection<TipoResponseDTO> tipos;
 
-	public PokemonResponseDTO() {
+	public Long getId() {
+		return id;
+	}
+
+	protected PokemonResponseDTO() {
 	}
 
 	public PokemonResponseDTO(Long id, String nome, double altura, double peso, Genero genero, int nivel,
@@ -34,10 +38,6 @@ public class PokemonResponseDTO {
 		this.felicidade = felicidade;
 		this.ataques = ataques;
 		this.tipos = tipos;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public void setId(Long id) {

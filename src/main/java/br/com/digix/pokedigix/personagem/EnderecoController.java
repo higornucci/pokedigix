@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -113,5 +114,23 @@ public class EnderecoController {
 							endereco.getRegiao()));
 		}
 		return ResponseEntity.ok(enderecosRetornados);
+	}
+
+	@Operation(summary = "Atualizar o Endereço")
+	@ApiResponse(responseCode = "200")
+	@PutMapping(path = "/{id}", consumes = "application/json")
+	public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoUpdateDTO enderecoRequestDTO,
+			@PathVariable Long id) {
+
+		Endereco endereco = enderecoRepository.findById(id).get();
+
+		endereco.setRegiao(enderecoRequestDTO.getRegiao());
+		endereco.setCidade(enderecoRequestDTO.getCidade());
+		enderecoRepository.save(endereco);
+
+		return ResponseEntity.ok(new EnderecoResponseDTO(
+				endereco.getId(),
+				endereco.getRegiao(),
+				endereco.getCidade()));
 	}
 }
