@@ -37,7 +37,7 @@ class TipoControllerTest {
 
     @BeforeEach
     @AfterEach
-    public void resetDb() {
+    void resetDb() {
         tipoRepository.deleteAll();
     }
 
@@ -115,7 +115,7 @@ class TipoControllerTest {
     }
 
     @Test
-    public void deve_deletar_um_tipo() throws Exception {
+    void deve_deletar_um_tipo() throws Exception {
         // Codigo Do Enzão
         int quantidadeEsperada = 3;
         String eletrico = "Eletrico";
@@ -134,7 +134,7 @@ class TipoControllerTest {
     }
 
     @Test
-    public void deve_deletar_um_tipo_pelo_id() throws Exception {
+    void deve_deletar_um_tipo_pelo_id() throws Exception {
         // Arrange
         int quantidadeEsperada = 2;
         String eletrico = "Eletrico";
@@ -162,7 +162,7 @@ class TipoControllerTest {
     }
 
     @Test
-    public void deve_alterar_um_tipo() throws Exception {
+    void deve_alterar_um_tipo() throws Exception {
         // Arrange
         String eletrico = "Eletrico";
         Tipo tipoEletrico = new Tipo(eletrico);
@@ -186,7 +186,7 @@ class TipoControllerTest {
     }
 
     @Test
-    public void deve_atualizar_um_tipo_pelo_id() throws Exception {
+    void deve_atualizar_um_tipo_pelo_id() throws Exception {
         String nome = "Agua";
         Tipo tipoPokemon = new Tipo(nome);
         tipoRepository.save(tipoPokemon);
