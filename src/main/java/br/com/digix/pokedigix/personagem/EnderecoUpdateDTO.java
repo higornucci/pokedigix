@@ -3,10 +3,10 @@ package br.com.digix.pokedigix.personagem;
 public class EnderecoUpdateDTO {
     private String cidade;
     private String regiao;
-    
+
     public EnderecoUpdateDTO() {
     }
-    
+
     public EnderecoUpdateDTO(String regiao, String cidade) {
         this.cidade = cidade;
         this.regiao = regiao;

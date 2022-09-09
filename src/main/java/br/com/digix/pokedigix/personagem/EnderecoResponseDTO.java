@@ -38,10 +38,4 @@ public class EnderecoResponseDTO {
         this.cidade = cidade;
     }
 
-    
-
-    
-
-
-
 }

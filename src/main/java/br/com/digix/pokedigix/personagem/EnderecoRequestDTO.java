@@ -4,8 +4,16 @@ public class EnderecoRequestDTO {
 
   private String cidade;
   private String regiao;
+  
+public EnderecoRequestDTO(){
 
-  public String getRegiao() {
+}
+  public EnderecoRequestDTO(String regiao, String cidade) {
+    this.regiao = regiao;
+    this.cidade = cidade;
+}
+
+public String getRegiao() {
     return regiao;
   }
 

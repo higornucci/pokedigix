@@ -24,7 +24,7 @@ public class AtaqueResponseDTO {
             String nome,
             String descricao,
             TipoResponseDTO tipo) {
-                
+
         this.id = id;
         this.forca = forca;
         this.acuracia = acuracia;

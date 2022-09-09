@@ -7,14 +7,15 @@ import javax.persistence.Id;
 
 @Entity
 public class Endereco {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String cidade;
     private String regiao;
 
-    protected Endereco() {}
+    protected Endereco() {
+    }
 
     public Endereco(String regiao, String cidade) {
         this.cidade = cidade;
@@ -43,6 +44,6 @@ public class Endereco {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
-    }   
-    
+    }
+
 }

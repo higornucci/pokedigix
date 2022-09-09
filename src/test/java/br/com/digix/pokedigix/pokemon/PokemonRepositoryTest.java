@@ -23,129 +23,126 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 class PokemonRepositoryTest {
 
-  @Autowired
-  private PokemonRepository pokemonRepository;
+    @Autowired
+    private PokemonRepository pokemonRepository;
 
-  @Autowired
-  private EnderecoRepository enderecoRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
-  @Autowired
-  private TreinadorRepository treinadorRepository;
+    @Autowired
+    private TreinadorRepository treinadorRepository;
 
-  @Autowired
-  private TipoRepository tipoRepository;
+    @Autowired
+    private TipoRepository tipoRepository;
 
-  @AfterEach
-  @BeforeEach
-  void resetDb() {
-    pokemonRepository.deleteAll();
-    treinadorRepository.deleteAll();
-    tipoRepository.deleteAll();
-  }
+    @AfterEach
+    @BeforeEach
+    void resetDb() {
+        pokemonRepository.deleteAll();
+        treinadorRepository.deleteAll();
+        tipoRepository.deleteAll();
+    }
 
-  @Test
-  void deve_salvar_um_pokemon() throws Exception {
-    Pokemon gastly = new PokemonBuilder().construir();
+    @Test
+    void deve_salvar_um_pokemon() throws Exception {
+        Pokemon gastly = new PokemonBuilder().construir();
 
-    pokemonRepository.save(gastly);
+        pokemonRepository.save(gastly);
 
-    assertNotNull(gastly.getId());
-  }
+        assertNotNull(gastly.getId());
+    }
 
-  @Test
-  void deve_salvar_um_pokemon_com_um_tipo() throws Exception {
-    int quantidadeDeTiposEsperada = 1;
-    Tipo fantasma = new Tipo("Fantasma");
-    Pokemon gastly = new PokemonBuilder().comTipo(fantasma).construir();
-    pokemonRepository.save(gastly);
+    @Test
+    void deve_salvar_um_pokemon_com_um_tipo() throws Exception {
+        int quantidadeDeTiposEsperada = 1;
+        Tipo fantasma = new Tipo("Fantasma");
+        Pokemon gastly = new PokemonBuilder().comTipo(fantasma).construir();
+        pokemonRepository.save(gastly);
 
-    Pokemon gastlyRetornado = pokemonRepository.findById(gastly.getId()).get();
+        Pokemon gastlyRetornado = pokemonRepository.findById(gastly.getId()).get();
 
-    assertNotNull(gastlyRetornado.getTipos());
-    assertEquals(quantidadeDeTiposEsperada, gastlyRetornado.getTipos().size());
-    assertTrue(gastlyRetornado.getTipos().contains(fantasma));
-  }
+        assertNotNull(gastlyRetornado.getTipos());
+        assertEquals(quantidadeDeTiposEsperada, gastlyRetornado.getTipos().size());
+        assertTrue(gastlyRetornado.getTipos().contains(fantasma));
+    }
 
-  @Test
-  void deve_salvar_um_pokemon_com_ataque() throws Exception {
-    Ataque ataque = new AtaqueBuilder().construir();
-    Pokemon pokemon = new PokemonBuilder().comAtaque(ataque).construir();
+    @Test
+    void deve_salvar_um_pokemon_com_ataque() throws Exception {
+        Ataque ataque = new AtaqueBuilder().construir();
+        Pokemon pokemon = new PokemonBuilder().comAtaque(ataque).construir();
 
-    pokemonRepository.save(pokemon);
+        pokemonRepository.save(pokemon);
 
-    assertTrue(pokemon.getAtaques().contains(ataque));
-  }
+        assertTrue(pokemon.getAtaques().contains(ataque));
+    }
 
-  @Test
-  void deve_buscar_um_pokemon_pelo_seu_tipo()
-    throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
-    Tipo tipo = new Tipo("Psíquico");
-    Pokemon pokemon = new PokemonBuilder().comTipo(tipo).construir();
-    tipoRepository.save(tipo);
+    @Test
+    void deve_buscar_um_pokemon_pelo_seu_tipo()
+            throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
+            LimiteDeAtaquePokemonException {
+        Tipo tipo = new Tipo("Psíquico");
+        Pokemon pokemon = new PokemonBuilder().comTipo(tipo).construir();
+        tipoRepository.save(tipo);
 
-    pokemonRepository.save(pokemon);
+        pokemonRepository.save(pokemon);
 
-    Collection<Pokemon> pokemonsRetornados = pokemonRepository.buscarPorTipo(
-      tipo.getId()
-    );
-    assertTrue(pokemonsRetornados.contains(pokemon));
-  }
+        Collection<Pokemon> pokemonsRetornados = pokemonRepository.buscarPorTipo(
+                tipo.getId());
+        assertTrue(pokemonsRetornados.contains(pokemon));
+    }
 
-  @Test
-  void deve_buscar_um_pokemon_por_nome() throws Exception {
-    Pokemon pokemon = new PokemonBuilder().comNome("Gastly").construir();
-    pokemonRepository.save(pokemon);
+    @Test
+    void deve_buscar_um_pokemon_por_nome() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().comNome("Gastly").construir();
+        pokemonRepository.save(pokemon);
 
-    Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining(
-      "Gastly"
-    );
+        Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining(
+                "Gastly");
 
-    assertTrue(pokemonRetornado.contains(pokemon));
-  }
+        assertTrue(pokemonRetornado.contains(pokemon));
+    }
 
-  @Test
-  void pokemon_sem_treinador_e_selvagem() throws Exception {
-    Pokemon pokemon = new PokemonBuilder().construir();
-    pokemonRepository.save(pokemon);
+    @Test
+    void pokemon_sem_treinador_e_selvagem() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().construir();
+        pokemonRepository.save(pokemon);
 
-    assertTrue(pokemon.isSelvagem());
-  }
+        assertTrue(pokemon.isSelvagem());
+    }
 
-  @Test
-  void pokemon_com_treinador_nao_e_selvagem() throws Exception {
-    Pokemon pokemon = new PokemonBuilder().construir();
-    Endereco endereco = new Endereco("Norte", "campo grande");
-    Treinador treinador = new Treinador("Ash", endereco, pokemon);
-    pokemonRepository.save(pokemon);
-    enderecoRepository.save(endereco);
-    treinadorRepository.save(treinador);
+    @Test
+    void pokemon_com_treinador_nao_e_selvagem() throws Exception {
+        Pokemon pokemon = new PokemonBuilder().construir();
+        Endereco endereco = new Endereco("Norte", "campo grande");
+        Treinador treinador = new Treinador("Ash", endereco, pokemon);
+        pokemonRepository.save(pokemon);
+        enderecoRepository.save(endereco);
+        treinadorRepository.save(treinador);
 
-    assertFalse(pokemon.isSelvagem());
-  }
+        assertFalse(pokemon.isSelvagem());
+    }
 
-  @Test
-  void pode_nao_ter_genero() throws Exception {
-    Genero genero = null;
-    Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
-    pokemonRepository.save(pokemon);
+    @Test
+    void pode_nao_ter_genero() throws Exception {
+        Genero genero = null;
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
+        pokemonRepository.save(pokemon);
 
-    Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining(
-      "Gastly"
-    );
+        Collection<Pokemon> pokemonRetornado = pokemonRepository.findByNomeContaining(
+                "Gastly");
+        assertTrue(pokemonRetornado.contains(pokemon));
+    }
 
-    assertTrue(pokemonRetornado.contains(pokemon));
-  }
+    @Test
+    void pode_ter_um_genero_indefinido() throws Exception {
+        Genero genero = Genero.INDEFINIDO;
+        Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
+        pokemonRepository.save(pokemon);
 
-  @Test
-  void pode_ter_um_genero_indefinido() throws Exception {
-    Genero genero = Genero.INDEFINIDO;
-    Pokemon pokemon = new PokemonBuilder().comGenero(genero).construir();
-    pokemonRepository.save(pokemon);
+        Pokemon pokemonRetornado = pokemonRepository
+                .findById(pokemon.getId())
+                .get();
 
-    Pokemon pokemonRetornado = pokemonRepository
-      .findById(pokemon.getId())
-      .get();
-
-    assertEquals(Genero.INDEFINIDO, pokemonRetornado.getGenero());
-  }
+        assertEquals(Genero.INDEFINIDO, pokemonRetornado.getGenero());
+    }
 }

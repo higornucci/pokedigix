@@ -22,22 +22,22 @@ public class Ataque {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     private int forca;
 
     @Column(nullable = false)
     private int acuracia;
-    
+
     @Column(nullable = false, name = "pp")
     private int pontosDePoder;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private Categoria categoria;
-    
+
     @Column(nullable = false, length = 30)
     private String nome;
-    
+
     @Column(nullable = false)
     private String descricao;
 
@@ -47,15 +47,17 @@ public class Ataque {
     @ManyToMany(mappedBy = "ataques")
     private Collection<Pokemon> pokemons;
 
-    public Ataque() {}
+    protected Ataque() {
+    }
 
-    public Ataque(int forca, 
-                int acuracia, 
-                int pontosDePoder, 
-                Categoria categoria, 
-                String nome, 
-                String descricao,
-                Tipo tipo) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    public Ataque(int forca,
+            int acuracia,
+            int pontosDePoder,
+            Categoria categoria,
+            String nome,
+            String descricao,
+            Tipo tipo)
+            throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         validarAcuracia(acuracia);
         validarForca(categoria, forca);
         validarTipo(categoria, tipo);
@@ -67,15 +69,15 @@ public class Ataque {
         this.descricao = descricao;
         this.tipo = tipo;
     }
-    
+
     private void validarTipo(Categoria categoria, Tipo tipo) throws TipoInvalidoParaCategoriaException {
-        if(!categoria.equals(Categoria.EFEITO) && tipo == null) {
+        if (!categoria.equals(Categoria.EFEITO) && tipo == null) {
             throw new TipoInvalidoParaCategoriaException(categoria);
         }
     }
 
     private void validarForca(Categoria categoria, int forca) throws ForcaInvalidaParaCategoriaException {
-        if(!categoria.equals(Categoria.EFEITO) && forca <= 0) {
+        if (!categoria.equals(Categoria.EFEITO) && forca <= 0) {
             throw new ForcaInvalidaParaCategoriaException(categoria);
         }
     }
@@ -88,9 +90,9 @@ public class Ataque {
         this.descricao = descricao;
         this.categoria = Categoria.EFEITO;
     }
-    
+
     private void validarAcuracia(int acuracia) throws AcuraciaInvalidaException {
-        if(acuracia < 0 || acuracia > 100) {
+        if (acuracia < 0 || acuracia > 100) {
             throw new AcuraciaInvalidaException();
         }
     }
@@ -126,7 +128,7 @@ public class Ataque {
     public Long getId() {
         return this.id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }

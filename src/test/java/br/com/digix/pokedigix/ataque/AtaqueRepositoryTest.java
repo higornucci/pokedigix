@@ -68,7 +68,6 @@ class AtaqueRepositoryTest {
     ataqueRepository.save(ataque);
 
     Ataque ataqueRetornado = ataqueRepository.findById(ataque.getId()).get();
-
     assertEquals(tipo.getNome(), ataqueRetornado.getTipo().getNome());
     assertNotNull(ataqueRetornado.getTipo().getId());
   }
