@@ -29,4 +29,9 @@ public class TreinadorBuilder {
 		return this;
 	}
 
+    public TreinadorBuilder comEndereco(Endereco endereco) {
+        this.endereco = endereco;
+        return this;
+    }
+
 }

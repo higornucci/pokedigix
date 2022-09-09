@@ -1,13 +1,11 @@
 package br.com.digix.pokedigix.ataque;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.com.digix.pokedigix.PokedigixApplication;
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.utils.JsonUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,11 +16,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
+import br.com.digix.pokedigix.PokedigixApplication;
+import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
+import br.com.digix.pokedigix.utils.JsonUtil;
+
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT,classes=PokedigixApplication.class)
+
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-class AtaqueControllerTest {
+public class AtaqueControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
@@ -41,39 +46,58 @@ class AtaqueControllerTest {
 	}
 
 	@Test
-	void deve_adicionar_um_ataque() throws Exception {
-		int quantidadeEsperada = 1;
-		String nomeDoTipo = "Watter";
-		Tipo tipo = new Tipo(nomeDoTipo);
+	public void deve_adicionar_um_ataque() throws Exception {
+		String ataqueEsperado = "Choque do Trovao";
+		String tipoEsperado = "ELetrico";
+
+		int quantidadeDeAtaquesEsperados = 1;
+		Tipo tipo = new Tipo(tipoEsperado);
 		tipoRepository.save(tipo);
-		String nomeDoAtaque = "Aqua-Jet";
 
 		AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
+		ataqueRequestDTO.setForca(125);
+		ataqueRequestDTO.setAcuracia(100);
+		ataqueRequestDTO.setPontosDePoder(99);
+		ataqueRequestDTO.setCategoria(Categoria.ESPECIAL);
+		ataqueRequestDTO.setNome(ataqueEsperado);
+		ataqueRequestDTO.setDescricao("Muito Bom");
 		ataqueRequestDTO.setTipoId(tipo.getId());
-		ataqueRequestDTO.setAcuracia(10);
-		ataqueRequestDTO.setCategoria(Categoria.FISICO);
-		ataqueRequestDTO.setDescricao("Cospe agua no outro");
-		ataqueRequestDTO.setForca(30);
-		ataqueRequestDTO.setNome(nomeDoAtaque);
-		ataqueRequestDTO.setPontosDePoder(20);
 
-		// Action
-		mvc
-				.perform(
-						post("/api/v1/ataques/")
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(JsonUtil.toJson(ataqueRequestDTO)))
+		mvc.perform(
+				post("/api/v1/ataques").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(ataqueRequestDTO)));
+
+		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+		long quantidadeDeAtaquesEncontrados = ataquesEncontrados.spliterator().getExactSizeIfKnown();
+
+		mvc.perform(post("/api/v1/ataques")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.toJson(ataqueRequestDTO)))
 				.andExpect(status().isCreated());
 
-		// Asserts
-		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
-		long quantidadeEncontrada = ataquesEncontrados
-				.spliterator()
-				.getExactSizeIfKnown();
+		assertThat(quantidadeDeAtaquesEncontrados)
+				.isEqualTo(quantidadeDeAtaquesEsperados);
 
-		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
 		assertThat(ataquesEncontrados)
 				.extracting(Ataque::getNome)
-				.containsOnly(nomeDoAtaque);
+				.containsOnly(ataqueEsperado);
 	}
-}
+
+	@Test
+    void deve_excluir_um_ataque_pelo_id() throws Exception {
+        // Teste do código Do Enzão
+        int quantidadeEsperada = 0;
+
+        Tipo tipo = new Tipo("Eletrico");
+
+        Ataque ataque = new AtaqueBuilder().comTipo(tipo).construir();
+        ataqueRepository.save(ataque);
+
+        String url = "/api/v1/ataques/" + ataque.getId();
+        MvcResult resultado = mvc.perform(delete(url)).andReturn();
+
+        Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+        long quantidadeEncontrada = ataquesEncontrados.spliterator().getExactSizeIfKnown();
+
+        assertEquals(quantidadeEsperada, quantidadeEncontrada);
+		}
+	}

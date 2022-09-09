@@ -8,8 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.com.digix.pokedigix.PokedigixApplication;
-import br.com.digix.pokedigix.utils.JsonUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import br.com.digix.pokedigix.PokedigixApplication;
+import br.com.digix.pokedigix.utils.JsonUtil;
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
+
 class TipoControllerTest {
 
 	@Autowired
@@ -43,22 +46,22 @@ class TipoControllerTest {
 		String nomeEsperado = "Fire";
 		int quantidadeEsperada = 1;
 		TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
-
 		// Action
 		mvc
-				.perform(post("/api/v1/tipos").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(tipoRequestDTO)))
+				.perform(
+						post("/api/v1/tipos")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(JsonUtil.toJson(tipoRequestDTO)))
 				.andExpect(status().isCreated());
-
 		// Asserts
 		Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
-		long quantidadeEncontrada = tiposEncontrados
-				.spliterator()
-				.getExactSizeIfKnown();
+		long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
 
 		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
-		assertThat(tiposEncontrados)
-				.extracting(Tipo::getNome)
-				.containsOnly(nomeEsperado);
+		assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
+
+		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+		assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
 	}
 
 	@Test
@@ -110,6 +113,25 @@ class TipoControllerTest {
 	}
 
 	@Test
+	public void deve_deletar_um_tipo() throws Exception {
+		// Codigo Do Enzão
+		int quantidadeEsperada = 3;
+		String eletrico = "Eletrico";
+		String agua = "Agua";
+		String fantasma = "Fantasma";
+		Tipo tipoAgua = new Tipo(agua);
+		tipoRepository.save(tipoAgua);
+		tipoRepository.save(new Tipo(agua));
+		tipoRepository.save(new Tipo(eletrico));
+		tipoRepository.save(new Tipo(fantasma));
+
+		String url = "/api/v1/tipos/" + tipoAgua.getId();
+		MvcResult resultado = mvc.perform(delete(url)).andReturn();
+
+		Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+	}
+
+	@Test
 	void deve_deletar_um_tipo_pelo_id() throws Exception {
 		// Arrange
 		int quantidadeEsperada = 2;
@@ -135,6 +157,51 @@ class TipoControllerTest {
 
 		assertThat(HttpStatus.NO_CONTENT.value())
 				.isEqualTo(resultado.getResponse().getStatus());
+	}
+
+	@Test
+	public void deve_atualizar_um_tipo_pelo_id() throws Exception {
+		String nome = "Agua";
+		Tipo tipoPokemon = new Tipo(nome);
+		tipoRepository.save(tipoPokemon);
+
+		String nomeEsperado = "Fogo";
+		TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(nomeEsperado);
+		int quantidadeEsperada = 1;
+
+		mvc.perform(put("/api/v1/tipos/" + tipoPokemon.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.toJson(tipoRequestDTO)))
+				.andExpect(status().isOk());
+
+		Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+		long quantidadeEncontrada = tiposEncontrados.spliterator().getExactSizeIfKnown();
+		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+		assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(nomeEsperado);
+	}
+
+	@Test
+	public void deve_alterar_um_tipo() throws Exception {
+		// Arrange
+		String eletrico = "Eletrico";
+		Tipo tipoEletrico = new Tipo(eletrico);
+		tipoRepository.save(tipoEletrico);
+
+		String novoNome = "Fogo";
+		TipoRequestDTO tipoRequestDTO = new TipoRequestDTO(novoNome);
+		String url = "/api/v1/tipos/" + tipoEletrico.getId();
+
+		// Action
+		var resultado = mvc.perform(put(url)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.toJson(tipoRequestDTO))).andReturn();
+
+		// Asserts
+		int status = resultado.getResponse().getStatus();
+		assertEquals(HttpStatus.OK.value(), status);
+
+		Iterable<Tipo> tiposEncontrados = tipoRepository.findAll();
+		assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(novoNome);
 	}
 
 	@Test

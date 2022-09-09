@@ -38,20 +38,12 @@ public class Tipo {
         return this.id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public Collection<Pokemon> getPokemons() {
-        return pokemons;
-    }
+  
 
-    public void setPokemons(Collection<Pokemon> pokemons) {
-        this.pokemons = pokemons;
-    }
+  
     
 }

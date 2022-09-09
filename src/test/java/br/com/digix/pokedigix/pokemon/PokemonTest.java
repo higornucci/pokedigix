@@ -191,4 +191,5 @@ class PokemonTest {
 					new PokemonBuilder().comFelicidade(felicidadeInvalida).construir();
 				});
 	}
+
 }
