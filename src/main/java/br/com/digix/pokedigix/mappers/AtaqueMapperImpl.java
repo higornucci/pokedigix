@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.mappers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -54,6 +56,15 @@ public class AtaqueMapperImpl implements AtaqueMapper {
                 ataque.getNome(),
                 ataque.getDescricao(),
                 tipoMapper.tipoParaTipoResponse(ataque.getTipo()));
+    }
+
+    @Override
+    public Collection<AtaqueResponseDTO> ataquesParaAtaqueResponseDTOs(Collection<Ataque> ataques) {
+        Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
+        for (Ataque ataque : ataques) {
+            ataquesDTOs.add(ataqueParaAtaqueResponseDTO(ataque));
+        }
+        return ataquesDTOs;
     }
 
 }
