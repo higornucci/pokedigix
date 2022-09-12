@@ -159,11 +159,32 @@ class EnderecoControllerTest {
       String novaCidade = "Pallioto";
       Endereco novoEndereco = new EnderecoBuilder().comCidade(novaCidade).construir();
       enderecoRepository.save(novoEndereco);
-      String potencialCidade = null;
+      String potencialCidade = "";
       int quantidadeEsperada = 2;
 
       //Action
-      MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?" + potencialCidade)).andReturn();
+      MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?termo=" + potencialCidade)).andReturn();
+
+      //Assertions
+      EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),EnderecoResponseDTO[].class);
+
+      assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
+      assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
+      assertThat(enderecosRetornadosDTO).extracting("cidade").contains(cidade);
+    }
+
+    @Test
+    void deve_buscar_lista_de_cidades_quando_null() throws Exception{
+      String cidade = "Pallet";
+      Endereco endereco = new EnderecoBuilder().comCidade(cidade).construir();
+      enderecoRepository.save(endereco);
+      String novaCidade = "Pallioto";
+      Endereco novoEndereco = new EnderecoBuilder().comCidade(novaCidade).construir();
+      enderecoRepository.save(novoEndereco);
+      int quantidadeEsperada = 2;
+
+      //Action
+      MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?" )).andReturn();
 
       //Assertions
       EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(),EnderecoResponseDTO[].class);
@@ -204,11 +225,32 @@ class EnderecoControllerTest {
         String novaRegiao = "Hoenn";
         Endereco novoEndereco = new EnderecoBuilder().comRegiao(novaRegiao).construir();
         enderecoRepository.save(novoEndereco);
-        String potencialRegiao = null;
+        String potencialRegiao = "";
         int quantidadeEsperada = 2;
 
         //Action
-        MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?" + potencialRegiao)).andReturn();
+        MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?termo=" + potencialRegiao)).andReturn();
+
+        //Assertions
+        EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+
+        assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
+        assertThat(enderecosRetornadosDTO).extracting("cidade").contains(regiao);
+        assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
+    }
+
+    @Test
+    void deve_buscar_lista_de_regiao_quando_nulo() throws Exception{
+        String regiao = "Kanto";
+        Endereco endereco = new EnderecoBuilder().comRegiao(regiao).construir();
+        enderecoRepository.save(endereco);
+        String novaRegiao = "Hoenn";
+        Endereco novoEndereco = new EnderecoBuilder().comRegiao(novaRegiao).construir();
+        enderecoRepository.save(novoEndereco);
+        int quantidadeEsperada = 2;
+
+        //Action
+        MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?" )).andReturn();
 
         //Assertions
         EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);

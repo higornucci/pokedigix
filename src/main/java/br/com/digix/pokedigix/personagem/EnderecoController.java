@@ -78,10 +78,10 @@ public class EnderecoController {
     public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorCidade(
             @RequestParam(required = false, name = "termo") String cidade) {
         Iterable<Endereco> enderecos;
-        if (cidade != null) {
-            enderecos = enderecoRepository.findByCidadeContaining(cidade);
-        } else {
+        if (cidade==null || cidade.isEmpty()) {
             enderecos = enderecoRepository.findAll();
+        } else {
+            enderecos = enderecoRepository.findByCidadeContaining(cidade);
         }
 
         Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
@@ -99,10 +99,11 @@ public class EnderecoController {
     public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorRegiao(
             @RequestParam(required = false, name = "termo") String regiao) {
         Iterable<Endereco> enderecos;
-        if (regiao != null) {
-            enderecos = enderecoRepository.findByRegiaoContaining(regiao);
-        } else {
+        if (regiao == null || regiao.isEmpty()) {
             enderecos = enderecoRepository.findAll();
+        } else {
+            enderecos = enderecoRepository.findByRegiaoContaining(regiao);
+
         }
         Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
 
