@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.pokemon;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueBuilder;
-import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.personagem.TreinadorBuilder;
 import br.com.digix.pokedigix.tipo.Tipo;
 
@@ -173,7 +171,7 @@ class PokemonTest {
     @Test
     void deve_verificar_se_pokemon_nao_eh_selvagem() throws Exception {
         Pokemon pokemon = new PokemonBuilder().construir();
-        Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).construir();
+        new TreinadorBuilder().comPokemonInicial(pokemon).construir();
 
         assertFalse(pokemon.isSelvagem());
     }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.naming.NameNotFoundException;
 import javax.transaction.Transactional;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
+import br.com.digix.pokedigix.mappers.TipoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -31,6 +33,9 @@ public class TipoController {
   @Autowired
   private TipoRepository tipoRepository;
 
+  private TipoMapper tipoMapper
+      = Mappers.getMapper(TipoMapper.class);
+
   @Operation(summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
@@ -38,7 +43,7 @@ public class TipoController {
     Tipo tipo = new Tipo(novoTipo.getNome());
     tipoRepository.save(tipo);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+        .body(tipoMapper.tipoToTipoResponseDTO(tipo));
   }
 
   @Operation(summary = "Buscar todos os tipos sem ordem")

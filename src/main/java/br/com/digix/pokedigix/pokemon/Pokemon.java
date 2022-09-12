@@ -18,16 +18,13 @@ import javax.persistence.ManyToOne;
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.utils.EntidadeBase;
 
 @Entity
-public class Pokemon {
+public class Pokemon extends EntidadeBase {
   private static final int LIMITE_ATAQUES = 4;
 
   private static final int LIMITE_TIPOS = 2;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
 
   @Column(length = 15, nullable = false)
   private String nome;
@@ -138,10 +135,6 @@ public class Pokemon {
 
   public int getFelicidade() {
     return felicidade;
-  }
-
-  public Long getId() {
-    return this.id;
   }
 
   public Collection<Tipo> getTipos() {
