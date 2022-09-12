@@ -78,10 +78,10 @@ public class EnderecoController {
     public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorCidade(
             @RequestParam(required = false, name = "termo") String cidade) {
         Iterable<Endereco> enderecos;
-        if (cidade != null) {
-            enderecos = enderecoRepository.findByCidadeContaining(cidade);
-        } else {
+        if (cidade==null || cidade.isEmpty()) {
             enderecos = enderecoRepository.findAll();
+        } else {
+            enderecos = enderecoRepository.findByCidadeContaining(cidade);
         }
 
         Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
@@ -99,10 +99,11 @@ public class EnderecoController {
     public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorRegiao(
             @RequestParam(required = false, name = "termo") String regiao) {
         Iterable<Endereco> enderecos;
-        if (regiao != null) {
-            enderecos = enderecoRepository.findByRegiaoContaining(regiao);
-        } else {
+        if (regiao == null || regiao.isEmpty()) {
             enderecos = enderecoRepository.findAll();
+        } else {
+            enderecos = enderecoRepository.findByRegiaoContaining(regiao);
+
         }
         Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
 
@@ -121,9 +122,11 @@ public class EnderecoController {
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoUpdateDTO enderecoRequestDTO,
             @PathVariable Long id) {
-
-        Endereco endereco = enderecoRepository.findById(id).get();
-
+        Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
+        if (enderecoOptional.isEmpty()) {
+            throw new NotFoundException(null);
+        }
+        Endereco endereco = enderecoOptional.get();
         endereco.setRegiao(enderecoRequestDTO.getRegiao());
         endereco.setCidade(enderecoRequestDTO.getCidade());
         enderecoRepository.save(endereco);

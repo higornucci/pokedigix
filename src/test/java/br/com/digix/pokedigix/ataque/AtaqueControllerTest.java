@@ -1,7 +1,11 @@
 package br.com.digix.pokedigix.ataque;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
@@ -12,18 +16,15 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import br.com.digix.pokedigix.utils.JsonUtil;
-import static org.junit.Assert.assertEquals;
 
 import br.com.digix.pokedigix.tipo.TipoRepository;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.tipo.Tipo;
@@ -134,5 +135,23 @@ class AtaqueControllerTest {
                 Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
                 assertThat(ataquesEncontrados).extracting(Ataque::getNome)
                                 .containsOnly(novoAtaque);
+        }
+
+        @Test
+        void deve_buscar_um_ataque_pelo_id() throws Exception {
+                Ataque ataque = new AtaqueBuilder().construir();
+                ataqueRepository.save(ataque);
+
+                // Action
+                MvcResult mvcResult = mvc.perform(get("/api/v1/ataques/" + ataque.getId())).andReturn();
+
+                // Assert
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
+
+                String content = mvcResult.getResponse().getContentAsString();
+                AtaqueResponseDTO ataqueDTO = JsonUtil.mapFromJson(content, AtaqueResponseDTO.class);
+
+                assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
         }
 }
