@@ -4,19 +4,13 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
+import br.com.digix.pokedigix.utils.EntidadeBase;
 
 @Entity
-public class Tipo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Tipo extends EntidadeBase {
 
     @Column(nullable = false, length = 15)
     private String nome;
@@ -27,16 +21,12 @@ public class Tipo {
     protected Tipo() {
     }
 
-    public Tipo(String nomeEsperado) {
-        this.nome = nomeEsperado;
+    public Tipo(String nome) {
+        this.nome = nome;
     }
 
     public String getNome() {
         return this.nome;
-    }
-
-    public Long getId() {
-        return this.id;
     }
 
     public void setNome(String nome) {
