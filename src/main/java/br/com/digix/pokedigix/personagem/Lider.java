@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.personagem;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Column;

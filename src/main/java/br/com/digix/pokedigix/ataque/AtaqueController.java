@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
-import br.com.digix.pokedigix.tipo.Tipo;
-import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
+import br.com.digix.pokedigix.mappers.AtaqueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -29,7 +27,7 @@ public class AtaqueController {
   private AtaqueRepository ataqueRepository;
 
   @Autowired
-  private TipoRepository tipoRepository;
+  private AtaqueMapper ataqueMapper;
 
   @Operation(summary = "Buscar um ataque pelo seu id")
   @ApiResponse(responseCode = "200", description = "Retorna os dados do ataque solicitado")
@@ -40,20 +38,7 @@ public class AtaqueController {
       throw new NotFoundException(null);
     }
     Ataque ataque = ataqueOptional.get();
-    TipoResponseDTO tipoResponseDTO = new TipoResponseDTO(
-        ataque.getTipo().getId(),
-        ataque.getTipo().getNome());
-
-    return ResponseEntity.ok(
-        new AtaqueResponseDTO(
-            ataque.getId(),
-            ataque.getForca(),
-            ataque.getAcuracia(),
-            ataque.getPontosDePoder(),
-            ataque.getCategoria(),
-            ataque.getNome(),
-            ataque.getDescricao(),
-            tipoResponseDTO));
+    return ResponseEntity.ok(ataqueMapper.ataqueParaAtaqueResponseDTO(ataque));
   }
 
   @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
@@ -62,33 +47,11 @@ public class AtaqueController {
   public ResponseEntity<AtaqueResponseDTO> criar(
       @RequestBody AtaqueRequestDTO novoAtaque)
       throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-    Optional<Tipo> tipoOptional = tipoRepository.findById(novoAtaque.getTipoId());
-    if (tipoOptional.isEmpty()) {
-      throw new NotFoundException(null);
-    }
-    Tipo tipo = tipoOptional.get();
-    Ataque ataque = new Ataque(
-        novoAtaque.getForca(),
-        novoAtaque.getAcuracia(),
-        novoAtaque.getPontosDePoder(),
-        novoAtaque.getCategoria(),
-        novoAtaque.getNome(),
-        novoAtaque.getDescricao(),
-        tipo);
+    Ataque ataque = ataqueMapper.ataqueRequestParaAtaque(novoAtaque);
     ataqueRepository.save(ataque);
-    TipoResponseDTO tipoDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(
-            new AtaqueResponseDTO(
-                ataque.getId(),
-                ataque.getForca(),
-                ataque.getAcuracia(),
-                ataque.getPontosDePoder(),
-                ataque.getCategoria(),
-                ataque.getNome(),
-                ataque.getDescricao(),
-                tipoDTO));
+        .body(ataqueMapper.ataqueParaAtaqueResponseDTO(ataque));
   }
 
   @Operation(summary = "Atualizar um Ataque")
@@ -108,19 +71,9 @@ public class AtaqueController {
     ataque.setDescricao(ataqueRequestDTO.getDescricao());
     ataque.setForca(ataqueRequestDTO.getForca());
     ataque.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
-
     ataqueRepository.save(ataque);
-    TipoResponseDTO tipoDTO = new TipoResponseDTO(ataque.getId(), ataque.getNome());
 
-    return ResponseEntity.ok(new AtaqueResponseDTO(
-        ataque.getId(),
-        ataque.getForca(),
-        ataque.getAcuracia(),
-        ataque.getPontosDePoder(),
-        ataque.getCategoria(),
-        ataque.getNome(),
-        ataque.getDescricao(),
-        tipoDTO));
+    return ResponseEntity.ok(ataqueMapper.ataqueParaAtaqueResponseDTO(ataque));
 
   }
 

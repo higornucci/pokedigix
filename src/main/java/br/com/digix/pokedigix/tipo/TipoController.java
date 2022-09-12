@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.naming.NameNotFoundException;
 import javax.transaction.Transactional;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,17 +32,17 @@ public class TipoController {
   @Autowired
   private TipoRepository tipoRepository;
 
-  private TipoMapper tipoMapper
-      = Mappers.getMapper(TipoMapper.class);
+  @Autowired
+  private TipoMapper tipoMapper;
 
   @Operation(summary = "Criar um novo tipo que pode ser usado para Pokemons ou Ataques")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
   public ResponseEntity<TipoResponseDTO> criarTipo(@RequestBody TipoRequestDTO novoTipo) {
-    Tipo tipo = new Tipo(novoTipo.getNome());
+    Tipo tipo = tipoMapper.tipoRequestParaTipo(novoTipo);
     tipoRepository.save(tipo);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(tipoMapper.tipoToTipoResponseDTO(tipo));
+        .body(tipoMapper.tipoParaTipoResponse(tipo));
   }
 
   @Operation(summary = "Buscar todos os tipos sem ordem")
@@ -59,7 +58,7 @@ public class TipoController {
     }
     Collection<TipoResponseDTO> tiposRetornados = new ArrayList<>();
     for (Tipo tipo : tipos) {
-      tiposRetornados.add(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+      tiposRetornados.add(tipoMapper.tipoParaTipoResponse(tipo));
     }
     return ResponseEntity.ok(tiposRetornados);
   }
@@ -73,7 +72,7 @@ public class TipoController {
             throw new NameNotFoundException(null);
         }
         Tipo tipo = tipoOptional.get();
-        return ResponseEntity.ok(new TipoResponseDTO(tipo.getId(), tipo.getNome()));
+        return ResponseEntity.ok(tipoMapper.tipoParaTipoResponse(tipo));
     }
 
     @Operation(summary = "Deletar um Tipo pelo seu id")
@@ -105,6 +104,6 @@ public class TipoController {
         Tipo tipoParaAlterar = tipoOptional.get();
         tipoParaAlterar.setNome(tipoRequestDTO.getNome());
         tipoRepository.save(tipoParaAlterar);
-        return ResponseEntity.ok(new TipoResponseDTO(tipoParaAlterar.getId(), tipoParaAlterar.getNome()));
+        return ResponseEntity.ok(tipoMapper.tipoParaTipoResponse(tipoParaAlterar));
     }
 }

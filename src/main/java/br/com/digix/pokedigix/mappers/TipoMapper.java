@@ -6,8 +6,8 @@ import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRequestDTO;
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TipoMapper {    
-    public Tipo tipoRequestDTOToTipo(TipoRequestDTO tipoRequestDTO);
-    public TipoResponseDTO tipoToTipoResponseDTO(Tipo tipo);
+    public Tipo tipoRequestParaTipo(TipoRequestDTO tipoRequestDTO);
+    public TipoResponseDTO tipoParaTipoResponse(Tipo tipo);
 }
