@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.webjars.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -121,9 +122,12 @@ public class EnderecoController {
 	@PutMapping(path = "/{id}", consumes = "application/json")
 	public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoUpdateDTO enderecoRequestDTO,
 			@PathVariable Long id) {
+		Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
+		if (enderecoOptional.isEmpty()) {
+			throw new NotFoundException(null);
+		}
 
-		Endereco endereco = enderecoRepository.findById(id).get();
-
+		Endereco endereco = enderecoOptional.get();
 		endereco.setRegiao(enderecoRequestDTO.getRegiao());
 		endereco.setCidade(enderecoRequestDTO.getCidade());
 		enderecoRepository.save(endereco);

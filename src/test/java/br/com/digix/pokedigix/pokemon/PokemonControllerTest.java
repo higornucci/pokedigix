@@ -109,7 +109,7 @@ class PokemonControllerTest {
 	}
 
 	@Test
-	public void deve_excluir_um_pokemon() throws Exception {
+	void deve_excluir_um_pokemon() throws Exception {
 		// Teste do código Do Enzão
 		int quantidadeEsperada = 0;
 

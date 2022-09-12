@@ -39,7 +39,7 @@ class TipoControllerTest {
 	private TipoRepository tipoRepository;
 
 	@BeforeEach
-	public void resetDb() {
+	void resetDb() {
 		tipoRepository.deleteAll();
 	}
 
@@ -138,7 +138,7 @@ class TipoControllerTest {
 	}
 
 	@Test
-	public void deve_atualizar_um_tipo_pelo_id() throws Exception {
+	void deve_atualizar_um_tipo_pelo_id() throws Exception {
 		String nome = "Agua";
 		Tipo tipoPokemon = new Tipo(nome);
 		tipoRepository.save(tipoPokemon);
@@ -159,7 +159,7 @@ class TipoControllerTest {
 	}
 
 	@Test
-	public void deve_alterar_um_tipo() throws Exception {
+	void deve_alterar_um_tipo() throws Exception {
 		// Arrange
 		String eletrico = "Eletrico";
 		Tipo tipoEletrico = new Tipo(eletrico);
