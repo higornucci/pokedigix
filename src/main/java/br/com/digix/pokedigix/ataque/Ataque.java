@@ -2,28 +2,25 @@ package br.com.digix.pokedigix.ataque;
 
 import java.util.Collection;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.utils.EntidadeBase;
 
 @Entity
-public class Ataque {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class Ataque extends EntidadeBase {
 
-	private int forca;
+    @Basic
+    private int forca;
 
 	@Column(nullable = false)
 	private int acuracia;
@@ -125,17 +122,10 @@ public class Ataque {
 		return descricao;
 	}
 
-	public Long getId() {
-		return this.id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Collection<Pokemon> getPokemons() {
-		return pokemons;
-	}
+    public Collection<Pokemon> getPokemons() {
+        return pokemons;
+    }
 
 	public void setForca(int forca) {
 		this.forca = forca;

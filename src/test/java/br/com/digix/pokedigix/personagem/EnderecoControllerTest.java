@@ -144,15 +144,14 @@ class EnderecoControllerTest {
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?termo=" + potencialCidade)).andReturn();
 
 		// Assertions
-		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
-				.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(
+				resultado.getResponse().getContentAsString(),
+				EnderecoResponseDTO[].class);
 
 		assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 		assertThat(enderecosRetornadosDTO).extracting("cidade").contains(novaCidade);
 		assertThat(enderecosRetornadosDTO).hasSize(2);
 	}
-
-    
 
 	@Test
 	void deve_buscar_lista_de_cidades_quando_vazio() throws Exception {
@@ -169,8 +168,9 @@ class EnderecoControllerTest {
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?termo=" + potencialCidade)).andReturn();
 
 		// Assertions
-		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
-				.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(
+				resultado.getResponse().getContentAsString(),
+				EnderecoResponseDTO[].class);
 
 		assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 		assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
@@ -191,8 +191,9 @@ class EnderecoControllerTest {
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?")).andReturn();
 
 		// Assertions
-		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
-				.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(
+				resultado.getResponse().getContentAsString(),
+				EnderecoResponseDTO[].class);
 
 		assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 		assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
@@ -215,8 +216,9 @@ class EnderecoControllerTest {
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?termo=" + potencialRegiao)).andReturn();
 
 		// Assertions
-		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
-				.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(
+				resultado.getResponse().getContentAsString(),
+				EnderecoResponseDTO[].class);
 
 		assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 		assertThat(enderecosRetornadosDTO).extracting("regiao").containsAnyOf(regiao);
@@ -238,8 +240,9 @@ class EnderecoControllerTest {
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?termo=" + potencialRegiao)).andReturn();
 
 		// Assertions
-		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
-				.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(
+				resultado.getResponse().getContentAsString(),
+				EnderecoResponseDTO[].class);
 
 		assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 		assertThat(enderecosRetornadosDTO).extracting("regiao").contains(regiao);
@@ -260,12 +263,12 @@ class EnderecoControllerTest {
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/regiao?")).andReturn();
 
 		// Assertions
-		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil
-				.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
+		EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(
+				resultado.getResponse().getContentAsString(),
+				EnderecoResponseDTO[].class);
 
 		assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
 		assertThat(enderecosRetornadosDTO).extracting("regiao").contains(regiao);
 		assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
 	}
-
 }

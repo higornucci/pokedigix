@@ -174,6 +174,7 @@ class PokemonTest {
 	@Test
 	void deve_verificar_se_pokemon_nao_eh_selvagem() throws Exception {
 		Pokemon pokemon = new PokemonBuilder().construir();
+		new TreinadorBuilder().comPokemonInicial(pokemon).construir();
 		Treinador treinador = new TreinadorBuilder().comPokemonInicial(pokemon).construir();
 
 		assertFalse(pokemon.isSelvagem());

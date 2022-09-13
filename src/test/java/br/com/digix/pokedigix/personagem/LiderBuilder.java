@@ -1,5 +1,8 @@
 package br.com.digix.pokedigix.personagem;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import br.com.digix.pokedigix.pokemon.FelicidadeInvalidaException;
 import br.com.digix.pokedigix.pokemon.LimiteDeAtaquePokemonException;
 import br.com.digix.pokedigix.pokemon.LimiteDeTipoPokemonException;
@@ -22,10 +25,10 @@ public class LiderBuilder {
         this.insignia = Insignia.TROVAO;
     }
 
-
-
     public Lider construir() {
-        return new Lider(nome, endereco, pokemon, insignia);
+        Collection<Pokemon> listaDePokemon = new ArrayList<>();
+        listaDePokemon.add(this.pokemon);
+        return new Lider(nome, endereco, listaDePokemon, insignia);
     }
 
     public LiderBuilder comInsignia(Insignia insignia) {

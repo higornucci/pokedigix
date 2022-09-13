@@ -1,17 +1,16 @@
 package br.com.digix.pokedigix.personagem;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import br.com.digix.pokedigix.utils.EntidadeBase;
 
 @Entity
-public class Endereco {
+public class Endereco extends EntidadeBase {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@Column(nullable = false)
 	private String cidade;
+	@Column(nullable = false)
 	private String regiao;
 
 	protected Endereco() {
@@ -22,20 +21,12 @@ public class Endereco {
 		this.regiao = regiao;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	public String getRegiao() {
 		return regiao;
 	}
 
 	public String getCidade() {
 		return cidade;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public void setRegiao(String regiao) {
