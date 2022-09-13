@@ -213,7 +213,7 @@ class EnderecoControllerTest {
         EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
 
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
-        assertThat(enderecosRetornadosDTO).extracting("cidade").containsAnyOf(regiao);
+        assertThat(enderecosRetornadosDTO).extracting("regiao").containsAnyOf(regiao);
         assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
     }
     
@@ -235,7 +235,7 @@ class EnderecoControllerTest {
         EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
 
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
-        assertThat(enderecosRetornadosDTO).extracting("cidade").contains(regiao);
+        assertThat(enderecosRetornadosDTO).extracting("regiao").contains(regiao);
         assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
     }
 
@@ -256,7 +256,7 @@ class EnderecoControllerTest {
         EnderecoResponseDTO[] enderecosRetornadosDTO = JsonUtil.mapFromJson(resultado.getResponse().getContentAsString(), EnderecoResponseDTO[].class);
 
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
-        assertThat(enderecosRetornadosDTO).extracting("cidade").contains(regiao);
+        assertThat(enderecosRetornadosDTO).extracting("regiao").contains(regiao);
         assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
     }
 
