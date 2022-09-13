@@ -23,6 +23,7 @@ import org.webjars.NotFoundException;
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueRepository;
 import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.mappers.PokemonMapper;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
@@ -41,6 +42,9 @@ public class PokemonController {
 
   @Autowired
   private TipoRepository tipoRepository;
+
+  @Autowired
+  private PokemonMapper pokemonMapper;
 
   @Operation(summary = "Deletar um Pokemon pelo seu id")
   @ApiResponse(responseCode = "204")
@@ -67,73 +71,12 @@ public class PokemonController {
   public ResponseEntity<PokemonResponseDTO> criarPokemon(
       @RequestBody PokemonRequestDTO novoPokemon)
       throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
-      LimiteDeAtaquePokemonException {
-    Collection<Tipo> tipos = new ArrayList<>();
-    Collection<Ataque> ataques = new ArrayList<>();
-    for (Long ataqueId : novoPokemon.getAtaquesIds()) {
-      Optional<Ataque> ataqueOptional = ataqueRepository.findById(ataqueId);
-      if (ataqueOptional.isEmpty()) {
-        throw new NotFoundException(null);
-      }
-      Ataque ataque = ataqueOptional.get();
-      ataques.add(ataque);
-    }
-    for (Long tipoId : novoPokemon.getTiposIds()) {
-      Optional<Tipo> tipoOptional = tipoRepository.findById(tipoId);
-      if (tipoOptional.isEmpty()) {
-        throw new NotFoundException(null);
-      }
-      Tipo tipo = tipoOptional.get();
-      tipos.add(tipo);
-    }
-    Pokemon pokemon = new Pokemon(
-        novoPokemon.getNome(),
-        novoPokemon.getAltura(),
-        novoPokemon.getPeso(),
-        novoPokemon.getGenero(),
-        novoPokemon.getNivel(),
-        novoPokemon.getNumeroPokedex(),
-        novoPokemon.getFelicidade(),
-        tipos,
-        ataques);
+      LimiteDeAtaquePokemonException, org.springframework.data.crossstore.ChangeSetPersister.NotFoundException {
+      Pokemon pokemon = pokemonMapper.pokemonRequestParaPokemon(novoPokemon);
     pokemonRepository.save(pokemon);
-    Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-    for (Ataque ataque : ataques) {
-      AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
-          ataque.getId(),
-          ataque.getForca(),
-          ataque.getAcuracia(),
-          ataque.getPontosDePoder(),
-          ataque.getCategoria(),
-          ataque.getNome(),
-          ataque.getDescricao(),
-          new TipoResponseDTO(
-              ataque.getTipo().getId(),
-              ataque.getTipo().getNome()));
-      ataquesDTOs.add(ataqueDTO);
-    }
-    Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-    for (Tipo tipo : tipos) {
-      TipoResponseDTO tipoDTO = new TipoResponseDTO(
-          tipo.getId(),
-          tipo.getNome());
-
-      tiposDTOs.add(tipoDTO);
-    }
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(
-            new PokemonResponseDTO(
-                pokemon.getId(),
-                pokemon.getNome(),
-                pokemon.getAltura(),
-                pokemon.getPeso(),
-                pokemon.getGenero(),
-                pokemon.getNivel(),
-                pokemon.getNumeroPokedex(),
-                pokemon.getFelicidade(),
-                ataquesDTOs,
-                tiposDTOs));
+        .body(pokemonMapper.pokemonParaAtaqueResponseDTO(pokemon));
   }
 
   @Operation(summary = "Atualizar um pokemon")

@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.mappers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ import br.com.digix.pokedigix.ataque.ForcaInvalidaParaCategoriaException;
 import br.com.digix.pokedigix.ataque.TipoInvalidoParaCategoriaException;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
+import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
 @Component
 public class AtaqueMapperImpl implements AtaqueMapper {
@@ -38,7 +41,8 @@ public class AtaqueMapperImpl implements AtaqueMapper {
             }
             Tipo tipo = tipoOptional.get();
             return new Ataque(ataqueRequestDTO.getForca(), ataqueRequestDTO.getAcuracia(),
-                    ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(), ataqueRequestDTO.getNome(),
+                    ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
+                    ataqueRequestDTO.getNome(),
                     ataqueRequestDTO.getDescricao(), tipo);
         }
     }
@@ -54,6 +58,26 @@ public class AtaqueMapperImpl implements AtaqueMapper {
                 ataque.getNome(),
                 ataque.getDescricao(),
                 tipoMapper.tipoParaTipoResponse(ataque.getTipo()));
+    }
+
+    @Override
+    public Collection<AtaqueResponseDTO> ataqueParaAtaqueResponseDTO(Collection<Ataque> ataques) {
+        Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
+        for (Ataque ataque : ataques) {
+            AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
+                    ataque.getId(),
+                    ataque.getForca(),
+                    ataque.getAcuracia(),
+                    ataque.getPontosDePoder(),
+                    ataque.getCategoria(),
+                    ataque.getNome(),
+                    ataque.getDescricao(),
+                    new TipoResponseDTO(
+                            ataque.getTipo().getId(),
+                            ataque.getTipo().getNome()));
+            ataquesDTOs.add(ataqueDTO);
+        }
+        return ataquesDTOs;
     }
 
 }

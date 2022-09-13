@@ -258,6 +258,8 @@ class EnderecoControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
         assertThat(enderecosRetornadosDTO).extracting("cidade").contains(regiao);
         assertThat(enderecosRetornadosDTO).hasSize(quantidadeEsperada);
-    }
+    } 
+
+    
 
 }
