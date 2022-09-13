@@ -36,8 +36,8 @@ import br.com.digix.pokedigix.utils.JsonUtil;
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 class PokemonControllerTest {
-        @Autowired
-        private MockMvc mvc;
+	@Autowired
+	private MockMvc mvc;
 
 	@Autowired
 	private PokemonRepository pokemonRepository;

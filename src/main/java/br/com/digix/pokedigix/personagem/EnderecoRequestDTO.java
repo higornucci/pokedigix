@@ -9,7 +9,7 @@ public class EnderecoRequestDTO {
 
 	}
 
-	public EnderecoRequestDTO(String regiao, String cidade) {
+	public EnderecoRequestDTO(String cidade, String regiao) {
 		this.regiao = regiao;
 		this.cidade = cidade;
 	}
