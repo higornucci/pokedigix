@@ -13,6 +13,5 @@ public interface TipoMapper {
     public Tipo tipoRequestParaTipo(TipoRequestDTO tipoRequestDTO);
 
     public TipoResponseDTO tipoParaTipoResponse(Tipo tipo);
-
-    public Collection<TipoResponseDTO> tiposParaTipoResponseDTOs(Collection<Tipo> tipo);
+    public Collection<TipoResponseDTO> tiposParaTiposResponses(Collection<Tipo> tipos);
 }

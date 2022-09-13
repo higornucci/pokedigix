@@ -23,13 +23,12 @@ public class TipoMapperImpl implements TipoMapper {
     }
 
     @Override
-    public Collection<TipoResponseDTO> tiposParaTipoResponseDTOs(Collection<Tipo> tipos) {
+    public Collection<TipoResponseDTO> tiposParaTiposResponses(Collection<Tipo> tipos) {
         Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
         for (Tipo tipo : tipos) {
-            tiposDTOs.add(tipoParaTipoResponse(tipo));
+            tiposDTOs.add(this.tipoParaTipoResponse(tipo));
         }
-
         return tiposDTOs;
     }
-
+    
 }

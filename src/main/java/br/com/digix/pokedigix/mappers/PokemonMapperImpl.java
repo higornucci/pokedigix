@@ -22,6 +22,7 @@ import br.com.digix.pokedigix.tipo.TipoRepository;
 
 @Component
 public class PokemonMapperImpl implements PokemonMapper {
+
     @Autowired
     private AtaqueRepository ataqueRepository;
 
@@ -39,7 +40,6 @@ public class PokemonMapperImpl implements PokemonMapper {
             FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
         Collection<Tipo> tipos = new ArrayList<>();
         Collection<Ataque> ataques = new ArrayList<>();
-
         for (Long ataqueId : pokemonRequestDTO.getAtaquesIds()) {
             Optional<Ataque> ataqueOptional = ataqueRepository.findById(ataqueId);
             if (ataqueOptional.isEmpty()) {
@@ -48,7 +48,6 @@ public class PokemonMapperImpl implements PokemonMapper {
             Ataque ataque = ataqueOptional.get();
             ataques.add(ataque);
         }
-
         for (Long tipoId : pokemonRequestDTO.getTiposIds()) {
             Optional<Tipo> tipoOptional = tipoRepository.findById(tipoId);
             if (tipoOptional.isEmpty()) {
@@ -70,7 +69,7 @@ public class PokemonMapperImpl implements PokemonMapper {
     }
 
     @Override
-    public PokemonResponseDTO pokemonParaPokemonResponseDTO(Pokemon pokemon) {
+    public PokemonResponseDTO pokemonParaPokemonResponse(Pokemon pokemon) {
         return new PokemonResponseDTO(
                 pokemon.getId(),
                 pokemon.getNome(),
@@ -80,17 +79,16 @@ public class PokemonMapperImpl implements PokemonMapper {
                 pokemon.getNivel(),
                 pokemon.getNumeroPokedex(),
                 pokemon.getFelicidade(),
-                ataqueMapper.ataquesParaAtaqueResponseDTOs(pokemon.getAtaques()),
-                tipoMapper.tiposParaTipoResponseDTOs(pokemon.getTipos()));
+                ataqueMapper.ataquesParaAtaquesResponses(pokemon.getAtaques()),
+                tipoMapper.tiposParaTiposResponses(pokemon.getTipos()));
     }
 
     @Override
-    public Collection<PokemonResponseDTO> pokemonsParaPokemonResponseDTOs(Collection<Pokemon> pokemons) {
-        Collection<PokemonResponseDTO> pokemonsDTO = new ArrayList<>();
+    public Collection<PokemonResponseDTO> pokemonsParaPokemonsResponses(Collection<Pokemon> pokemons) {
+        Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
         for (Pokemon pokemon : pokemons) {
-            pokemonsDTO.add(pokemonParaPokemonResponseDTO(pokemon));
+            pokemonsRetornados.add(this.pokemonParaPokemonResponse(pokemon));
         }
-
-        return pokemonsDTO;
+        return pokemonsRetornados;
     }
 }

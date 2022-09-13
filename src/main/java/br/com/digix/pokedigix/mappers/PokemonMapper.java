@@ -15,6 +15,6 @@ import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
 @Mapper(componentModel = "spring")
 public interface PokemonMapper {
     public Pokemon pokemonRequestParaPokemon(PokemonRequestDTO pokemonRequestDTO) throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException;
-    public PokemonResponseDTO pokemonParaPokemonResponseDTO(Pokemon pokemon);
-    public Collection<PokemonResponseDTO> pokemonsParaPokemonResponseDTOs(Collection<Pokemon> pokemons);
+    public PokemonResponseDTO pokemonParaPokemonResponse(Pokemon pokemon);
+    public Collection<PokemonResponseDTO> pokemonsParaPokemonsResponses(Collection<Pokemon> pokemons);
 }

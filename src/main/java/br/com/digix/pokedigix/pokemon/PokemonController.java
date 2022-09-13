@@ -69,10 +69,9 @@ public class PokemonController {
       LimiteDeAtaquePokemonException {
     Pokemon pokemon = pokemonMapper.pokemonRequestParaPokemon(novoPokemon);
     pokemonRepository.save(pokemon);
-
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(pokemonMapper.pokemonParaPokemonResponseDTO(pokemon));
+        .body(pokemonMapper.pokemonParaPokemonResponse(pokemon));
   }
 
   @Operation(summary = "Atualizar um pokemon")
@@ -101,7 +100,6 @@ public class PokemonController {
       Tipo tipo = tipoOptional.get();
       tipos.add(tipo);
     }
-
     Optional<Pokemon> pokemonOptional = pokemonRepository.findById(id);
     if (pokemonOptional.isEmpty()) {
       throw new NotFoundException(null);
@@ -116,10 +114,8 @@ public class PokemonController {
     alterarPokemon.setFelicidade(pokemonAtt.getFelicidade());
     alterarPokemon.setAtaques(ataques);
     alterarPokemon.setTipos(tipos);
-
     pokemonRepository.save(alterarPokemon);
-
-    return ResponseEntity.ok(pokemonMapper.pokemonParaPokemonResponseDTO(alterarPokemon));
+    return ResponseEntity.ok(pokemonMapper.pokemonParaPokemonResponse(alterarPokemon));
   }
 
   @Operation(summary = "Buscar Pokemon pelo seu id do tipo")
@@ -127,7 +123,7 @@ public class PokemonController {
   @GetMapping(path = "/tipo/{id}")
   public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloTipo(@PathVariable Long id) {
     Collection<Pokemon> pokemons = pokemonRepository.buscarPorTipo(id);
-    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonResponseDTOs(pokemons));
+    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponses(pokemons));
   }
 
   @Operation(summary = "Buscar Pokemon pelo seu nome parcial ou completo")
@@ -141,6 +137,6 @@ public class PokemonController {
     } else {
       pokemons = (Collection<Pokemon>) pokemonRepository.findAll();
     }
-    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonResponseDTOs(pokemons));
+    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponses(pokemons));
   }
 }
