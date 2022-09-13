@@ -50,8 +50,8 @@ public class EnderecoController {
                 .body(
                         new EnderecoResponseDTO(
                                 endereco.getId(),
-                                endereco.getCidade(),
-                                endereco.getRegiao()));
+                                endereco.getRegiao(),
+                                endereco.getCidade()));
     }
 
     @Operation(summary = "Buscar um endereço pelo seu id")
@@ -111,8 +111,8 @@ public class EnderecoController {
             enderecosRetornados.add(
                     new EnderecoResponseDTO(
                             endereco.getId(),
-                            endereco.getCidade(),
-                            endereco.getRegiao()));
+                            endereco.getRegiao(),
+                            endereco.getCidade()));
         }
         return ResponseEntity.ok(enderecosRetornados);
     }
