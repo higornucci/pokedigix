@@ -94,7 +94,7 @@ public class EnderecoController {
     @Operation(summary = "Atualizar o Endereço")
     @ApiResponse(responseCode = "200")
     @PutMapping(path = "/{id}", consumes = "application/json")
-    public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoUpdateDTO enderecoRequestDTO,
+    public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoRequestDTO enderecoRequestDTO,
             @PathVariable Long id) {
         Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         if (enderecoOptional.isEmpty()) {
