@@ -17,42 +17,42 @@ import br.com.digix.pokedigix.utils.EntidadeBase;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Personagem extends EntidadeBase {
 
-    @Column(nullable = false)
-    private String nome;
+	@Column(nullable = false)
+	private String nome;
 
-    @ManyToOne
-    private Endereco endereco;
+	@ManyToOne
+	private Endereco endereco;
 
-    @OneToMany (mappedBy = "treinador")
-    protected Collection<Pokemon> pokemons;
+	@OneToMany(mappedBy = "treinador")
+	protected Collection<Pokemon> pokemons;
 
-    protected Personagem() {
-    }
+	protected Personagem() {
+	}
 
-    protected Personagem(String nome, Endereco endereco) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.pokemons = new ArrayList<>();
-    }
+	protected Personagem(String nome, Endereco endereco) {
+		this.nome = nome;
+		this.endereco = endereco;
+		this.pokemons = new ArrayList<>();
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
+	public Endereco getEndereco() {
+		return endereco;
+	}
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
 
-    public Collection<Pokemon> getPokemons() {
-        return pokemons;
-    }
+	public Collection<Pokemon> getPokemons() {
+		return pokemons;
+	}
 
 }

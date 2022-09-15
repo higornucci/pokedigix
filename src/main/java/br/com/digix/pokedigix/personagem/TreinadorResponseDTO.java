@@ -13,10 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TreinadorResponseDTO {
 
-    private Long id;
-    private String nome;
-    private Endereco endereco;
-    private int dinheiro;
-    private int nivel;
-    private Collection<Insignia> insignias;
+	private Long id;
+	private String nome;
+	private Endereco endereco;
+	private int dinheiro;
+	private int nivel;
+	private Collection<Insignia> insignias;
 }

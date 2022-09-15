@@ -14,28 +14,28 @@ public class EnderecoResponseDTO {
         this.cidade = cidade;
     }
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getRegiao() {
-        return regiao;
-    }
+	public String getRegiao() {
+		return regiao;
+	}
 
-    public void setRegiao(String regiao) {
-        this.regiao = regiao;
-    }
+	public void setRegiao(String regiao) {
+		this.regiao = regiao;
+	}
 
-    public String getCidade() {
-        return cidade;
-    }
+	public String getCidade() {
+		return cidade;
+	}
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
 
 }
