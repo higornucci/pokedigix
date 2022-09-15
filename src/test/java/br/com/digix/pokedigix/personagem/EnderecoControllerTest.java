@@ -116,7 +116,7 @@ class EnderecoControllerTest {
     Endereco endereco = new Endereco(regiao, cidade);
     enderecoRepository.save(endereco);
     int quantidadeEsperada = 1;
-    EnderecoUpdateDTO tipoRequestDTO = new EnderecoUpdateDTO(regiaoAtualizada, cidade);
+    EnderecoRequestDTO tipoRequestDTO = new EnderecoRequestDTO(regiaoAtualizada, cidade);
 
     // Action
     String url = "/api/v1/enderecos/" + endereco.getId();

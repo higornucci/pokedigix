@@ -16,8 +16,14 @@ import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Pokemon extends EntidadeBase {
   private static final int LIMITE_ATAQUES = 4;
 
@@ -60,9 +66,6 @@ public class Pokemon extends EntidadeBase {
   @JoinTable(name = "pokemon_ataque", joinColumns = @JoinColumn(name = "pokemon_id"), inverseJoinColumns = @JoinColumn(name = "ataque_id"))
   private Collection<Ataque> ataques;
 
-  public Pokemon() {
-  }
-
   public Pokemon(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
       int felicidade, Collection<Tipo> tipos, Collection<Ataque> ataques)
       throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
@@ -104,73 +107,6 @@ public class Pokemon extends EntidadeBase {
     if (nivel < 1 || nivel > 100) {
       throw new NivelPokemonInvalidoException();
     }
-  }
 
-  public String getNome() {
-    return nome;
-  }
-
-  public double getAltura() {
-    return altura;
-  }
-
-  public double getPeso() {
-    return peso;
-  }
-
-  public Genero getGenero() {
-    return genero;
-  }
-
-  public int getNivel() {
-    return nivel;
-  }
-
-  public int getNumeroPokedex() {
-    return numeroPokedex;
-  }
-
-  public int getFelicidade() {
-    return felicidade;
-  }
-
-  public Collection<Tipo> getTipos() {
-    return tipos;
-  }
-
-  public Collection<Ataque> getAtaques() {
-    return ataques;
-  }
-
-  public void setTreinador(Treinador treinador) {
-    this.treinador = treinador;
-  }
-
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
-
-  public void setAltura(double altura) {
-    this.altura = altura;
-  }
-
-  public void setPeso(double peso) {
-    this.peso = peso;
-  }
-
-  public void setGenero(Genero genero) {
-    this.genero = genero;
-  }
-
-  public void setNivel(int nivel) {
-    this.nivel = nivel;
-  }
-
-  public void setNumeroPokedex(int numeroPokedex) {
-    this.numeroPokedex = numeroPokedex;
-  }
-
-  public void setFelicidade(int felicidade) {
-    this.felicidade = felicidade;
   }
 }

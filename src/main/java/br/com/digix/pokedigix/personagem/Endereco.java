@@ -4,37 +4,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Endereco extends EntidadeBase {
 
     @Column(nullable = false)
-    private String cidade;
-    @Column(nullable = false)
     private String regiao;
-
-    protected Endereco() {
-    }
-
-    public Endereco(String regiao, String cidade) {
-        this.regiao = regiao;
-        this.cidade = cidade;
-    }
-
-    public String getRegiao() {
-        return regiao;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setRegiao(String regiao) {
-        this.regiao = regiao;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+    @Column(nullable = false)
+    private String cidade;
 
 }

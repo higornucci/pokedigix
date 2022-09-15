@@ -7,8 +7,9 @@ public class PokemonRequestDTO extends PokemonDTO {
     private Collection<Long> tiposIds;
     private Collection<Long> ataquesIds;
 
-	protected PokemonRequestDTO(){}
-	
+    protected PokemonRequestDTO() {
+    }
+
     public PokemonRequestDTO(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
             int felicidade, Collection<Long> tiposIds, Collection<Long> ataquesIds) {
         super(nome, altura, peso, genero, nivel, numeroPokedex, felicidade);

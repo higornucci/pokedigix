@@ -133,7 +133,6 @@ public class TreinadorController {
 		if (treinadorOptional.isEmpty()) {
 			throw new NoSuchElementException();
 		}
-		Treinador treinador = treinadorOptional.get();
-		return treinador;
+		return treinadorOptional.get();
 	}
 }
