@@ -22,6 +22,7 @@ import org.webjars.NotFoundException;
 
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.mappers.PokemonMapper;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonRepository;
 import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
@@ -42,6 +43,10 @@ public class TreinadorController {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private PokemonMapper pokemonMapper;
+
 
 	@Operation(summary = "Buscar um treinador pelo seu id")
 	@ApiResponse(responseCode = "200", description = "Retorna o treinador solicitado")
@@ -103,6 +108,7 @@ public class TreinadorController {
 							pokemon.getFelicidade(),
 							ataquesDTO,
 							tiposDTO));
+			pokemonsDTO = pokemonMapper.pokemonsParaPokemonsResponseDTO(treinador.getPokemons());
 		}
 
 		return ResponseEntity.ok(pokemonsDTO);

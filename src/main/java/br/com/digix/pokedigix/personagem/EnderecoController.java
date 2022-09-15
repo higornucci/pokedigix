@@ -42,16 +42,17 @@ public class EnderecoController {
     public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
             @RequestBody EnderecoRequestDTO novoEndereco) {
         Endereco endereco = new Endereco(
-                novoEndereco.getRegiao(),
-                novoEndereco.getCidade());
+            novoEndereco.getRegiao(),
+            novoEndereco.getCidade()
+            );
         enderecoRepository.save(endereco);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
                         new EnderecoResponseDTO(
                                 endereco.getId(),
-                                endereco.getCidade(),
-                                endereco.getRegiao()));
+                                endereco.getRegiao(),
+                                endereco.getCidade()));
     }
 
     @Operation(summary = "Buscar um endereço pelo seu id")
@@ -88,7 +89,7 @@ public class EnderecoController {
 
         for (Endereco endereco : enderecos) {
             enderecosRetornados
-                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getRegiao(), endereco.getCidade()));
+                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getRegiao(), endereco.getCidade()) );
         }
         return ResponseEntity.ok(enderecosRetornados);
     }
@@ -111,8 +112,8 @@ public class EnderecoController {
             enderecosRetornados.add(
                     new EnderecoResponseDTO(
                             endereco.getId(),
-                            endereco.getCidade(),
-                            endereco.getRegiao()));
+                            endereco.getRegiao(),
+                            endereco.getCidade()));
         }
         return ResponseEntity.ok(enderecosRetornados);
     }

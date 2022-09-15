@@ -17,8 +17,8 @@ public class Endereco extends EntidadeBase {
     }
 
     public Endereco(String regiao, String cidade) {
-        this.cidade = cidade;
         this.regiao = regiao;
+        this.cidade = cidade;
     }
 
     public String getRegiao() {

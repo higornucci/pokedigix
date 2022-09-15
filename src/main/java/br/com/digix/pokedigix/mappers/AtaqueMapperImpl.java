@@ -17,7 +17,6 @@ import br.com.digix.pokedigix.ataque.ForcaInvalidaParaCategoriaException;
 import br.com.digix.pokedigix.ataque.TipoInvalidoParaCategoriaException;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
 @Component
 public class AtaqueMapperImpl implements AtaqueMapper {
@@ -64,18 +63,7 @@ public class AtaqueMapperImpl implements AtaqueMapper {
     public Collection<AtaqueResponseDTO> ataqueParaAtaqueResponseDTO(Collection<Ataque> ataques) {
         Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
         for (Ataque ataque : ataques) {
-            AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
-                    ataque.getId(),
-                    ataque.getForca(),
-                    ataque.getAcuracia(),
-                    ataque.getPontosDePoder(),
-                    ataque.getCategoria(),
-                    ataque.getNome(),
-                    ataque.getDescricao(),
-                    new TipoResponseDTO(
-                            ataque.getTipo().getId(),
-                            ataque.getTipo().getNome()));
-            ataquesDTOs.add(ataqueDTO);
+            ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
         }
         return ataquesDTOs;
     }

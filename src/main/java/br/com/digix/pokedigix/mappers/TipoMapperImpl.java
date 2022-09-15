@@ -27,11 +27,7 @@ public class TipoMapperImpl implements TipoMapper {
     Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
 
         for (Tipo tipo : tipos) {
-            TipoResponseDTO tipoDTO = new TipoResponseDTO(
-                tipo.getId(),
-                tipo.getNome());
-      
-            tiposDTOs.add(tipoDTO);
+            tiposDTOs.add(this.tipoParaTipoResponse(tipo));
           }
         return tiposDTOs;
     }

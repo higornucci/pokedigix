@@ -76,7 +76,7 @@ public class PokemonController {
     pokemonRepository.save(pokemon);
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(pokemonMapper.pokemonParaAtaqueResponseDTO(pokemon));
+        .body(pokemonMapper.pokemonParaPokemonResponseDTO(pokemon));
   }
 
   @Operation(summary = "Atualizar um pokemon")
@@ -168,45 +168,7 @@ public class PokemonController {
     Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
 
     for (Pokemon pokemon : pokemons) {
-      Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-      Collection<Tipo> tipos = pokemon.getTipos();
-      for (Tipo tipo : tipos) {
-        TipoResponseDTO tiposRetornadosDTO = new TipoResponseDTO(
-            tipo.getId(),
-            tipo.getNome());
-        tiposDTOs.add(tiposRetornadosDTO);
-      }
-
-      Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-      Collection<Ataque> ataques = pokemon.getAtaques();
-
-      for (Ataque ataque : ataques) {
-        AtaqueResponseDTO ataquesRetornadoDTO = new AtaqueResponseDTO(
-            ataque.getId(),
-            ataque.getForca(),
-            ataque.getAcuracia(),
-            ataque.getPontosDePoder(),
-            ataque.getCategoria(),
-            ataque.getNome(),
-            ataque.getDescricao(),
-            new TipoResponseDTO(
-                ataque.getTipo().getId(),
-                ataque.getTipo().getNome()));
-        ataquesDTOs.add(ataquesRetornadoDTO);
-      }
-
-      pokemonsRetornados.add(
-          new PokemonResponseDTO(
-              pokemon.getId(),
-              pokemon.getNome(),
-              pokemon.getAltura(),
-              pokemon.getPeso(),
-              pokemon.getGenero(),
-              pokemon.getNivel(),
-              pokemon.getNumeroPokedex(),
-              pokemon.getFelicidade(),
-              ataquesDTOs,
-              tiposDTOs));
+      pokemonsRetornados.add(pokemonMapper.pokemonParaPokemonResponseDTO(pokemon));
     }
     return ResponseEntity.ok(pokemonsRetornados);
   }
@@ -217,52 +179,13 @@ public class PokemonController {
   public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloNome(
       @RequestParam(required = false, name = "termo") String nome) {
 
-    Iterable<Pokemon> pokemons;
+    Collection<Pokemon> pokemons;
     if (nome != null) {
       pokemons = pokemonRepository.findByNomeContaining(nome);
     } else {
-      pokemons = pokemonRepository.findAll();
+      pokemons = (Collection<Pokemon>) pokemonRepository.findAll();
     }
-
-    Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
-
-    for (Pokemon pokemon : pokemons) {
-      Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-      Collection<Tipo> tipos = pokemon.getTipos();
-      for (Tipo tipo : tipos) {
-        TipoResponseDTO tiposRetornadosDTO = new TipoResponseDTO(tipo.getId(), tipo.getNome());
-        tiposDTOs.add(tiposRetornadosDTO);
-      }
-
-      Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-      Collection<Ataque> ataques = pokemon.getAtaques();
-
-      for (Ataque ataque : ataques) {
-        AtaqueResponseDTO ataquesRetornadoDTO = new AtaqueResponseDTO(ataque.getId(),
-            ataque.getForca(),
-            ataque.getAcuracia(),
-            ataque.getPontosDePoder(),
-            ataque.getCategoria(),
-            ataque.getNome(),
-            ataque.getDescricao(),
-            new TipoResponseDTO(ataque.getTipo().getId(), ataque.getTipo().getNome()));
-        ataquesDTOs.add(ataquesRetornadoDTO);
-      }
-
-      pokemonsRetornados.add(
-          new PokemonResponseDTO(
-              pokemon.getId(),
-              pokemon.getNome(),
-              pokemon.getAltura(),
-              pokemon.getPeso(),
-              pokemon.getGenero(),
-              pokemon.getNivel(),
-              pokemon.getNumeroPokedex(),
-              pokemon.getFelicidade(),
-              ataquesDTOs,
-              tiposDTOs));
-    }
-    return ResponseEntity.ok(pokemonsRetornados);
+    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponseDTO(pokemons));
   }
 
 }
