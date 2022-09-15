@@ -14,13 +14,18 @@ import javax.persistence.ManyToOne;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class Ataque extends EntidadeBase {
 
-    @Basic
-    private int forca;
+	@Basic
+	private int forca;
 
 	@Column(nullable = false)
 	private int acuracia;
@@ -43,9 +48,6 @@ public class Ataque extends EntidadeBase {
 
 	@ManyToMany(mappedBy = "ataques")
 	private Collection<Pokemon> pokemons;
-
-	protected Ataque() {
-	}
 
 	public Ataque(int forca,
 			int acuracia,
@@ -94,68 +96,5 @@ public class Ataque extends EntidadeBase {
 		}
 	}
 
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	public int getForca() {
-		return forca;
-	}
-
-	public int getAcuracia() {
-		return acuracia;
-	}
-
-	public int getPontosDePoder() {
-		return pontosDePoder;
-	}
-
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-
-    public Collection<Pokemon> getPokemons() {
-        return pokemons;
-    }
-
-	public void setForca(int forca) {
-		this.forca = forca;
-	}
-
-	public void setAcuracia(int acuracia) {
-		this.acuracia = acuracia;
-	}
-
-	public void setPontosDePoder(int pontosDePoder) {
-		this.pontosDePoder = pontosDePoder;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
-	}
-
-	public void setPokemons(Collection<Pokemon> pokemons) {
-		this.pokemons = pokemons;
-	}
+	
 }
