@@ -1,5 +1,6 @@
 package br.com.digix.pokedigix.personagem;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -41,8 +42,12 @@ public class EnderecoController {
     @Operation(summary = "Cadastrar um novo endereço")
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(@RequestBody EnderecoRequestDTO novoEndereco) {
-        Endereco endereco = enderecoMapper.enderecoRequestParaEndereco(novoEndereco);
+    public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
+            @RequestBody EnderecoRequestDTO novoEndereco) {
+        Endereco endereco = new Endereco(
+            novoEndereco.getRegiao(),
+            novoEndereco.getCidade()
+            );
         enderecoRepository.save(endereco);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -73,7 +78,13 @@ public class EnderecoController {
             enderecos = enderecoRepository.findByCidadeContaining(cidade);
         }
 
-        return ResponseEntity.ok(enderecoMapper.enderecosParaEnderecoResponseDTOs(enderecos));
+        Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
+
+        for (Endereco endereco : enderecos) {
+            enderecosRetornados
+                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getRegiao(), endereco.getCidade()) );
+        }
+        return ResponseEntity.ok(enderecosRetornados);
     }
 
     @Operation(summary = "Buscar um endereço pelo nome da região")

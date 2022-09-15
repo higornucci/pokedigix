@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -33,10 +34,11 @@ class EnderecoControllerTest {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
-	@AfterEach
-	public void resetDb() {
-		enderecoRepository.deleteAll();
-	}
+  @AfterEach
+  @BeforeEach
+  public void resetDb() {
+    enderecoRepository.deleteAll();
+  }
 
 	@Test
 	void deve_excluir_um_endereco_pelo_id() throws Exception {
@@ -80,9 +82,9 @@ class EnderecoControllerTest {
 		String cidadeEsperada = "Pallet";
 		String regiaoEsperada = "Kanto";
 
-		EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO();
-		enderecoRequestDTO.setCidade(cidadeEsperada);
-		enderecoRequestDTO.setRegiao(regiaoEsperada);
+    EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO();
+    enderecoRequestDTO.setRegiao(regiaoEsperada);
+    enderecoRequestDTO.setCidade(cidadeEsperada);
 
 		mvc
 				.perform(
@@ -100,7 +102,8 @@ class EnderecoControllerTest {
 		assertThat(enderecosEncontrados)
 				.extracting(Endereco::getCidade)
 				.containsOnly(cidadeEsperada);
-		assertThat(enderecosEncontrados)
+    
+    		assertThat(enderecosEncontrados)
 				.extracting(Endereco::getRegiao)
 				.containsOnly(regiaoEsperada);
 	}
@@ -131,15 +134,14 @@ class EnderecoControllerTest {
 		assertThat(enderecoEnconrados).extracting(Endereco::getRegiao).containsOnly(regiaoAtualizada);
 	}
 
-	@Test
-	void deve_buscar_pelo_nome_da_cidade() throws Exception {
-		String cidade = "Pallet";
-		Endereco endereco = new EnderecoBuilder().comCidade(cidade).construir();
-		enderecoRepository.save(endereco);
-		String novaCidade = "Pallioto";
-		Endereco novoEndereco = new EnderecoBuilder().comCidade(novaCidade).construir();
-		enderecoRepository.save(novoEndereco);
-		String potencialCidade = "Pall";
+  @Test
+  void deve_buscar_pelo_nome_da_cidade() throws Exception {
+    Endereco endereco = new EnderecoBuilder().construir();
+    enderecoRepository.save(endereco);
+    String novaCidade = "Pallioto";
+    Endereco novoEndereco = new EnderecoBuilder().comCidade(novaCidade).construir();
+    enderecoRepository.save(novoEndereco);
+    String potencialCidade = "Pall";
 
 		// Action
 		MvcResult resultado = mvc.perform(get("/api/v1/enderecos/cidade?termo=" + potencialCidade)).andReturn();
