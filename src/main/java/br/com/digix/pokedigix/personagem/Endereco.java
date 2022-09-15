@@ -8,33 +8,33 @@ import br.com.digix.pokedigix.utils.EntidadeBase;
 @Entity
 public class Endereco extends EntidadeBase {
 
-    @Column(nullable = false)
-    private String cidade;
-    @Column(nullable = false)
-    private String regiao;
+	@Column(nullable = false)
+	private String cidade;
+	@Column(nullable = false)
+	private String regiao;
 
-    protected Endereco() {
-    }
+	protected Endereco() {
+	}
 
-    public Endereco(String regiao, String cidade) {
-        this.cidade = cidade;
-        this.regiao = regiao;
-    }
+	public Endereco(String regiao, String cidade) {
+		this.cidade = cidade;
+		this.regiao = regiao;
+	}
 
-    public String getRegiao() {
-        return regiao;
-    }
+	public String getRegiao() {
+		return regiao;
+	}
 
-    public String getCidade() {
-        return cidade;
-    }
+	public String getCidade() {
+		return cidade;
+	}
 
-    public void setRegiao(String regiao) {
-        this.regiao = regiao;
-    }
+	public void setRegiao(String regiao) {
+		this.regiao = regiao;
+	}
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
 
 }

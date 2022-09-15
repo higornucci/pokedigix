@@ -50,6 +50,7 @@ public class TreinadorController {
 	@ApiResponse(responseCode = "200", description = "Retorna o treinador solicitado")
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<TreinadorResponseDTO> buscarPorId(@PathVariable Long id) {
+
 		Treinador treinador = buscarTreinador(id);
 		return ResponseEntity.ok(treinadorMapper.treinadorParaTreinadorResponse(treinador));
 
@@ -59,6 +60,7 @@ public class TreinadorController {
 	@ApiResponse(responseCode = "200", description = "Retorna uma lista contendo os pokemons do treinador")
 	@GetMapping(path = "/{id}/pokemons")
 	public ResponseEntity<Collection<PokemonResponseDTO>> buscarPorPokemons(@PathVariable Long id) {
+
 		Treinador treinador = buscarTreinador(id);
 		return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponses(treinador.getPokemons()));
 	}
@@ -133,7 +135,6 @@ public class TreinadorController {
 		if (treinadorOptional.isEmpty()) {
 			throw new NoSuchElementException();
 		}
-		Treinador treinador = treinadorOptional.get();
-		return treinador;
+		return treinadorOptional.get();
 	}
 }
