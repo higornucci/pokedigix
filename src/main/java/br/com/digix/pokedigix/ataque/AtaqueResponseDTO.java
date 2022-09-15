@@ -2,7 +2,8 @@ package br.com.digix.pokedigix.ataque;
 
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
-public class AtaqueResponseDTO extends AtaqueModelo {
+public class AtaqueResponseDTO extends AtaqueDTO {
+
     private Long id;
     private TipoResponseDTO tipo;
 
@@ -18,14 +19,8 @@ public class AtaqueResponseDTO extends AtaqueModelo {
             String nome,
             String descricao,
             TipoResponseDTO tipo) {
-
+        super(forca, acuracia, pontosDePoder, categoria, nome, descricao);
         this.id = id;
-        this.forca = forca;
-        this.acuracia = acuracia;
-        this.pontosDePoder = pontosDePoder;
-        this.categoria = categoria;
-        this.nome = nome;
-        this.descricao = descricao;
         this.tipo = tipo;
     }
 

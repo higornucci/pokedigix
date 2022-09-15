@@ -2,7 +2,8 @@ package br.com.digix.pokedigix.pokemon;
 
 import java.util.Collection;
 
-public class PokemonRequestDTO extends PokemonModelo {
+public class PokemonRequestDTO extends PokemonDTO {
+
     private Collection<Long> tiposIds;
     private Collection<Long> ataquesIds;
 
@@ -11,13 +12,7 @@ public class PokemonRequestDTO extends PokemonModelo {
 
     public PokemonRequestDTO(String nome, double altura, double peso, Genero genero, int nivel, int numeroPokedex,
             int felicidade, Collection<Long> tiposIds, Collection<Long> ataquesIds) {
-        this.nome = nome;
-        this.altura = altura;
-        this.peso = peso;
-        this.genero = genero;
-        this.nivel = nivel;
-        this.numeroPokedex = numeroPokedex;
-        this.felicidade = felicidade;
+        super(nome, altura, peso, genero, nivel, numeroPokedex, felicidade);
         this.tiposIds = tiposIds;
         this.ataquesIds = ataquesIds;
     }

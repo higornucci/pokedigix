@@ -5,7 +5,8 @@ import java.util.Collection;
 import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 
-public class PokemonResponseDTO extends PokemonModelo {
+public class PokemonResponseDTO extends PokemonDTO {
+
     private Long id;
     private Collection<AtaqueResponseDTO> ataques;
     private Collection<TipoResponseDTO> tipos;
@@ -16,14 +17,8 @@ public class PokemonResponseDTO extends PokemonModelo {
     public PokemonResponseDTO(Long id, String nome, double altura, double peso, Genero genero, int nivel,
             int numeroPokedex,
             int felicidade, Collection<AtaqueResponseDTO> ataques, Collection<TipoResponseDTO> tipos) {
+        super(nome, altura, peso, genero, nivel, numeroPokedex, felicidade);
         this.id = id;
-        this.nome = nome;
-        this.altura = altura;
-        this.peso = peso;
-        this.genero = genero;
-        this.nivel = nivel;
-        this.numeroPokedex = numeroPokedex;
-        this.felicidade = felicidade;
         this.ataques = ataques;
         this.tipos = tipos;
     }

@@ -17,35 +17,36 @@ import br.com.digix.pokedigix.pokemon.PokemonRepository;
 
 @Component
 public class TreinadorMapperImpl implements TreinadorMapper {
-    @Autowired
-    PokemonMapper pokemonMapper;
 
-    @Autowired
-    private PokemonRepository pokemonRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
-    @Autowired
-    private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PokemonRepository pokemonRepository;
 
-    @Override
-    public Treinador treinadorRequestParaTreinador(TreinadorRequestDTO treinadorRequestDTO) throws LimiteDePokemonException {
-        Optional<Endereco> enderecoOptional = enderecoRepository.findById(treinadorRequestDTO.getIdEndereco());
-        if (enderecoOptional.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Endereco endereco = enderecoOptional.get();
+	@Override
+	public TreinadorResponseDTO treinadorParaTreinadorResponse(Treinador treinador) {
+		return new TreinadorResponseDTO(
+				treinador.getId(),
+				treinador.getNome(),
+				treinador.getEndereco(),
+				treinador.getDinheiro(),
+				treinador.getNivel(),
+				treinador.getInsignias());
+	}
 
-        Optional<Pokemon> pokemoOptional = pokemonRepository.findById(treinadorRequestDTO.getIdPrimeiroPokemon());
-        if (pokemoOptional.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Pokemon pokemon = pokemoOptional.get();
-        return new Treinador(treinadorRequestDTO.getNome(), endereco, pokemon);
-    }
-
-    @Override
-    public TreinadorResponseDTO treinadorParaTreinadorResponseDTO(Treinador treinador) {
-        return new TreinadorResponseDTO(treinador.getId(), treinador.getEndereco(), treinador.getNome(),
-        treinador.getInsignias(), treinador.getDinheiro(), treinador.getNivel());
-    }
+	@Override
+	public Treinador treinadorRequestParaTreinador(TreinadorRequestDTO treinadorRequestDTO)
+			throws LimiteDePokemonException {
+		Optional<Endereco> enderecoOptional = enderecoRepository.findById(treinadorRequestDTO.getIdEndereco());
+		if (enderecoOptional.isEmpty()) {
+			throw new NoSuchElementException();
+		}
+		Optional<Pokemon> pokemoOptional = pokemonRepository.findById(treinadorRequestDTO.getIdPrimeiroPokemon());
+		if (pokemoOptional.isEmpty()) {
+			throw new NoSuchElementException();
+		}
+		return new Treinador(treinadorRequestDTO.getNome(), enderecoOptional.get(), pokemoOptional.get());
+	}
 
 }
