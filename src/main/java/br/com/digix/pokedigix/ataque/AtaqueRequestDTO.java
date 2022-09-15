@@ -1,76 +1,22 @@
 package br.com.digix.pokedigix.ataque;
 
-public class AtaqueRequestDTO {
-    private int forca;
-    private int acuracia;
-    private int pontosDePoder;
+public class AtaqueRequestDTO extends AtaqueDTO {
+
     private Long tipoId;
-    private Categoria categoria;
-    private String nome;
-    private String descricao;
 
-    public AtaqueRequestDTO(){}
+    public AtaqueRequestDTO() {
+    }
 
-    public AtaqueRequestDTO(int forca
-    , int acuracia, 
-    int pontosDePoder, 
-    Long tipoId, 
-    Categoria categoria, String nome, String descricao) {
-        this.forca = forca;
-        this.acuracia = acuracia;
-        this.pontosDePoder = pontosDePoder;
+    public AtaqueRequestDTO(
+            int forca, 
+            int acuracia,
+            int pontosDePoder,
+            Long tipoId,
+            Categoria categoria, 
+            String nome, 
+            String descricao) {
+        super(forca, acuracia, pontosDePoder, categoria, nome, descricao);
         this.tipoId = tipoId;
-        this.categoria = categoria;
-        this.nome = nome;
-        this.descricao = descricao;
-    }
-
-    public int getForca() {
-        return forca;
-    }
-
-    public void setForca(int forca) {
-        this.forca = forca;
-    }
-
-    public int getAcuracia() {
-        return acuracia;
-    }
-
-    public void setAcuracia(int acuracia) {
-        this.acuracia = acuracia;
-    }
-
-    public int getPontosDePoder() {
-        return pontosDePoder;
-    }
-
-    public void setPontosDePoder(int pontosDePoder) {
-        this.pontosDePoder = pontosDePoder;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public Long getTipoId() {

@@ -16,6 +16,7 @@ import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.personagem.Treinador;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Builder;
 
 @Entity
 public class Pokemon extends EntidadeBase {
