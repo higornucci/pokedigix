@@ -24,7 +24,7 @@ import br.com.digix.pokedigix.tipo.TipoRepository;
 public class PokemonMapperImpl implements PokemonMapper {
 
     @Autowired
-    private TipoMapper tipoMapper;
+    private AtaqueRepository ataqueRepository;
 
     @Autowired
     private TipoRepository tipoRepository;
@@ -33,12 +33,12 @@ public class PokemonMapperImpl implements PokemonMapper {
     private AtaqueMapper ataqueMapper;
 
     @Autowired
-    private AtaqueRepository ataqueRepository;
+    private TipoMapper tipoMapper;
 
     @Override
-    public Pokemon pokemonRequestParaPokemon(PokemonRequestDTO pokemonRequestDTO)
-            throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
-            LimiteDeAtaquePokemonException {
+    public Pokemon pokemonRequestParaPokemon(PokemonRequestDTO pokemonRequestDTO) throws NivelPokemonInvalidoException,
+            FelicidadeInvalidaException, LimiteDeTipoPokemonException, LimiteDeAtaquePokemonException {
+        Collection<Tipo> tipos = new ArrayList<>();
         Collection<Ataque> ataques = new ArrayList<>();
         for (Long ataqueId : pokemonRequestDTO.getAtaquesIds()) {
             Optional<Ataque> ataqueOptional = ataqueRepository.findById(ataqueId);
@@ -48,7 +48,6 @@ public class PokemonMapperImpl implements PokemonMapper {
             Ataque ataque = ataqueOptional.get();
             ataques.add(ataque);
         }
-        Collection<Tipo> tipos = new ArrayList<>();
         for (Long tipoId : pokemonRequestDTO.getTiposIds()) {
             Optional<Tipo> tipoOptional = tipoRepository.findById(tipoId);
             if (tipoOptional.isEmpty()) {
@@ -56,7 +55,6 @@ public class PokemonMapperImpl implements PokemonMapper {
             }
             Tipo tipo = tipoOptional.get();
             tipos.add(tipo);
-
         }
         return new Pokemon(
                 pokemonRequestDTO.getNome(),
@@ -68,11 +66,10 @@ public class PokemonMapperImpl implements PokemonMapper {
                 pokemonRequestDTO.getFelicidade(),
                 tipos,
                 ataques);
-
     }
 
     @Override
-    public PokemonResponseDTO pokemonParaPokemonResponseDTO(Pokemon pokemon) {
+    public PokemonResponseDTO pokemonParaPokemonResponse(Pokemon pokemon) {
         return new PokemonResponseDTO(
                 pokemon.getId(),
                 pokemon.getNome(),
@@ -82,17 +79,17 @@ public class PokemonMapperImpl implements PokemonMapper {
                 pokemon.getNivel(),
                 pokemon.getNumeroPokedex(),
                 pokemon.getFelicidade(),
-                ataqueMapper.ataqueParaAtaqueResponseDTO(pokemon.getAtaques()),
-                tipoMapper.tipoParaTipoResponse(pokemon.getTipos()));
+                ataqueMapper.ataquesParaAtaquesResponses(pokemon.getAtaques()),
+                tipoMapper.tiposParaTiposResponses(pokemon.getTipos()));
     }
 
     @Override
-    public Collection<PokemonResponseDTO>  pokemonsParaPokemonsResponseDTO (Collection<Pokemon> pokemons) {
-        Collection<PokemonResponseDTO> pokemonsDTOs = new ArrayList<>();
+    public Collection<PokemonResponseDTO> pokemonsParaPokemonsResponses(Collection<Pokemon> pokemons) {
+        Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
         for (Pokemon pokemon : pokemons) {
-            pokemonsDTOs.add(this.pokemonParaPokemonResponseDTO(pokemon));
+            pokemonsRetornados.add(this.pokemonParaPokemonResponse(pokemon));
         }
-        return pokemonsDTOs;
+        return pokemonsRetornados;
     }
 
 }

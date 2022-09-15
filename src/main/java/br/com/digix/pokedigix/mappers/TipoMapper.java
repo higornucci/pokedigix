@@ -12,5 +12,5 @@ import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 public interface TipoMapper {    
     public Tipo tipoRequestParaTipo(TipoRequestDTO tipoRequestDTO);
     public TipoResponseDTO tipoParaTipoResponse(Tipo tipo);
-    public Collection<TipoResponseDTO> tipoParaTipoResponse(Collection<Tipo> tipos);
+    public Collection<TipoResponseDTO> tiposParaTiposResponses(Collection<Tipo> tipos);
 }

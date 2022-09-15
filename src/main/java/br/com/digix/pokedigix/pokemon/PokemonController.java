@@ -22,11 +22,9 @@ import org.webjars.NotFoundException;
 
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueRepository;
-import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
 import br.com.digix.pokedigix.mappers.PokemonMapper;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
-import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -58,9 +56,7 @@ public class PokemonController {
   @ApiResponse(responseCode = "204")
   @DeleteMapping
   @Transactional
-
   public ResponseEntity<Void> removerPokemon(@RequestParam(required = true) String termo) {
-
     pokemonRepository.deleteByNomeContaining(termo);
     return ResponseEntity.noContent().build();
   }
@@ -71,12 +67,12 @@ public class PokemonController {
   public ResponseEntity<PokemonResponseDTO> criarPokemon(
       @RequestBody PokemonRequestDTO novoPokemon)
       throws NivelPokemonInvalidoException, FelicidadeInvalidaException, LimiteDeTipoPokemonException,
-      LimiteDeAtaquePokemonException, org.springframework.data.crossstore.ChangeSetPersister.NotFoundException {
-      Pokemon pokemon = pokemonMapper.pokemonRequestParaPokemon(novoPokemon);
+      LimiteDeAtaquePokemonException {
+    Pokemon pokemon = pokemonMapper.pokemonRequestParaPokemon(novoPokemon);
     pokemonRepository.save(pokemon);
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(pokemonMapper.pokemonParaPokemonResponseDTO(pokemon));
+        .body(pokemonMapper.pokemonParaPokemonResponse(pokemon));
   }
 
   @Operation(summary = "Atualizar um pokemon")
@@ -105,28 +101,6 @@ public class PokemonController {
       Tipo tipo = tipoOptional.get();
       tipos.add(tipo);
     }
-    Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-    for (Ataque ataque : ataques) {
-      AtaqueResponseDTO ataqueDTO = new AtaqueResponseDTO(
-          ataque.getId(),
-          ataque.getForca(),
-          ataque.getAcuracia(),
-          ataque.getPontosDePoder(),
-          ataque.getCategoria(),
-          ataque.getNome(),
-          ataque.getDescricao(),
-          new TipoResponseDTO(
-              ataque.getTipo().getId(),
-              ataque.getTipo().getNome()));
-      ataquesDTOs.add(ataqueDTO);
-    }
-    Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-    for (Tipo tipo : tipos) {
-      TipoResponseDTO tipoDTO = new TipoResponseDTO(
-          tipo.getId(),
-          tipo.getNome());
-      tiposDTOs.add(tipoDTO);
-    }
     Optional<Pokemon> pokemonOptional = pokemonRepository.findById(id);
     if (pokemonOptional.isEmpty()) {
       throw new NotFoundException(null);
@@ -141,36 +115,17 @@ public class PokemonController {
     alterarPokemon.setFelicidade(pokemonAtt.getFelicidade());
     alterarPokemon.setAtaques(ataques);
     alterarPokemon.setTipos(tipos);
-
     pokemonRepository.save(alterarPokemon);
-
-    return ResponseEntity.ok(
-        new PokemonResponseDTO(
-            alterarPokemon.getId(),
-            alterarPokemon.getNome(),
-            alterarPokemon.getAltura(),
-            alterarPokemon.getPeso(),
-            alterarPokemon.getGenero(),
-            alterarPokemon.getNivel(),
-            alterarPokemon.getNumeroPokedex(),
-            alterarPokemon.getFelicidade(),
-            ataquesDTOs,
-            tiposDTOs));
+    return ResponseEntity.ok(pokemonMapper.pokemonParaPokemonResponse(alterarPokemon));
   }
 
   @Operation(summary = "Buscar Pokemon pelo seu id do tipo")
   @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo tipo")
   @GetMapping(path = "/tipo/{id}")
-  public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloTipo(
+  public ResponseEntity<Object> buscarPeloTipo(
       @PathVariable Long id) {
-    Iterable<Pokemon> pokemons = pokemonRepository.buscarPorTipo(id);
-
-    Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
-
-    for (Pokemon pokemon : pokemons) {
-      pokemonsRetornados.add(pokemonMapper.pokemonParaPokemonResponseDTO(pokemon));
-    }
-    return ResponseEntity.ok(pokemonsRetornados);
+    Collection<Pokemon> pokemons = pokemonRepository.buscarPorTipo(id);
+    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponses(pokemons));
   }
 
   @Operation(summary = "Buscar Pokemon pelo seu nome parcial ou completo")
@@ -178,14 +133,12 @@ public class PokemonController {
   @GetMapping
   public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloNome(
       @RequestParam(required = false, name = "termo") String nome) {
-
     Collection<Pokemon> pokemons;
     if (nome != null) {
       pokemons = pokemonRepository.findByNomeContaining(nome);
     } else {
       pokemons = (Collection<Pokemon>) pokemonRepository.findAll();
     }
-    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponseDTO(pokemons));
+    return ResponseEntity.ok(pokemonMapper.pokemonsParaPokemonsResponses(pokemons));
   }
-
 }

@@ -15,5 +15,5 @@ import br.com.digix.pokedigix.ataque.TipoInvalidoParaCategoriaException;
 public interface AtaqueMapper {
     public Ataque ataqueRequestParaAtaque(AtaqueRequestDTO ataqueRequestDTO) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException;
     public AtaqueResponseDTO ataqueParaAtaqueResponseDTO(Ataque ataque);
-    public Collection<AtaqueResponseDTO> ataqueParaAtaqueResponseDTO(Collection<Ataque> ataques);
+    public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(Collection<Ataque> ataques);
 }

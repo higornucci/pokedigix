@@ -60,7 +60,8 @@ public class AtaqueMapperImpl implements AtaqueMapper {
     }
 
     @Override
-    public Collection<AtaqueResponseDTO> ataqueParaAtaqueResponseDTO(Collection<Ataque> ataques) {
+    public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(
+                                                Collection<Ataque> ataques) {
         Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
         for (Ataque ataque : ataques) {
             ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
