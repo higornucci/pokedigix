@@ -9,7 +9,7 @@ public class EnderecoResponseDTO {
 	public EnderecoResponseDTO() {
 	}
 
-	public EnderecoResponseDTO(Long id, String cidade, String regiao) {
+	public EnderecoResponseDTO(Long id, String regiao, String cidade) {
 		this.id = id;
 		this.cidade = cidade;
 		this.regiao = regiao;

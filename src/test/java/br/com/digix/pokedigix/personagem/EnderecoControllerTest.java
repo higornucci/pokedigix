@@ -59,7 +59,7 @@ class EnderecoControllerTest {
 	void deve_cadastrar_um_novo_endereco() throws Exception {
 		int quantidadeEsperada = 1;
 		Endereco endereco = new EnderecoBuilder().construir();
-		EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO(endereco.getCidade(), endereco.getRegiao());
+		EnderecoRequestDTO enderecoRequestDTO = new EnderecoRequestDTO(endereco.getRegiao(), endereco.getCidade());
 
 		mvc.perform(post("/api/v1/enderecos/")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -105,15 +105,16 @@ class EnderecoControllerTest {
 				.containsOnly(regiaoEsperada);
 	}
 
-	@Test
-	void deve_atualizar_um_endereco() throws Exception {
-		String regiao = "Centro Oeste";
-		String regiaoAtualizada = "Sul";
-		String cidade = "Campo Grande";
-		Endereco endereco = new Endereco(regiao, cidade);
-		enderecoRepository.save(endereco);
-		int quantidadeEsperada = 1;
-		EnderecoUpdateDTO tipoRequestDTO = new EnderecoUpdateDTO(regiaoAtualizada, cidade);
+
+  @Test
+  void deve_atualizar_um_endereco() throws Exception {
+    String regiao = "Centro Oeste";
+    String regiaoAtualizada = "Sul";
+    String cidade = "Campo Grande";
+    Endereco endereco = new Endereco(regiao, cidade);
+    enderecoRepository.save(endereco);
+    int quantidadeEsperada = 1;
+    EnderecoRequestDTO tipoRequestDTO = new EnderecoRequestDTO(regiaoAtualizada, cidade);
 
 		// Action
 		String url = "/api/v1/enderecos/" + endereco.getId();
