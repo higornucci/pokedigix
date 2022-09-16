@@ -10,7 +10,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
 @Entity
 public class Treinador extends Personagem {
 
@@ -40,17 +43,8 @@ public class Treinador extends Personagem {
         this.insignias.add(insignia);
     }
 
-    public int getDinheiro() {
-        return dinheiro;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public Collection<Insignia> getInsignias() {
-        return insignias;
-    }
+   
+    
 
     public void capturar(Pokemon pokemonACapturar) throws LimiteDePokemonException {
         validarQuantidadeDePokemons();
@@ -68,15 +62,5 @@ public class Treinador extends Personagem {
         return LIMITE_POKEMON;
     }
 
-    public void setDinheiro(int dinheiro) {
-        this.dinheiro = dinheiro;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-    }
-
-    public void setInsignias(Collection<Insignia> insignias) {
-        this.insignias = insignias;
-    }
+   
 }

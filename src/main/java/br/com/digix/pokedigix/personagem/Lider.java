@@ -8,8 +8,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Lider extends Personagem {
 
     @Enumerated(EnumType.STRING)
@@ -22,12 +29,12 @@ public class Lider extends Personagem {
         this.insignia = insignia;
     }
     
-    public Insignia getInsignia() {
-        return insignia;
-    }
-    public void setInsignia(Insignia insignia) {
-        this.insignia = insignia;
-    }
+    // public Insignia getInsignia() {
+    //     return insignia;
+    // }
+    // public void setInsignia(Insignia insignia) {
+    //     this.insignia = insignia;
+    // }
     
 }
 
