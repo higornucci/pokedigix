@@ -14,146 +14,87 @@ import javax.persistence.ManyToOne;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Ataque extends EntidadeBase {
 
-    @Basic
-    private int forca;
+	@Basic
+	private int forca;
 
-    @Column(nullable = false)
-    private int acuracia;
+	@Column(nullable = false)
+	private int acuracia;
 
-    @Column(nullable = false, name = "pp")
-    private int pontosDePoder;
+	@Column(nullable = false, name = "pp")
+	private int pontosDePoder;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
-    private Categoria categoria;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 15)
+	private Categoria categoria;
 
-    @Column(nullable = false, length = 30)
-    private String nome;
+	@Column(nullable = false, length = 30)
+	private String nome;
 
-    @Column(nullable = false)
-    private String descricao;
+	@Column(nullable = false)
+	private String descricao;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Tipo tipo;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Tipo tipo;
 
-    @ManyToMany(mappedBy = "ataques")
-    private Collection<Pokemon> pokemons;
+	@ManyToMany(mappedBy = "ataques")
+	private Collection<Pokemon> pokemons;
 
-    protected Ataque() {
-    }
+	public Ataque(int forca,
+			int acuracia,
+			int pontosDePoder,
+			Categoria categoria,
+			String nome,
+			String descricao,
+			Tipo tipo)
+			throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+		validarAcuracia(acuracia);
+		validarForca(categoria, forca);
+		validarTipo(categoria, tipo);
+		this.forca = forca;
+		this.acuracia = acuracia;
+		this.pontosDePoder = pontosDePoder;
+		this.categoria = categoria;
+		this.nome = nome;
+		this.descricao = descricao;
+		this.tipo = tipo;
+	}
 
-    public Ataque(int forca,
-            int acuracia,
-            int pontosDePoder,
-            Categoria categoria,
-            String nome,
-            String descricao,
-            Tipo tipo)
-            throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-        validarAcuracia(acuracia);
-        validarForca(categoria, forca);
-        validarTipo(categoria, tipo);
-        this.forca = forca;
-        this.acuracia = acuracia;
-        this.pontosDePoder = pontosDePoder;
-        this.categoria = categoria;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.tipo = tipo;
-    }
+	private void validarTipo(Categoria categoria, Tipo tipo) throws TipoInvalidoParaCategoriaException {
+		if (!categoria.equals(Categoria.EFEITO) && tipo == null) {
+			throw new TipoInvalidoParaCategoriaException(categoria);
+		}
+	}
 
-    private void validarTipo(Categoria categoria, Tipo tipo) throws TipoInvalidoParaCategoriaException {
-        if (!categoria.equals(Categoria.EFEITO) && tipo == null) {
-            throw new TipoInvalidoParaCategoriaException(categoria);
-        }
-    }
+	private void validarForca(Categoria categoria, int forca) throws ForcaInvalidaParaCategoriaException {
+		if (!categoria.equals(Categoria.EFEITO) && forca <= 0) {
+			throw new ForcaInvalidaParaCategoriaException(categoria);
+		}
+	}
 
-    private void validarForca(Categoria categoria, int forca) throws ForcaInvalidaParaCategoriaException {
-        if (!categoria.equals(Categoria.EFEITO) && forca <= 0) {
-            throw new ForcaInvalidaParaCategoriaException(categoria);
-        }
-    }
+	public Ataque(int acuracia, int pontosDePoder, String nome, String descricao) throws AcuraciaInvalidaException {
+		validarAcuracia(acuracia);
+		this.acuracia = acuracia;
+		this.pontosDePoder = pontosDePoder;
+		this.nome = nome;
+		this.descricao = descricao;
+		this.categoria = Categoria.EFEITO;
+	}
 
-    public Ataque(int acuracia, int pontosDePoder, String nome, String descricao) throws AcuraciaInvalidaException {
-        validarAcuracia(acuracia);
-        this.acuracia = acuracia;
-        this.pontosDePoder = pontosDePoder;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.categoria = Categoria.EFEITO;
-    }
+	private void validarAcuracia(int acuracia) throws AcuraciaInvalidaException {
+		if (acuracia < 0 || acuracia > 100) {
+			throw new AcuraciaInvalidaException();
+		}
+	}
 
-    private void validarAcuracia(int acuracia) throws AcuraciaInvalidaException {
-        if (acuracia < 0 || acuracia > 100) {
-            throw new AcuraciaInvalidaException();
-        }
-    }
-
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public int getForca() {
-        return forca;
-    }
-
-    public int getAcuracia() {
-        return acuracia;
-    }
-
-    public int getPontosDePoder() {
-        return pontosDePoder;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public Collection<Pokemon> getPokemons() {
-        return pokemons;
-    }
-
-    public void setForca(int forca) {
-        this.forca = forca;
-    }
-
-    public void setAcuracia(int acuracia) {
-        this.acuracia = acuracia;
-    }
-
-    public void setPontosDePoder(int pontosDePoder) {
-        this.pontosDePoder = pontosDePoder;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
-    public void setPokemons(Collection<Pokemon> pokemons) {
-        this.pokemons = pokemons;
-    }
+	
 }

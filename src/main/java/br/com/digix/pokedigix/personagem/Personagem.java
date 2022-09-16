@@ -12,47 +12,53 @@ import javax.persistence.OneToMany;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Setter
+@Getter
+@NoArgsConstructor
 public abstract class Personagem extends EntidadeBase {
 
-    @Column(nullable = false)
-    private String nome;
 
-    @ManyToOne
-    private Endereco endereco;
 
-    @OneToMany (mappedBy = "treinador")
-    protected Collection<Pokemon> pokemons;
+	@Column(nullable = false)
+	private String nome;
 
-    protected Personagem() {
-    }
+	@ManyToOne
+	private Endereco endereco;
 
-    protected Personagem(String nome, Endereco endereco) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.pokemons = new ArrayList<>();
-    }
+	@OneToMany(mappedBy = "treinador")
+	protected Collection<Pokemon> pokemons;
 
-    public String getNome() {
-        return nome;
-    }
+	
+	protected Personagem(String nome, Endereco endereco) {
+		this.nome = nome;
+		this.endereco = endereco;
+		this.pokemons = new ArrayList<>();
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
+	public Endereco getEndereco() {
+		return endereco;
+	}
 
-    public Collection<Pokemon> getPokemons() {
-        return pokemons;
-    }
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Collection<Pokemon> getPokemons() {
+		return pokemons;
+	}
 
 }

@@ -8,8 +8,14 @@ import javax.persistence.ManyToMany;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Tipo extends EntidadeBase {
 
     @Column(nullable = false, length = 15)
@@ -18,19 +24,11 @@ public class Tipo extends EntidadeBase {
     @ManyToMany(mappedBy = "tipos")
     private Collection<Pokemon> pokemons;
 
-    protected Tipo() {
-    }
 
     public Tipo(String nome) {
         this.nome = nome;
     }
 
-    public String getNome() {
-        return this.nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    
 
 }
