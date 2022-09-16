@@ -10,20 +10,20 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AtaqueResponseDTO extends AtaqueDTO {
 
-	private Long id;
-	private TipoResponseDTO tipo;
+    private Long id;
+    private TipoResponseDTO tipo;
 
-	public AtaqueResponseDTO(
-			Long id,
-			int forca,
-			int acuracia,
-			int pontosDePoder,
-			Categoria categoria,
-			String nome,
-			String descricao,
-			TipoResponseDTO tipo) {
-		super(forca, acuracia, pontosDePoder, categoria, nome, descricao);
-		this.id = id;
-		this.tipo = tipo;
-	}
+    public AtaqueResponseDTO(
+            Long id,
+            int forca,
+            int acuracia,
+            int pontosDePoder,
+            Categoria categoria,
+            String nome,
+            String descricao,
+            TipoResponseDTO tipo) {
+        super(forca, acuracia, pontosDePoder, categoria, nome, descricao);
+        this.id = id;
+        this.tipo = tipo;
+    }
 }

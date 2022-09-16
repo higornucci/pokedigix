@@ -117,7 +117,7 @@ class PokemonControllerTest {
 		pokemonRepository.save(pokemon);
 
 		String url = "/api/v1/pokemons/" + pokemon.getId();
-		MvcResult resultado = mvc.perform(delete(url)).andReturn();
+		mvc.perform(delete(url)).andReturn();
 
 		Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
 		long quantidadeEncontrada = pokemonsEncontrados.spliterator().getExactSizeIfKnown();
