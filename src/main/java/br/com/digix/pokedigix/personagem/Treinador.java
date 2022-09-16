@@ -10,7 +10,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
 @Entity
 public class Treinador extends Personagem {
 

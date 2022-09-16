@@ -46,6 +46,7 @@ public class TreinadorMapperImpl implements TreinadorMapper {
 		if (pokemoOptional.isEmpty()) {
 			throw new NoSuchElementException();
 		}
+		
 		return new Treinador(treinadorRequestDTO.getNome(), enderecoOptional.get(), pokemoOptional.get());
 	}
 

@@ -12,10 +12,18 @@ import javax.persistence.OneToMany;
 
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.utils.EntidadeBase;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Setter
+@Getter
+@NoArgsConstructor
 public abstract class Personagem extends EntidadeBase {
+
+
 
 	@Column(nullable = false)
 	private String nome;
@@ -26,9 +34,7 @@ public abstract class Personagem extends EntidadeBase {
 	@OneToMany(mappedBy = "treinador")
 	protected Collection<Pokemon> pokemons;
 
-	protected Personagem() {
-	}
-
+	
 	protected Personagem(String nome, Endereco endereco) {
 		this.nome = nome;
 		this.endereco = endereco;
