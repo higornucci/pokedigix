@@ -91,5 +91,4 @@ public class PokemonMapperImpl implements PokemonMapper {
         }
         return pokemonsRetornados;
     }
-
 }

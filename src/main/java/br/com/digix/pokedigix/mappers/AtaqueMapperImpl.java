@@ -40,7 +40,8 @@ public class AtaqueMapperImpl implements AtaqueMapper {
             }
             Tipo tipo = tipoOptional.get();
             return new Ataque(ataqueRequestDTO.getForca(), ataqueRequestDTO.getAcuracia(),
-                    ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(), ataqueRequestDTO.getNome(),
+                    ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
+                    ataqueRequestDTO.getNome(),
                     ataqueRequestDTO.getDescricao(), tipo);
         }
     }

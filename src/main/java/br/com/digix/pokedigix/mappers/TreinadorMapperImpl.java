@@ -18,26 +18,27 @@ import br.com.digix.pokedigix.pokemon.PokemonRepository;
 @Component
 public class TreinadorMapperImpl implements TreinadorMapper {
 
-    @Autowired
-    private EnderecoRepository enderecoRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
-    @Autowired
-    private PokemonRepository pokemonRepository;
+	@Autowired
+	private PokemonRepository pokemonRepository;
 
-    @Override
-    public TreinadorResponseDTO treinadorParaTreinadorResponse(Treinador treinador) {
-        return new TreinadorResponseDTO(
-						treinador.getId(),
-						treinador.getEndereco(),
-						treinador.getNome(),
-						treinador.getInsignias(),
-						treinador.getNivel(),
-						treinador.getDinheiro());
-    }
+	@Override
+	public TreinadorResponseDTO treinadorParaTreinadorResponse(Treinador treinador) {
+		return new TreinadorResponseDTO(
+				treinador.getId(),
+				treinador.getNome(),
+				treinador.getEndereco(),
+				treinador.getDinheiro(),
+				treinador.getNivel(),
+				treinador.getInsignias());
+	}
 
-    @Override
-    public Treinador treinadorRequestParaTreinador(TreinadorRequestDTO treinadorRequestDTO) throws LimiteDePokemonException {
-        Optional<Endereco> enderecoOptional = enderecoRepository.findById(treinadorRequestDTO.getIdEndereco());
+	@Override
+	public Treinador treinadorRequestParaTreinador(TreinadorRequestDTO treinadorRequestDTO)
+			throws LimiteDePokemonException {
+		Optional<Endereco> enderecoOptional = enderecoRepository.findById(treinadorRequestDTO.getIdEndereco());
 		if (enderecoOptional.isEmpty()) {
 			throw new NoSuchElementException();
 		}
@@ -46,6 +47,6 @@ public class TreinadorMapperImpl implements TreinadorMapper {
 			throw new NoSuchElementException();
 		}
 		return new Treinador(treinadorRequestDTO.getNome(), enderecoOptional.get(), pokemoOptional.get());
-    }
-    
+	}
+
 }
