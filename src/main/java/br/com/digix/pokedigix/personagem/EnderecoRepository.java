@@ -6,9 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface EnderecoRepository extends CrudRepository<Endereco, Long> {
 
-    
-    Collection <Endereco> findByCidadeContaining (String cidade);
-    Collection <Endereco> findByRegiaoContaining (String regiao);
+	Collection<Endereco> findByCidadeContaining(String cidade);
 
+	Collection<Endereco> findByRegiaoContaining(String regiao);
 
 }

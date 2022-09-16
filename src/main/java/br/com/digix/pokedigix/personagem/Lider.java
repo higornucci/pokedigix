@@ -19,9 +19,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Lider extends Personagem {
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Insignia insignia;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Insignia insignia;
+
+	
 
     public Lider(String nome, Endereco endereco, Collection<Pokemon> pokemons, Insignia insignia) {
         super(nome, endereco);
@@ -29,12 +31,6 @@ public class Lider extends Personagem {
         this.insignia = insignia;
     }
     
-    // public Insignia getInsignia() {
-    //     return insignia;
-    // }
-    // public void setInsignia(Insignia insignia) {
-    //     this.insignia = insignia;
-    // }
+    
     
 }
-

@@ -18,15 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
+import br.com.digix.pokedigix.mappers.EnderecoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping(path = { "/api/v1/enderecos" }, produces = { "application/json" })
 public class EnderecoController {
-
     @Autowired
     private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private EnderecoMapper enderecoMapper;
 
     @Operation(summary = "Deletar um Endereço pelo seu id")
     @ApiResponse(responseCode = "204")
@@ -42,34 +45,25 @@ public class EnderecoController {
     public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(
             @RequestBody EnderecoRequestDTO novoEndereco) {
         Endereco endereco = new Endereco(
-                novoEndereco.getRegiao(),
-                novoEndereco.getCidade());
+            novoEndereco.getRegiao(),
+            novoEndereco.getCidade()
+            );
         enderecoRepository.save(endereco);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(
-                        new EnderecoResponseDTO(
-                                endereco.getId(),
-                                endereco.getRegiao(),
-                                endereco.getCidade()));
+                .body(enderecoMapper.enderecoParaEnderecoResponseDTO(endereco));
     }
 
     @Operation(summary = "Buscar um endereço pelo seu id")
     @ApiResponse(responseCode = "200", description = "Retorna o endereço solicitado")
     @GetMapping(path = "/{id}")
-    public ResponseEntity<EnderecoResponseDTO> buscarPorId(
-            @PathVariable Long id) {
+    public ResponseEntity<EnderecoResponseDTO> buscarPorId(@PathVariable Long id) {
         Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         if (enderecoOptional.isEmpty()) {
             throw new NotFoundException(null);
         }
         Endereco endereco = enderecoOptional.get();
-        return ResponseEntity.ok(
-                new EnderecoResponseDTO(
-                        endereco.getId(),
-                        endereco.getRegiao(),
-                        endereco.getCidade()));
-
+        return ResponseEntity.ok(enderecoMapper.enderecoParaEnderecoResponseDTO(endereco));
     }
 
     @Operation(summary = "Buscar um endereço pelo nome da cidade")
@@ -77,9 +71,9 @@ public class EnderecoController {
     @GetMapping(path = "/cidade")
     public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorCidade(
             @RequestParam(required = false, name = "termo") String cidade) {
-        Iterable<Endereco> enderecos;
-        if (cidade==null || cidade.isEmpty()) {
-            enderecos = enderecoRepository.findAll();
+        Collection<Endereco> enderecos;
+        if (cidade == null || cidade.isEmpty()) {
+            enderecos = (Collection<Endereco>) enderecoRepository.findAll();
         } else {
             enderecos = enderecoRepository.findByCidadeContaining(cidade);
         }
@@ -88,7 +82,7 @@ public class EnderecoController {
 
         for (Endereco endereco : enderecos) {
             enderecosRetornados
-                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getRegiao(), endereco.getCidade()));
+                    .add(new EnderecoResponseDTO(endereco.getId(), endereco.getRegiao(), endereco.getCidade()) );
         }
         return ResponseEntity.ok(enderecosRetornados);
     }
@@ -98,29 +92,20 @@ public class EnderecoController {
     @GetMapping(path = "/regiao")
     public ResponseEntity<Collection<EnderecoResponseDTO>> buscarPorRegiao(
             @RequestParam(required = false, name = "termo") String regiao) {
-        Iterable<Endereco> enderecos;
+        Collection<Endereco> enderecos;
         if (regiao == null || regiao.isEmpty()) {
-            enderecos = enderecoRepository.findAll();
+            enderecos = (Collection<Endereco>) enderecoRepository.findAll();
         } else {
             enderecos = enderecoRepository.findByRegiaoContaining(regiao);
-
         }
-        Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
 
-        for (Endereco endereco : enderecos) {
-            enderecosRetornados.add(
-                    new EnderecoResponseDTO(
-                            endereco.getId(),
-                            endereco.getRegiao(),
-                            endereco.getCidade()));
-        }
-        return ResponseEntity.ok(enderecosRetornados);
+        return ResponseEntity.ok(enderecoMapper.enderecosParaEnderecoResponseDTOs(enderecos));
     }
 
     @Operation(summary = "Atualizar o Endereço")
     @ApiResponse(responseCode = "200")
     @PutMapping(path = "/{id}", consumes = "application/json")
-    public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoUpdateDTO enderecoRequestDTO,
+    public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoRequestDTO enderecoRequestDTO,
             @PathVariable Long id) {
         Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
         if (enderecoOptional.isEmpty()) {
@@ -131,9 +116,6 @@ public class EnderecoController {
         endereco.setCidade(enderecoRequestDTO.getCidade());
         enderecoRepository.save(endereco);
 
-        return ResponseEntity.ok(new EnderecoResponseDTO(
-                endereco.getId(),
-                endereco.getRegiao(),
-                endereco.getCidade()));
+        return ResponseEntity.ok(enderecoMapper.enderecoParaEnderecoResponseDTO(endereco));
     }
 }

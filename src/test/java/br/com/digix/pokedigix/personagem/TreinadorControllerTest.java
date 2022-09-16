@@ -119,6 +119,7 @@ class TreinadorControllerTest {
 
                 assertEquals(quantidadeEsperada, quantidadeEncontrada);
         }
+
         @Test
         void deve_deletar_um_treinador_pelo_nome() throws Exception {
                 // Arrange
