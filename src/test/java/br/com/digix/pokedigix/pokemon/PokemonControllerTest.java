@@ -117,7 +117,39 @@ class PokemonControllerTest {
 		pokemonRepository.save(pokemon);
 
 		String url = "/api/v1/pokemons/" + pokemon.getId();
-		MvcResult resultado = mvc.perform(delete(url)).andReturn();
+		mvc.perform(delete(url)).andReturn();
+
+		Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
+		long quantidadeEncontrada = pokemonsEncontrados.spliterator().getExactSizeIfKnown();
+
+		assertEquals(quantidadeEsperada, quantidadeEncontrada);
+	}
+	
+	@Test
+	void deve_excluir_um_pokemon_pelo_nome() throws Exception {
+		int quantidadeEsperada = 0;
+
+		Pokemon pokemon = new PokemonBuilder().construir();
+		pokemonRepository.save(pokemon);
+
+		String url = "/api/v1/pokemons?termo=" + pokemon.getNome();
+		mvc.perform(delete(url)).andReturn();
+
+		Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
+		long quantidadeEncontrada = pokemonsEncontrados.spliterator().getExactSizeIfKnown();
+
+		assertEquals(quantidadeEsperada, quantidadeEncontrada);
+	}
+	
+	@Test
+	void deve_excluir_um_pokemon_pelo_nome_parcial() throws Exception {
+		int quantidadeEsperada = 0;
+
+		Pokemon pokemon = new PokemonBuilder().comNome("Pichu").construir();
+		pokemonRepository.save(pokemon);
+
+		String url = "/api/v1/pokemons?termo=" + "Pi";
+		mvc.perform(delete(url)).andReturn();
 
 		Iterable<Pokemon> pokemonsEncontrados = pokemonRepository.findAll();
 		long quantidadeEncontrada = pokemonsEncontrados.spliterator().getExactSizeIfKnown();
