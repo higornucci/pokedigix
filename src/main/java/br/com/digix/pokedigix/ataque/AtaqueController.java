@@ -1,5 +1,6 @@
 package br.com.digix.pokedigix.ataque;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
@@ -83,5 +85,19 @@ public class AtaqueController {
   public ResponseEntity<Void> removerAtaqueId(@PathVariable Long id) {
     ataqueRepository.deleteById(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @Operation(summary = "Lista todos os ataques recebendo seu nome ou parcial")
+  @ApiResponse(responseCode = "200")
+  @GetMapping
+  public ResponseEntity<Collection<AtaqueResponseDTO>> buscarPelonome(
+    @RequestParam(required = false, name = "termo") String nome){
+  Collection<Ataque> ataques;
+  if(nome != null){
+    ataques = ataqueRepository.findByNomeContaining(nome);
+  }else {
+    ataques = (Collection<Ataque>) ataqueRepository.findAll();
+  }
+  return ResponseEntity.ok(ataqueMapper.ataquesParaAtaquesResponses(ataques));
   }
 }

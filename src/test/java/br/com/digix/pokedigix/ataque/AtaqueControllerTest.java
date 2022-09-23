@@ -154,4 +154,27 @@ class AtaqueControllerTest {
 
                 assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
         }
+
+		@Test
+        void deve_buscar_pelo_nome_parcial_ou_completo() throws Exception{
+                //arange
+                String tipo = "Fairy";
+                String nome = "Beijo Dranante";
+                Tipo tipoEsperado = new Tipo(tipo);
+                Ataque ataque = new AtaqueBuilder().comNome(nome).comTipo(tipoEsperado).construir();
+                ataqueRepository.save(ataque);
+
+                MvcResult mvcResult = mvc.perform(get("/api/v1/ataques")).andReturn();
+
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
+
+                AtaqueResponseDTO[] ataquesRetornados = JsonUtil.mapFromJson(
+                        mvcResult.getResponse().getContentAsString(),
+                        AtaqueResponseDTO[].class);
+
+                assertThat(ataquesRetornados).extracting(AtaqueResponseDTO::getNome).containsOnly(nome);
+               
+                
+        }
 }
