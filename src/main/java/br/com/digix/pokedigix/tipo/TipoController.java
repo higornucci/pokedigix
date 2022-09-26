@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins= "*")
 @RequestMapping(path = { "/api/v1/tipos" }, produces = { "application/json" })
 public class TipoController {
 

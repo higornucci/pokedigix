@@ -9,6 +9,6 @@ import br.com.digix.pokedigix.tipo.Tipo;
 public interface AtaqueRepository extends CrudRepository<Ataque, Long> {
 
 	Collection<Ataque> findByTipo(Tipo tipo);
-
 	Collection<Ataque> findByCategoria(Categoria categoria);
+	Collection<Ataque> findByNomeContaining(String nome);
 }

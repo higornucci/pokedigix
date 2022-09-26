@@ -190,5 +190,6 @@ class AtaqueTest {
 		assertEquals(descricao, ataque.getDescricao());
 		assertEquals(tipoEsperado, ataque.getTipo());
 	}
+	
 
 }
