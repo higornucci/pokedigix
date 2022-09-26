@@ -16,9 +16,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Endereco extends EntidadeBase {
 
-    @Column(nullable = false)
-    private String regiao;
-    @Column(nullable = false)
-    private String cidade;
+	@Column(nullable = false)
+	private String regiao;
+	@Column(nullable = false)
+	private String cidade;
 
 }

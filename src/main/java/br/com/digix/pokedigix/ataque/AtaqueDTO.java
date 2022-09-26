@@ -11,11 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public abstract class AtaqueDTO {
 
-    private int forca;
-    private int acuracia;
-    private int pontosDePoder;
-    private Categoria categoria;
-    private String nome;
-    private String descricao;
-    
+	private int forca;
+	private int acuracia;
+	private int pontosDePoder;
+	private Categoria categoria;
+	private String nome;
+	private String descricao;
+
 }

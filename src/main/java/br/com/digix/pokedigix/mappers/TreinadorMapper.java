@@ -9,6 +9,8 @@ import br.com.digix.pokedigix.personagem.TreinadorResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface TreinadorMapper {
-    public TreinadorResponseDTO treinadorParaTreinadorResponse(Treinador treinador);
-    public Treinador treinadorRequestParaTreinador(TreinadorRequestDTO treinadorRequestDTO) throws LimiteDePokemonException;
+	public TreinadorResponseDTO treinadorParaTreinadorResponse(Treinador treinador);
+
+	public Treinador treinadorRequestParaTreinador(TreinadorRequestDTO treinadorRequestDTO)
+			throws LimiteDePokemonException;
 }

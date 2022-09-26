@@ -12,23 +12,23 @@ import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 @Component
 public class TipoMapperImpl implements TipoMapper {
 
-    @Override
-    public Tipo tipoRequestParaTipo(TipoRequestDTO tipoRequestDTO) {
-        return new Tipo(tipoRequestDTO.getNome());
-    }
+	@Override
+	public Tipo tipoRequestParaTipo(TipoRequestDTO tipoRequestDTO) {
+		return new Tipo(tipoRequestDTO.getNome());
+	}
 
-    @Override
-    public TipoResponseDTO tipoParaTipoResponse(Tipo tipo) {
-        return new TipoResponseDTO(tipo.getId(), tipo.getNome());
-    }
+	@Override
+	public TipoResponseDTO tipoParaTipoResponse(Tipo tipo) {
+		return new TipoResponseDTO(tipo.getId(), tipo.getNome());
+	}
 
-    @Override
-    public Collection<TipoResponseDTO> tiposParaTiposResponses(Collection<Tipo> tipos) {
-        Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
-        for (Tipo tipo : tipos) {
-            tiposDTOs.add(this.tipoParaTipoResponse(tipo));
-        }
-        return tiposDTOs;
-    }
-    
+	@Override
+	public Collection<TipoResponseDTO> tiposParaTiposResponses(Collection<Tipo> tipos) {
+		Collection<TipoResponseDTO> tiposDTOs = new ArrayList<>();
+		for (Tipo tipo : tipos) {
+			tiposDTOs.add(this.tipoParaTipoResponse(tipo));
+		}
+		return tiposDTOs;
+	}
+
 }

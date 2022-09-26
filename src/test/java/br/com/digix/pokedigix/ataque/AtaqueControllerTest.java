@@ -87,6 +87,40 @@ class AtaqueControllerTest {
 	}
 
 	@Test
+	void deve_adicionar_um_ataque_de_efeito() throws Exception {
+		int quantidadeEsperada = 1;
+		Tipo tipoEsperado = new Tipo("Normal");
+		tipoRepository.save(tipoEsperado);
+		long idTipo = tipoEsperado.getId();
+		int acuracia = 80;
+		int pontosDePoder = 15;
+		Categoria categoria = Categoria.EFEITO;
+		String nome = "Po do Sono";
+		String descricao = "Um poh sonifero que faz o oponente dormir por 3 turnos";
+
+		AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
+
+		ataqueRequestDTO.setTipoId(idTipo);
+		ataqueRequestDTO.setAcuracia(acuracia);
+		ataqueRequestDTO.setPontosDePoder(pontosDePoder);
+		ataqueRequestDTO.setCategoria(categoria);
+		ataqueRequestDTO.setNome(nome);
+		ataqueRequestDTO.setDescricao(descricao);
+
+		mvc.perform(post("/api/v1/ataques/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.toJson(ataqueRequestDTO)))
+				.andExpect(status().isCreated());
+
+		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+		long quantidadeEncontrada = ataquesEncontrados.spliterator().getExactSizeIfKnown();
+
+		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+		assertThat(ataquesEncontrados).extracting(Ataque::getNome).contains(nome);
+
+	}
+
+	@Test
 	void deve_excluir_um_ataque_pelo_id() throws Exception {
 		// Teste do código Do Enzão
 		int quantidadeEsperada = 0;
@@ -153,5 +187,28 @@ class AtaqueControllerTest {
                 AtaqueResponseDTO ataqueDTO = JsonUtil.mapFromJson(content, AtaqueResponseDTO.class);
 
                 assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
+        }
+
+		@Test
+        void deve_buscar_pelo_nome_parcial_ou_completo() throws Exception{
+                //arange
+                String tipo = "Fairy";
+                String nome = "Beijo Dranante";
+                Tipo tipoEsperado = new Tipo(tipo);
+                Ataque ataque = new AtaqueBuilder().comNome(nome).comTipo(tipoEsperado).construir();
+                ataqueRepository.save(ataque);
+
+                MvcResult mvcResult = mvc.perform(get("/api/v1/ataques")).andReturn();
+
+                int status = mvcResult.getResponse().getStatus();
+                assertEquals(HttpStatus.OK.value(), status);
+
+                AtaqueResponseDTO[] ataquesRetornados = JsonUtil.mapFromJson(
+                        mvcResult.getResponse().getContentAsString(),
+                        AtaqueResponseDTO[].class);
+
+                assertThat(ataquesRetornados).extracting(AtaqueResponseDTO::getNome).containsOnly(nome);
+               
+                
         }
 }

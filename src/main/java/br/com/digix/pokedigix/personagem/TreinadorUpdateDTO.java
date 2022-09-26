@@ -17,5 +17,4 @@ public class TreinadorUpdateDTO {
 	private int nivel;
 	private int dinheiro;
 	private Collection<Insignia> insignias;
-
 }

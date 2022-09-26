@@ -23,8 +23,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class Personagem extends EntidadeBase {
 
-
-
 	@Column(nullable = false)
 	private String nome;
 
@@ -34,7 +32,6 @@ public abstract class Personagem extends EntidadeBase {
 	@OneToMany(mappedBy = "treinador")
 	protected Collection<Pokemon> pokemons;
 
-	
 	protected Personagem(String nome, Endereco endereco) {
 		this.nome = nome;
 		this.endereco = endereco;

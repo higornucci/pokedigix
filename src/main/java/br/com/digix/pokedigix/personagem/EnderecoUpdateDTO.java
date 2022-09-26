@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnderecoUpdateDTO {
-    private String regiao;
-    private String cidade;
-
+	private String regiao;
+	private String cidade;
 }

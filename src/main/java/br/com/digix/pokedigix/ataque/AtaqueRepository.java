@@ -11,4 +11,6 @@ public interface AtaqueRepository extends CrudRepository<Ataque, Long> {
 	Collection<Ataque> findByTipo(Tipo tipo);
 
 	Collection<Ataque> findByCategoria(Categoria categoria);
+
+	Collection<Ataque> findByNomeContaining(String nome);
 }

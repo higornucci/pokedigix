@@ -10,9 +10,9 @@ import br.com.digix.pokedigix.personagem.EnderecoResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface EnderecoMapper {
-    public Endereco enderecoRequestParaEndereco(EnderecoRequestDTO enderecoRequestDTO);
+	public Endereco enderecoRequestParaEndereco(EnderecoRequestDTO enderecoRequestDTO);
 
-    public EnderecoResponseDTO enderecoParaEnderecoResponseDTO(Endereco endereco);
+	public EnderecoResponseDTO enderecoParaEnderecoResponseDTO(Endereco endereco);
 
-    public Collection<EnderecoResponseDTO> enderecosParaEnderecoResponseDTOs(Collection<Endereco> enderecos);
+	public Collection<EnderecoResponseDTO> enderecosParaEnderecoResponseDTOs(Collection<Endereco> enderecos);
 }

@@ -13,7 +13,10 @@ import br.com.digix.pokedigix.ataque.TipoInvalidoParaCategoriaException;
 
 @Mapper(componentModel = "spring")
 public interface AtaqueMapper {
-    public Ataque ataqueRequestParaAtaque(AtaqueRequestDTO ataqueRequestDTO) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException;
-    public AtaqueResponseDTO ataqueParaAtaqueResponseDTO(Ataque ataque);
-    public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(Collection<Ataque> ataques);
+	public Ataque ataqueRequestParaAtaque(AtaqueRequestDTO ataqueRequestDTO)
+			throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException;
+
+	public AtaqueResponseDTO ataqueParaAtaqueResponseDTO(Ataque ataque);
+
+	public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(Collection<Ataque> ataques);
 }

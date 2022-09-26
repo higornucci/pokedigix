@@ -21,52 +21,53 @@ import br.com.digix.pokedigix.tipo.TipoRepository;
 @Component
 public class AtaqueMapperImpl implements AtaqueMapper {
 
-    @Autowired
-    private TipoMapper tipoMapper;
+	@Autowired
+	private TipoMapper tipoMapper;
 
-    @Autowired
-    private TipoRepository tipoRepository;
+	@Autowired
+	private TipoRepository tipoRepository;
 
-    @Override
-    public Ataque ataqueRequestParaAtaque(AtaqueRequestDTO ataqueRequestDTO)
-            throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-        if (ataqueRequestDTO.getCategoria().equals(Categoria.EFEITO)) {
-            return new Ataque(ataqueRequestDTO.getAcuracia(), ataqueRequestDTO.getPontosDePoder(),
-                    ataqueRequestDTO.getNome(), ataqueRequestDTO.getDescricao());
-        } else {
-            Optional<Tipo> tipoOptional = tipoRepository.findById(ataqueRequestDTO.getTipoId());
-            if (tipoOptional.isEmpty()) {
-                throw new NoSuchElementException();
-            }
-            Tipo tipo = tipoOptional.get();
-            return new Ataque(ataqueRequestDTO.getForca(), ataqueRequestDTO.getAcuracia(),
-                    ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
-                    ataqueRequestDTO.getNome(),
-                    ataqueRequestDTO.getDescricao(), tipo);
-        }
-    }
+	@Override
+	public Ataque ataqueRequestParaAtaque(AtaqueRequestDTO ataqueRequestDTO)
+			throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+		Optional<Tipo> tipoOptional = tipoRepository.findById(ataqueRequestDTO.getTipoId());
+		if (tipoOptional.isEmpty()) {
+			throw new NoSuchElementException();
+		}
+		Tipo tipo = tipoOptional.get();
+		if (ataqueRequestDTO.getCategoria().equals(Categoria.EFEITO)) {
+			return new Ataque(ataqueRequestDTO.getAcuracia(), ataqueRequestDTO.getPontosDePoder(),
+					ataqueRequestDTO.getCategoria(),
+					ataqueRequestDTO.getNome(), ataqueRequestDTO.getDescricao(), tipo);
+		} else {
+			return new Ataque(ataqueRequestDTO.getForca(), ataqueRequestDTO.getAcuracia(),
+					ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
+					ataqueRequestDTO.getNome(),
+					ataqueRequestDTO.getDescricao(), tipo);
+		}
+	}
 
-    @Override
-    public AtaqueResponseDTO ataqueParaAtaqueResponseDTO(Ataque ataque) {
-        return new AtaqueResponseDTO(
-                ataque.getId(),
-                ataque.getForca(),
-                ataque.getAcuracia(),
-                ataque.getPontosDePoder(),
-                ataque.getCategoria(),
-                ataque.getNome(),
-                ataque.getDescricao(),
-                tipoMapper.tipoParaTipoResponse(ataque.getTipo()));
-    }
+	@Override
+	public AtaqueResponseDTO ataqueParaAtaqueResponseDTO(Ataque ataque) {
+		return new AtaqueResponseDTO(
+				ataque.getId(),
+				ataque.getForca(),
+				ataque.getAcuracia(),
+				ataque.getPontosDePoder(),
+				ataque.getCategoria(),
+				ataque.getNome(),
+				ataque.getDescricao(),
+				tipoMapper.tipoParaTipoResponse(ataque.getTipo()));
+	}
 
-    @Override
-    public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(
-                                                Collection<Ataque> ataques) {
-        Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
-        for (Ataque ataque : ataques) {
-            ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
-        }
-        return ataquesDTOs;
-    }
+	@Override
+	public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(
+			Collection<Ataque> ataques) {
+		Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
+		for (Ataque ataque : ataques) {
+			ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
+		}
+		return ataquesDTOs;
+	}
 
 }
