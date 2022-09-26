@@ -1,8 +1,6 @@
 package br.com.digix.pokedigix.pokemon;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
