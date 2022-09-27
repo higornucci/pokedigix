@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/ataques" }, produces = { "application/json" })
 public class AtaqueController {
 
