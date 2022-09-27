@@ -99,17 +99,15 @@ class AtaqueTest {
 	}
 
 	@Test
-	void nao_deve_ter_forca_nem_tipo_quando_a_categoria_for_efeito()
+	void nao_deve_ter_forca_quando_a_categoria_for_efeito()
 			throws Exception {
 		Categoria categoria = Categoria.EFEITO;
 		int forca = 0;
-		Tipo tipo = null;
 
 		Ataque ataque = new AtaqueBuilder().comCategoriaEfeito().construir();
 
 		assertEquals(categoria, ataque.getCategoria());
 		assertEquals(forca, ataque.getForca());
-		assertEquals(tipo, ataque.getTipo());
 	}
 
 	@Test
@@ -125,18 +123,6 @@ class AtaqueTest {
 	}
 
 	@Test
-	void nao_deve_ter_ataque_de_categoria_fisica_sem_tipo() {
-		Categoria categoria = Categoria.FISICO;
-		Tipo tipo = null;
-
-		assertThrows(
-				TipoInvalidoParaCategoriaException.class,
-				() -> {
-					new AtaqueBuilder().comTipo(tipo).comCategoria(categoria).construir();
-				});
-	}
-
-	@Test
 	void nao_deve_ter_ataque_de_categoria_especial_sem_forca() {
 		Categoria categoria = Categoria.ESPECIAL;
 		int forca = 0;
@@ -145,18 +131,6 @@ class AtaqueTest {
 				ForcaInvalidaParaCategoriaException.class,
 				() -> {
 					new AtaqueBuilder().comForca(forca).comCategoria(categoria).construir();
-				});
-	}
-
-	@Test
-	void nao_deve_ter_ataque_de_categoria_especial_sem_tipo() {
-		Categoria categoria = Categoria.ESPECIAL;
-		Tipo tipo = null;
-
-		assertThrows(
-				TipoInvalidoParaCategoriaException.class,
-				() -> {
-					new AtaqueBuilder().comTipo(tipo).comCategoria(categoria).construir();
 				});
 	}
 
@@ -190,5 +164,6 @@ class AtaqueTest {
 		assertEquals(descricao, ataque.getDescricao());
 		assertEquals(tipoEsperado, ataque.getTipo());
 	}
+	
 
 }

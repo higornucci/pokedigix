@@ -34,7 +34,7 @@ public class AtaqueBuilder {
 
 	public Ataque construir() throws Exception {
 		if (this.categoria.equals(Categoria.EFEITO)) {
-			return new Ataque(acuracia, pontosDePoder, nome, descricao);
+			return new Ataque(acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
 		} else {
 			return new Ataque(forca, acuracia, pontosDePoder, categoria, nome, descricao, tipoEsperado);
 		}
