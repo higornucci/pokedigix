@@ -25,7 +25,7 @@ import lombok.Setter;
 public class Ataque extends EntidadeBase {
 
 	@Basic
-	private int forca;
+	private int forca = 0;
 
 	@Column(nullable = false)
 	private int acuracia;
@@ -59,7 +59,6 @@ public class Ataque extends EntidadeBase {
 			throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
 		validarAcuracia(acuracia);
 		validarForca(categoria, forca);
-		validarTipo(categoria, tipo);
 		this.forca = forca;
 		this.acuracia = acuracia;
 		this.pontosDePoder = pontosDePoder;
@@ -69,20 +68,16 @@ public class Ataque extends EntidadeBase {
 		this.tipo = tipo;
 	}
 
-	private void validarTipo(Categoria categoria, Tipo tipo) throws TipoInvalidoParaCategoriaException {
-		if (!categoria.equals(Categoria.EFEITO) && tipo == null) {
-			throw new TipoInvalidoParaCategoriaException(categoria);
-		}
-	}
-
 	private void validarForca(Categoria categoria, int forca) throws ForcaInvalidaParaCategoriaException {
 		if (!categoria.equals(Categoria.EFEITO) && forca <= 0) {
 			throw new ForcaInvalidaParaCategoriaException(categoria);
 		}
 	}
 
-	public Ataque(int acuracia, int pontosDePoder, String nome, String descricao) throws AcuraciaInvalidaException {
+	public Ataque(int acuracia, int pontosDePoder, Categoria categoria, String nome, String descricao, Tipo tipo) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException {
 		validarAcuracia(acuracia);
+		validarForca(categoria, forca);
+		this.tipo = tipo;
 		this.acuracia = acuracia;
 		this.pontosDePoder = pontosDePoder;
 		this.nome = nome;
