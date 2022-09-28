@@ -154,4 +154,38 @@ class AtaqueControllerTest {
 
                 assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
         }
+
+		@Test
+	void deve_adicionar_um_ataque_de_efeito() throws Exception {
+		int quantidadeEsperada = 1;
+		Tipo tipoEsperado = new Tipo("Normal");
+		tipoRepository.save(tipoEsperado);
+		long idTipo = tipoEsperado.getId();
+		int acuracia = 80;
+		int pontosDePoder = 14;
+		Categoria categoria = Categoria.FISICO;
+		String nome = "Gabarito";
+		String descricao = "O usuário se irrita e confunde o alvo. No entanto, isso também aumenta drasticamente o status de ataque do alvo.";
+
+		AtaqueRequestDTO ataqueRequestDTO = new AtaqueRequestDTO();
+
+		ataqueRequestDTO.setTipoId(idTipo);
+		ataqueRequestDTO.setAcuracia(acuracia);
+		ataqueRequestDTO.setPontosDePoder(pontosDePoder);
+		ataqueRequestDTO.setCategoria(categoria);
+		ataqueRequestDTO.setNome(nome);
+		ataqueRequestDTO.setDescricao(descricao);
+
+		mvc.perform(post("/api/v1/ataques/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.toJson(ataqueRequestDTO)))
+				.andExpect(status().isCreated());
+
+		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+		long quantidadeEncontrada = ataquesEncontrados.spliterator().getExactSizeIfKnown();
+
+		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+		assertThat(ataquesEncontrados).extracting(Ataque::getNome).contains(nome);
+
+	}
 }
