@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.digix.pokedigix.mappers.AtaqueMapper;
+import br.com.digix.pokedigix.tipo.TipoRepository;
 
 
 @Service
@@ -15,6 +16,9 @@ public class AtaqueService {
 
     @Autowired
     private AtaqueMapper ataqueMapper;
+
+    @Autowired
+    private TipoRepository tipoRepository;
 
     public AtaqueResponseDTO buscarPorId(Long id) {
         return ataqueMapper.ataqueParaAtaqueResponseDTO(buscarAtaquePeloId(id));
@@ -37,7 +41,15 @@ public class AtaqueService {
     public AtaqueResponseDTO alterar(AtaqueRequestDTO ataqueRequestDTO, Long id) {
         Ataque ataqueParaAlterar = buscarAtaquePeloId(id);
         ataqueParaAlterar.setNome(ataqueRequestDTO.getNome());
+        ataqueParaAlterar.setAcuracia(ataqueRequestDTO.getAcuracia());
+        ataqueParaAlterar.setCategoria(ataqueRequestDTO.getCategoria());
+        ataqueParaAlterar.setDescricao(ataqueRequestDTO.getDescricao());
+        ataqueParaAlterar.setForca(ataqueRequestDTO.getForca());
+        ataqueParaAlterar.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
+        ataqueParaAlterar.setTipo(tipoRepository.findById(ataqueRequestDTO.getTipoId()).get());
+        
         ataqueRepository.save(ataqueParaAlterar);
+        
         return ataqueMapper.ataqueParaAtaqueResponseDTO(ataqueParaAlterar);
     }
 
