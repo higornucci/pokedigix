@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.mappers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -48,6 +50,15 @@ public class TreinadorMapperImpl implements TreinadorMapper {
 		}
 
 		return new Treinador(treinadorRequestDTO.getNome(), enderecoOptional.get(), pokemoOptional.get());
+	}
+
+	@Override
+	public Collection<TreinadorResponseDTO> treinadoresParaTreinadoresResponse(Collection<Treinador> treinadores) {
+		Collection<TreinadorResponseDTO> treinadoresRetornados = new ArrayList<>();
+        for (Treinador treinador : treinadores) {
+            treinadoresRetornados.add(this.treinadorParaTreinadorResponse(treinador));
+        }
+        return treinadoresRetornados;
 	}
 
 }
