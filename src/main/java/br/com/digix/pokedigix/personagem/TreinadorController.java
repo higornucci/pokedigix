@@ -85,4 +85,11 @@ public class TreinadorController {
 				.body(treinadorService.cadastrar(novoTreinador));
 	}
 
+	@Operation(summary = "Lista todos os treinadores ")
+	@ApiResponse(responseCode = "200")
+	@GetMapping
+	public ResponseEntity<Collection<TreinadorResponseDTO>> buscarTodosd(){
+		return ResponseEntity.ok(treinadorService.buscarTodos());
+	}
+
 }
