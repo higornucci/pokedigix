@@ -30,15 +30,15 @@ public class AtaqueMapperImpl implements AtaqueMapper {
     @Override
     public Ataque ataqueRequestParaAtaque(AtaqueRequestDTO ataqueRequestDTO)
             throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+        Optional<Tipo> tipoOptional = tipoRepository.findById(ataqueRequestDTO.getTipoId());
+        if (tipoOptional.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Tipo tipo = tipoOptional.get();
         if (ataqueRequestDTO.getCategoria().equals(Categoria.EFEITO)) {
-            return new Ataque(ataqueRequestDTO.getAcuracia(), ataqueRequestDTO.getPontosDePoder(),
-                    ataqueRequestDTO.getNome(), ataqueRequestDTO.getDescricao());
+            return new Ataque(ataqueRequestDTO.getAcuracia(), ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
+                    ataqueRequestDTO.getNome(), ataqueRequestDTO.getDescricao(), tipo);
         } else {
-            Optional<Tipo> tipoOptional = tipoRepository.findById(ataqueRequestDTO.getTipoId());
-            if (tipoOptional.isEmpty()) {
-                throw new NoSuchElementException();
-            }
-            Tipo tipo = tipoOptional.get();
             return new Ataque(ataqueRequestDTO.getForca(), ataqueRequestDTO.getAcuracia(),
                     ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
                     ataqueRequestDTO.getNome(),
@@ -61,7 +61,7 @@ public class AtaqueMapperImpl implements AtaqueMapper {
 
     @Override
     public Collection<AtaqueResponseDTO> ataquesParaAtaquesResponses(
-                                                Collection<Ataque> ataques) {
+            Collection<Ataque> ataques) {
         Collection<AtaqueResponseDTO> ataquesDTOs = new ArrayList<>();
         for (Ataque ataque : ataques) {
             ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
