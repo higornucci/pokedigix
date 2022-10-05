@@ -91,4 +91,8 @@ public class TreinadorService {
         }
         return treinadorOptional.get();
     }
+
+    public Collection<TreinadorResponseDTO> buscarTodos() {
+        return treinadorMapper.treinadoresParaTreinadoresResponse((Collection<Treinador>) treinadorRepository.findAll());
+    }
 }
