@@ -73,4 +73,11 @@ public class EnderecoController {
 
         return ResponseEntity.ok(enderecoService.alterar(enderecoRequestDTO, id));
     }
+
+    @Operation(summary = "Lista todos os endereços")
+	@ApiResponse(responseCode = "200")
+	@GetMapping
+	public ResponseEntity<Collection<EnderecoResponseDTO>> buscarTodos() {
+		return ResponseEntity.ok(enderecoService.buscarTodos());
+	}
 }
