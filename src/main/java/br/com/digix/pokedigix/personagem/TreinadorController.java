@@ -88,7 +88,7 @@ public class TreinadorController {
 	@Operation(summary = "Lista todos os treinadores ")
 	@ApiResponse(responseCode = "200")
 	@GetMapping
-	public ResponseEntity<Collection<TreinadorResponseDTO>> buscarTodosd(){
+	public ResponseEntity<Collection<TreinadorResponseDTO>> buscarTodos(){
 		return ResponseEntity.ok(treinadorService.buscarTodos());
 	}
 
