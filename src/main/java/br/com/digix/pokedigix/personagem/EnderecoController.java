@@ -20,10 +20,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/enderecos" }, produces = { "application/json" })
 public class EnderecoController {
-   @Autowired
-   private EnderecoService enderecoService;
+    @Autowired
+    private EnderecoService enderecoService;
 
     @Operation(summary = "Deletar um Endereço pelo seu id")
     @ApiResponse(responseCode = "204")
@@ -69,7 +70,14 @@ public class EnderecoController {
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoRequestDTO enderecoRequestDTO,
             @PathVariable Long id) {
-        
+
         return ResponseEntity.ok(enderecoService.alterar(enderecoRequestDTO, id));
     }
+
+    @Operation(summary = "Lista todos os endereços")
+	@ApiResponse(responseCode = "200")
+	@GetMapping
+	public ResponseEntity<Collection<EnderecoResponseDTO>> buscarTodos() {
+		return ResponseEntity.ok(enderecoService.buscarTodos());
+	}
 }

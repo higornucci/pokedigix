@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/treinadores" }, produces = { "application/json" })
 public class TreinadorController {
 
@@ -89,7 +90,7 @@ public class TreinadorController {
 	@Operation(summary = "Lista todos os treinadores ")
 	@ApiResponse(responseCode = "200")
 	@GetMapping
-	public ResponseEntity<Collection<TreinadorResponseDTO>> buscarTodosd(){
+	public ResponseEntity<Collection<TreinadorResponseDTO>> buscarTodos() {
 		return ResponseEntity.ok(treinadorService.buscarTodos());
 	}
 
