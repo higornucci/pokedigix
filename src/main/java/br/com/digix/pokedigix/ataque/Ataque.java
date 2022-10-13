@@ -40,7 +40,7 @@ public class Ataque extends EntidadeBase {
 	@Column(nullable = false, length = 30)
 	private String nome;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "varchar(255) default ' '")
 	private String descricao;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)

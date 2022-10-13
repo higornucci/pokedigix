@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.webjars.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +51,8 @@ public class PokemonService {
         return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
     }
 
-    public PokemonResponseDTO atualizar(PokemonRequestDTO pokemonRequestDTO, long id) throws LimiteDeAtaquePokemonException, LimiteDeTipoPokemonException {
+    public PokemonResponseDTO atualizar(PokemonRequestDTO pokemonRequestDTO, long id)
+            throws LimiteDeAtaquePokemonException, LimiteDeTipoPokemonException {
         Collection<Tipo> tipos = new ArrayList<>();
         Collection<Ataque> ataques = new ArrayList<>();
 
@@ -73,7 +77,7 @@ public class PokemonService {
         if (pokemonOptional.isEmpty()) {
             throw new NotFoundException(null);
         }
-        
+
         Pokemon alterarPokemon = pokemonOptional.get();
         alterarPokemon.setNome(pokemonRequestDTO.getNome());
         alterarPokemon.setAltura(pokemonRequestDTO.getAltura());
@@ -90,15 +94,19 @@ public class PokemonService {
 
     }
 
-    public Collection<PokemonResponseDTO> buscarPeloNome(String nome) {
+    public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao,
+            String direcao) {
         Collection<Pokemon> pokemons;
-    if (nome != null) {
-      pokemons = pokemonRepository.findByNomeContaining(nome);
-    } else {
-      pokemons = (Collection<Pokemon>) pokemonRepository.findAll();
+        Pageable pageable = null;
+        if (direcao.equals("ASC"))
+            pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).ascending());
+        else
+            pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).descending());
+        if (nome != null) {
+            pokemons = pokemonRepository.findByNomeContaining(nome, pageable).toList();
+        } else {
+            pokemons = pokemonRepository.findAll(pageable).toList();
+        }
+        return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
     }
-    return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
-    }
-
-   
 }

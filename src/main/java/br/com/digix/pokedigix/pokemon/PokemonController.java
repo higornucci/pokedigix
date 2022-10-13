@@ -78,7 +78,12 @@ public class PokemonController {
   @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo seu nome (completo ou parcial)")
   @GetMapping
   public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloNome(
-      @RequestParam(required = false, name = "termo") String nome) {
-    return ResponseEntity.ok(pokemonService.buscarPeloNome(nome));
+      @RequestParam(required = false, name = "termo") String nome,
+      @RequestParam(required = false, name = "pagina", defaultValue = "0") int pagina,
+      @RequestParam(required = false, name = "quantidade", defaultValue = "4") int quantidade,
+      @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome") String campoOrdenacao,
+      @RequestParam(required = false, name = "direcao", defaultValue = "ASC") String direcao
+      ) {
+    return ResponseEntity.ok(pokemonService.buscarPeloNome(nome, pagina, quantidade, campoOrdenacao, direcao));
   }
 }
