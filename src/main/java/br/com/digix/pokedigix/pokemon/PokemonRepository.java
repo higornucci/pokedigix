@@ -14,5 +14,7 @@ public interface PokemonRepository extends PagingAndSortingRepository<Pokemon, L
 	@Query("SELECT p FROM Pokemon p JOIN p.tipos t WHERE t.id = :tipoId") // jpql
 	Collection<Pokemon> buscarPorTipo(Long tipoId);
 
+	Collection<Pokemon> findByNomeContaining(String nome);
+	
 	Page<Pokemon> findByNomeContaining(String nome, Pageable pageable);
 }
