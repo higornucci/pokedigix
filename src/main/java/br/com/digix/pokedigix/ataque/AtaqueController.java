@@ -1,7 +1,7 @@
 package br.com.digix.pokedigix.ataque;
 
-
 import java.util.Collection;
+
 import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.digix.pokedigix.mappers.AtaqueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -30,12 +29,6 @@ public class AtaqueController {
   @Autowired
   private AtaqueService ataqueService;
 
-  @Autowired
-  private AtaqueRepository ataqueRepository;
-
-  @Autowired
-  private AtaqueMapper ataqueMapper;
-
   @Operation(summary = "Buscar um ataque pelo seu id")
   @ApiResponse(responseCode = "200", description = "Retorna os dados do ataque solicitado")
   @GetMapping(path = "/{id}")
@@ -46,9 +39,10 @@ public class AtaqueController {
   @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<AtaqueResponseDTO> criarAtaque(@RequestBody AtaqueRequestDTO novoAtaque) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-      return ResponseEntity.status(HttpStatus.CREATED)
-          .body(ataqueService.criar(novoAtaque));
+  public ResponseEntity<AtaqueResponseDTO> criarAtaque(@RequestBody AtaqueRequestDTO novoAtaque)
+      throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(ataqueService.criar(novoAtaque));
   }
 
   @Operation(summary = "Atualizar um Ataque")
@@ -57,7 +51,7 @@ public class AtaqueController {
 
   public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
       @PathVariable Long id) {
-        return ResponseEntity.ok(ataqueService.alterar(ataqueRequestDTO, id));
+    return ResponseEntity.ok(ataqueService.alterar(ataqueRequestDTO, id));
   }
 
   @Operation(summary = "Deletar um Ataque pelo seu id")
@@ -71,14 +65,13 @@ public class AtaqueController {
   @Operation(summary = "Lista todos os ataques recebendo seu nome ou parcial")
   @ApiResponse(responseCode = "200")
   @GetMapping
-  public ResponseEntity<Collection<AtaqueResponseDTO>> buscarPelonome(
-    @RequestParam(required = false, name = "termo") String nome){
-  Collection<Ataque> ataques;
-  if(nome != null){
-    ataques = ataqueRepository.findByNomeContaining(nome);
-  }else {
-    ataques = (Collection<Ataque>) ataqueRepository.findAll();
-  }
-  return ResponseEntity.ok(ataqueMapper.ataquesParaAtaquesResponses(ataques));
+  public ResponseEntity<Collection<AtaqueResponseDTO>> buscar(
+      @RequestParam(required = false, name = "pagina", defaultValue = "0") int pagina,
+      @RequestParam(required = false, name = "tamanho", defaultValue = "5") int tamanho,
+      @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome") String campoOrdenacao,
+      @RequestParam(required = false, name = "direcao", defaultValue = "ASC") String direcao,
+      @RequestParam(required = false, name = "termo") String nome) {
+
+    return ResponseEntity.ok(ataqueService.buscar(pagina, tamanho, campoOrdenacao, direcao, nome));
   }
 }

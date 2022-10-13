@@ -101,7 +101,7 @@ public class PokemonService {
         else
             pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
 
-        if (nome != null) {
+        if (nome != null && !nome.isEmpty()) {
             pokemons = pokemonRepository.findByNomeContaining(nome, pageable).getContent();
         } else {
             pokemons = (Collection<Pokemon>) pokemonRepository.findAll(pageable).getContent();
