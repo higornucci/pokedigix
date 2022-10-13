@@ -96,7 +96,7 @@ public class PokemonService {
     public Collection<PokemonResponseDTO> buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
         Collection<Pokemon> pokemons;
         Pageable pageable = null;
-        if(campoOrdenacao.equals("ASC"))
+        if(direcao.equals("ASC"))
              pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
         else
             pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
