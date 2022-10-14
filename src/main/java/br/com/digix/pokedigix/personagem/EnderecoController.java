@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/enderecos" }, produces = { "application/json" })
 public class EnderecoController {
 	@Autowired
@@ -68,6 +70,14 @@ public class EnderecoController {
 	@PutMapping(path = "/{id}", consumes = "application/json")
 	public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoRequestDTO enderecoRequestDTO,
 			@PathVariable Long id) {
+
 		return ResponseEntity.ok(enderecoService.alterar(enderecoRequestDTO, id));
+	}
+
+	@Operation(summary = "Lista todos os endereços")
+	@ApiResponse(responseCode = "200")
+	@GetMapping
+	public ResponseEntity<Collection<EnderecoResponseDTO>> buscarTodos() {
+		return ResponseEntity.ok(enderecoService.buscarTodos());
 	}
 }

@@ -44,6 +44,7 @@ public class EnderecoService {
 		} else {
 			enderecos = enderecoRepository.findByCidadeContaining(nome);
 		}
+
 		Collection<EnderecoResponseDTO> enderecosRetornados = new ArrayList<>();
 
 		for (Endereco endereco : enderecos) {
@@ -77,4 +78,9 @@ public class EnderecoService {
 
 		return enderecoMapper.enderecoParaEnderecoResponseDTO(endereco);
 	}
+
+	public Collection<EnderecoResponseDTO> buscarTodos() {
+		return enderecoMapper.enderecosParaEnderecoResponseDTOs((Collection<Endereco>) enderecoRepository.findAll());
+	}
+
 }
