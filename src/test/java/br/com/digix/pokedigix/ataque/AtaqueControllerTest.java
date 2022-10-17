@@ -8,6 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collection;
+
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,6 +87,27 @@ class AtaqueControllerTest {
 		assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
 		assertThat(ataquesEncontrados).extracting(Ataque::getNome).contains(nome);
 
+	}
+
+	@Test
+	void deve_retornar_os_ataques_por_pagina() throws Exception {
+		cadastrarDezAtaques();
+		int quantidadePorPagina = 3;
+		int totalPaginasEsperada = 4;
+
+		MvcResult mvcResult = mvc.perform(get("/api/v1/ataques?pagina=0&tamanho=" + quantidadePorPagina + "&campoOrdenacao=nome&direcao=ASC")).andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+
+		assertThat(status).isEqualTo(200);
+		AtaqueResponsePageDTO pageDTO = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(), AtaqueResponsePageDTO.class);
+		assertThat(pageDTO.getTotalPaginas()).isEqualTo(totalPaginasEsperada);
+	}
+
+	private void cadastrarDezAtaques() throws Exception {
+		for(int i = 0; i <= 10; i++) {
+			ataqueRepository.save(new AtaqueBuilder().construir());
+		}
 	}
 
 	@Test
@@ -203,9 +227,9 @@ class AtaqueControllerTest {
                 int status = mvcResult.getResponse().getStatus();
                 assertEquals(HttpStatus.OK.value(), status);
 
-                AtaqueResponseDTO[] ataquesRetornados = JsonUtil.mapFromJson(
+                Collection <AtaqueResponseDTO> ataquesRetornados = JsonUtil.mapFromJson(
                         mvcResult.getResponse().getContentAsString(),
-                        AtaqueResponseDTO[].class);
+                        AtaqueResponsePageDTO.class).getAtaques();
 
                 assertThat(ataquesRetornados).extracting(AtaqueResponseDTO::getNome).containsOnly(nome);
                
