@@ -101,11 +101,32 @@ class PokemonControllerTest {
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(HttpStatus.OK.value(), status);
 
-		PokemonResponseDTO[] pokemonRetornados = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(),
-				PokemonResponseDTO[].class);
+		Collection<PokemonResponseDTO> pokemonRetornados = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(),
+				PokemonResponsePageDTO.class).getPokemons();
 
 		assertThat(pokemonRetornados).extracting(PokemonResponseDTO::getNome).containsOnly(nome);
 
+	}
+
+	@Test
+	public void deve_retornar_os_pokemons_por_pagina() throws Exception {
+		cadastrarDezPokemons();
+		int quantidadePorPagina = 3;
+		int totalPaginasEsperada = 4;
+
+		MvcResult mvcResult = mvc.perform(get("/api/v1/pokemons?pagina=0&tamanho=" + quantidadePorPagina + "&campoOrdenacao=nome&direcao=ASC")).andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+
+		assertThat(status).isEqualTo(200);
+		PokemonResponsePageDTO pageDTO = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(), PokemonResponsePageDTO.class);
+		assertThat(pageDTO.getTotalPaginas()).isEqualTo(totalPaginasEsperada);
+	}
+
+	private void cadastrarDezPokemons() throws Exception {
+		for(int i = 0; i <= 10; i++) {
+			pokemonRepository.save(new PokemonBuilder().construir());
+		}
 	}
 
 	@Test
