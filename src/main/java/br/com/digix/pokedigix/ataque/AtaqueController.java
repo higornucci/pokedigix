@@ -1,9 +1,5 @@
 package br.com.digix.pokedigix.ataque;
 
-import java.util.Collection;
-
-import javax.naming.NameNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +28,7 @@ public class AtaqueController {
   @Operation(summary = "Buscar um ataque pelo seu id")
   @ApiResponse(responseCode = "200", description = "Retorna os dados do ataque solicitado")
   @GetMapping(path = "/{id}")
-  public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) throws NameNotFoundException {
+  public ResponseEntity<AtaqueResponseDTO> buscarPorId(@PathVariable Long id) {
     return ResponseEntity.ok(ataqueService.buscarPorId(id));
   }
 
@@ -65,7 +61,7 @@ public class AtaqueController {
   @Operation(summary = "Lista todos os ataques recebendo seu nome ou parcial")
   @ApiResponse(responseCode = "200")
   @GetMapping
-  public ResponseEntity<Collection<AtaqueResponseDTO>> buscar(
+  public ResponseEntity<AtaqueResponsePageDTO> buscar(
       @RequestParam(required = false, name = "pagina", defaultValue = "0") int pagina,
       @RequestParam(required = false, name = "tamanho", defaultValue = "5") int tamanho,
       @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome") String campoOrdenacao,

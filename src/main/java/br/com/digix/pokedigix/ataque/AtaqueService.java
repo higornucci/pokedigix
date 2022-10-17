@@ -1,10 +1,10 @@
 package br.com.digix.pokedigix.ataque;
 
-import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -62,21 +62,27 @@ public class AtaqueService {
         ataqueRepository.deleteById(id);
     }
 
-    public Collection<AtaqueResponseDTO> buscar(int pagina, int tamanho, String campoOrdenacao, String direcao,
+    public AtaqueResponsePageDTO buscar(int pagina, int tamanho, String campoOrdenacao, String direcao,
             String nome) {
-        Collection<Ataque> ataques;
-        Pageable pageable = null;
-        if (direcao.equals("ASC"))
-            pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
-        else
-            pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
+        Pageable pageable = criarPaginaOrdenada(pagina, tamanho, campoOrdenacao, direcao);
+        return mapearResposta(nome, pageable);
+    }
 
+    private AtaqueResponsePageDTO mapearResposta(String nome, Pageable pageable) {
+        Page<Ataque> ataques;
         if (nome != null && !nome.isEmpty()) {
-            ataques = ataqueRepository.findByNomeContaining(nome, pageable).getContent();
+            ataques = ataqueRepository.findByNomeContaining(nome, pageable);
         } else {
-            ataques = ataqueRepository.findAll(pageable).getContent();
+            ataques = ataqueRepository.findAll(pageable);
         }
-        return ataqueMapper.ataquesParaAtaquesResponses(ataques);
+        return ataqueMapper.ataquesParaAtaquesResponsesPaginadoOrdenado(ataques.getContent(), ataques.getTotalPages());
+    }
+
+    private Pageable criarPaginaOrdenada(int pagina, int tamanho, String campoOrdenacao, String direcao) {
+        if (direcao.equals("ASC"))
+            return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
+        else
+            return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
     }
 
 }

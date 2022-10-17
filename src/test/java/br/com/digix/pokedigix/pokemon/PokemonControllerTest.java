@@ -109,7 +109,7 @@ class PokemonControllerTest {
 	}
 
 	@Test
-	public void deve_retornar_os_pokemons_por_pagina() throws Exception {
+	void deve_retornar_os_pokemons_por_pagina() throws Exception {
 		cadastrarDezPokemons();
 		int quantidadePorPagina = 3;
 		int totalPaginasEsperada = 4;
