@@ -94,6 +94,7 @@ public class PokemonService {
         return pokemonMapper.pokemonParaPokemonResponse(alterarPokemon);
 
     }
+
     public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao,
             String direcao) {
         Collection<Pokemon> pokemons;
@@ -110,7 +111,8 @@ public class PokemonService {
         return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
     }
 
-    public PokemonResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
+    public PokemonResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao,
+            String nome) {
         Pageable pageable = criarPaginaOrdenada(pagina, tamanho, campoOrdenacao, direcao);
         return mapearResposta(nome, pageable);
     }
@@ -122,11 +124,12 @@ public class PokemonService {
         } else {
             pokemons = pokemonRepository.findAll(pageable);
         }
-        return pokemonMapper.pokemonsParaPokemonsResponsesPaginadoOrdenado(pokemons.getContent(), pokemons.getTotalPages());
+        return pokemonMapper.pokemonsParaPokemonsResponsesPaginadoOrdenado(pokemons.getContent(),
+                pokemons.getTotalPages());
     }
 
     private Pageable criarPaginaOrdenada(int pagina, int tamanho, String campoOrdenacao, String direcao) {
-        if(direcao.equals("ASC"))
+        if (direcao.equals("ASC"))
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
         else
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
