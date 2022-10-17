@@ -15,6 +15,6 @@ public interface PokemonRepository extends PagingAndSortingRepository<Pokemon, L
 	Collection<Pokemon> buscarPorTipo(Long tipoId);
 
 	Collection<Pokemon> findByNomeContaining(String nome);
-	
+
 	Page<Pokemon> findByNomeContaining(String nome, Pageable pageable);
 }
