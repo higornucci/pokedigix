@@ -94,19 +94,18 @@ public class PokemonService {
 
     }
 
-    public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao,
-            String direcao) {
+    public Collection<PokemonResponseDTO> buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
         Collection<Pokemon> pokemons;
         Pageable pageable = null;
-        if (direcao.equals("ASC"))
-            pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).ascending());
+        if(direcao.equals("ASC"))
+             pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
         else
-            pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).descending());
+            pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
 
         if (nome != null) {
             pokemons = pokemonRepository.findByNomeContaining(nome, pageable).getContent();
         } else {
-            pokemons = pokemonRepository.findAll(pageable).toList();
+            pokemons = (Collection<Pokemon>) pokemonRepository.findAll(pageable).getContent();
         }
         return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
     }
