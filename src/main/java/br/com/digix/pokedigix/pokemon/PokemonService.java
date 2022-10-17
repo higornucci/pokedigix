@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.webjars.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -90,12 +93,18 @@ public class PokemonService {
 
     }
 
-    public Collection<PokemonResponseDTO> buscarPeloNome(String nome) {
+    public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenado, String direcao) {
         Collection<Pokemon> pokemons;
+        Pageable pageable = null;
+        if(direcao.equalsIgnoreCase("ASC"))
+     pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenado).ascending());
+        else 
+    pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenado).descending());
+    
     if (nome != null) {
-      pokemons = pokemonRepository.findByNomeContaining(nome);
+      pokemons = pokemonRepository.findByNomeContaining(nome, pageable).toList();
     } else {
-      pokemons = (Collection<Pokemon>) pokemonRepository.findAll();
+      pokemons =  pokemonRepository.findAll(pageable).toList();
     }
     return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
     }
