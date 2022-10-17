@@ -74,11 +74,16 @@ public class PokemonController {
     return ResponseEntity.ok(pokemonService.buscarPokemonPeloIdDoTipo(id));
   }
 
-  @Operation(summary = "Buscar Pokemon pelo seu nome parcial ou completo")
-  @ApiResponse(responseCode = "200", description = "Lista de Pokemons buscada pelo seu nome (completo ou parcial)")
+  @Operation(summary = "Retorna uma lista de Pokémons ordenados e filtrados baseado nos parametros da busca")
+  @ApiResponse(responseCode = "200", description = "Lista de Pokemons encontrados")
   @GetMapping
   public ResponseEntity<Collection<PokemonResponseDTO>> buscarPeloNome(
-      @RequestParam(required = false, name = "termo") String nome) {
-    return ResponseEntity.ok(pokemonService.buscarPeloNome(nome));
+      @RequestParam(required = false, name = "pagina", defaultValue = "0") int pagina,
+      @RequestParam(required = false, name = "tamanho", defaultValue = "5") int tamanho,
+      @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "numeroPokedex") String campoOrdenacao,
+      @RequestParam(required = false, name = "direcao", defaultValue = "ASC") String direcao,
+      @RequestParam(required = false, name = "termo") String nome
+      ) {
+    return ResponseEntity.ok(pokemonService.buscarPeloNome(pagina, tamanho, campoOrdenacao, direcao,nome));
   }
 }
