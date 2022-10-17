@@ -94,7 +94,8 @@ public class PokemonService {
 
 	}
 
-	public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao, String direcao) {
+	public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao,
+			String direcao) {
 		Collection<Pokemon> pokemons;
 		Pageable pageable = null;
 		if (direcao.equals("ASC")) {
