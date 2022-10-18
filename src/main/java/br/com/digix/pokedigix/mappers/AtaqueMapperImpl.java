@@ -12,6 +12,7 @@ import br.com.digix.pokedigix.ataque.AcuraciaInvalidaException;
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueRequestDTO;
 import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.ataque.AtaqueResponsePageDTO;
 import br.com.digix.pokedigix.ataque.Categoria;
 import br.com.digix.pokedigix.ataque.ForcaInvalidaParaCategoriaException;
 import br.com.digix.pokedigix.ataque.TipoInvalidoParaCategoriaException;
@@ -36,7 +37,8 @@ public class AtaqueMapperImpl implements AtaqueMapper {
         }
         Tipo tipo = tipoOptional.get();
         if (ataqueRequestDTO.getCategoria().equals(Categoria.EFEITO)) {
-            return new Ataque(ataqueRequestDTO.getAcuracia(), ataqueRequestDTO.getPontosDePoder(), ataqueRequestDTO.getCategoria(),
+            return new Ataque(ataqueRequestDTO.getAcuracia(), ataqueRequestDTO.getPontosDePoder(),
+                    ataqueRequestDTO.getCategoria(),
                     ataqueRequestDTO.getNome(), ataqueRequestDTO.getDescricao(), tipo);
         } else {
             return new Ataque(ataqueRequestDTO.getForca(), ataqueRequestDTO.getAcuracia(),
@@ -67,6 +69,13 @@ public class AtaqueMapperImpl implements AtaqueMapper {
             ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
         }
         return ataquesDTOs;
+    }
+
+    @Override
+    public AtaqueResponsePageDTO ataquesParaAtaquesResponsesPaginadoOrdenado(Collection<Ataque> ataques,
+            int quantidadeDePaginas) {
+        return new AtaqueResponsePageDTO(this.ataquesParaAtaquesResponses(ataques), quantidadeDePaginas);
+
     }
 
 }
