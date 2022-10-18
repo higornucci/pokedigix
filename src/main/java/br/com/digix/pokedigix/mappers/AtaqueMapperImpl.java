@@ -68,5 +68,6 @@ public class AtaqueMapperImpl implements AtaqueMapper {
         }
         return ataquesDTOs;
     }
+   
 
 }
