@@ -85,7 +85,7 @@ public class PokemonController {
       @RequestParam(required = false, name = "direcao", defaultValue = "ASC") String direcao,
       @RequestParam(required = false, name = "termo") String nome
       ) {
-    return ResponseEntity.ok(pokemonService.buscarPeloNome(nome, pagina, tamanho, campoOrdenacao, direcao));
+    return ResponseEntity.ok(pokemonService.buscarPeloNome(campoOrdenacao, tamanho, pagina, direcao, nome));
 
   }
 }
