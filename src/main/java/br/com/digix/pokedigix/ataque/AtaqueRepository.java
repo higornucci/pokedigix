@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.ataque;
 
 import java.util.Collection;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
@@ -15,5 +16,6 @@ public interface AtaqueRepository extends PagingAndSortingRepository <Ataque, Lo
 	Collection<Ataque> findByCategoria(Categoria categoria);
 	Collection<Ataque> findByNomeContaining(String nome);
 
+	@Cacheable("buscarAtaques")
 	Page<Ataque> findByNomeContaining(String nome, Pageable pageable);
 }
