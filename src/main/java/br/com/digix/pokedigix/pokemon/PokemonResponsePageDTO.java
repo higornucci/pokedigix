@@ -13,6 +13,5 @@ import lombok.Setter;
 @Setter
 public class PokemonResponsePageDTO {
 	private Collection<PokemonResponseDTO> pokemons;
-	private int total;
-
+	private int totalPaginas;
 }

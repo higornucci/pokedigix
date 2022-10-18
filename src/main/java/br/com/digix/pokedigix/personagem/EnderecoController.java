@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/enderecos" }, produces = { "application/json" })
 public class EnderecoController {
+
 	@Autowired
 	private EnderecoService enderecoService;
 
