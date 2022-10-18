@@ -2,6 +2,7 @@ package br.com.digix.pokedigix.mappers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import br.com.digix.pokedigix.ataque.AcuraciaInvalidaException;
 import br.com.digix.pokedigix.ataque.Ataque;
 import br.com.digix.pokedigix.ataque.AtaqueRequestDTO;
 import br.com.digix.pokedigix.ataque.AtaqueResponseDTO;
+import br.com.digix.pokedigix.ataque.AtaqueResponsePageDTO;
 import br.com.digix.pokedigix.ataque.Categoria;
 import br.com.digix.pokedigix.ataque.ForcaInvalidaParaCategoriaException;
 import br.com.digix.pokedigix.ataque.TipoInvalidoParaCategoriaException;
@@ -67,6 +69,11 @@ public class AtaqueMapperImpl implements AtaqueMapper {
             ataquesDTOs.add(this.ataqueParaAtaqueResponseDTO(ataque));
         }
         return ataquesDTOs;
+    }
+
+    @Override
+    public AtaqueResponsePageDTO ataquesParaAtaquesResponsesPaginadoOrdenado(List<Ataque> ataques, int quantidadeDePaginas) {
+        return new AtaqueResponsePageDTO(this.ataquesParaAtaquesResponses(ataques), quantidadeDePaginas);
     }
    
 

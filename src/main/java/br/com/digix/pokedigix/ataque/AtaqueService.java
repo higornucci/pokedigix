@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 import br.com.digix.pokedigix.mappers.AtaqueMapper;
 import br.com.digix.pokedigix.tipo.TipoRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 @Service
 public class AtaqueService {
@@ -22,6 +27,26 @@ public class AtaqueService {
 
     public AtaqueResponseDTO buscarPorId(Long id) {
         return ataqueMapper.ataqueParaAtaqueResponseDTO(buscarAtaquePeloId(id));
+    }
+    public AtaqueResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
+        Pageable pageable = criarPaginaOrdenada(pagina, tamanho, campoOrdenacao, direcao);
+        return mapearResposta(nome, pageable);
+    }
+    private AtaqueResponsePageDTO mapearResposta(String nome, Pageable pageable) {
+        Page<Ataque> ataques;
+        if (nome != null && !nome.isEmpty()) {
+            ataques = ataqueRepository.findByNomeContaining(nome, pageable);
+        } else {
+            ataques = ataqueRepository.findAll(pageable);
+        }
+        return ataqueMapper.ataquesParaAtaquesResponsesPaginadoOrdenado(ataques.getContent(), ataques.getTotalPages());
+    }
+
+    private Pageable criarPaginaOrdenada(int pagina, int tamanho, String campoOrdenacao, String direcao) {
+        if(direcao.equals("ASC"))
+            return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
+        else
+            return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
     }
 
     private Ataque buscarAtaquePeloId(Long id) {

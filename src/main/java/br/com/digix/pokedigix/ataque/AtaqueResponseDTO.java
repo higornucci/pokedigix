@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.ataque;
 
+import java.util.Collection;
+
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ public class AtaqueResponseDTO extends AtaqueDTO {
 
     private Long id;
     private TipoResponseDTO tipo;
+
 
     public AtaqueResponseDTO(
             Long id,

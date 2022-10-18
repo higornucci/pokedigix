@@ -1,6 +1,5 @@
 package br.com.digix.pokedigix.ataque;
 
-
 import java.util.Collection;
 import javax.naming.NameNotFoundException;
 
@@ -46,9 +45,10 @@ public class AtaqueController {
   @Operation(summary = "Criar um novo Ataque que pode ser usado para Pokemons")
   @ApiResponse(responseCode = "201")
   @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<AtaqueResponseDTO> criarAtaque(@RequestBody AtaqueRequestDTO novoAtaque) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
-      return ResponseEntity.status(HttpStatus.CREATED)
-          .body(ataqueService.criar(novoAtaque));
+  public ResponseEntity<AtaqueResponseDTO> criarAtaque(@RequestBody AtaqueRequestDTO novoAtaque)
+      throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(ataqueService.criar(novoAtaque));
   }
 
   @Operation(summary = "Atualizar um Ataque")
@@ -57,7 +57,7 @@ public class AtaqueController {
 
   public ResponseEntity<AtaqueResponseDTO> atualizarTreinador(@RequestBody AtaqueRequestDTO ataqueRequestDTO,
       @PathVariable Long id) {
-        return ResponseEntity.ok(ataqueService.alterar(ataqueRequestDTO, id));
+    return ResponseEntity.ok(ataqueService.alterar(ataqueRequestDTO, id));
   }
 
   @Operation(summary = "Deletar um Ataque pelo seu id")
@@ -71,14 +71,13 @@ public class AtaqueController {
   @Operation(summary = "Lista todos os ataques recebendo seu nome ou parcial")
   @ApiResponse(responseCode = "200")
   @GetMapping
-  public ResponseEntity<Collection<AtaqueResponseDTO>> buscarPelonome(
-    @RequestParam(required = false, name = "termo") String nome){
-  Collection<Ataque> ataques;
-  if(nome != null){
-    ataques = ataqueRepository.findByNomeContaining(nome);
-  }else {
-    ataques = (Collection<Ataque>) ataqueRepository.findAll();
-  }
-  return ResponseEntity.ok(ataqueMapper.ataquesParaAtaquesResponses(ataques));
+  public ResponseEntity<AtaqueResponsePageDTO> buscarPelonome(
+      @RequestParam(required = false, name = "termo") String nome,
+      @RequestParam(required = false, name = "pagina", defaultValue = "0") int pagina,
+      @RequestParam(required = false, name = "tamanho", defaultValue = "4") int tamanho,
+      @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome") String campoOrdenacao,
+      @RequestParam(required = false, name = "direcao", defaultValue = "ASC") String direcao) {
+
+    return ResponseEntity.ok(ataqueService.buscarPeloNome(pagina, tamanho, campoOrdenacao, direcao,nome));
   }
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 public class AtaqueResponsePageDTO {
-    private Collection<AtaqueResponseDTO> pokemons;
+    private Collection<AtaqueResponseDTO> ataques;
     private int totalPaginas;
 
 }

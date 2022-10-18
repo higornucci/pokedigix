@@ -211,4 +211,24 @@ class AtaqueControllerTest {
                
                 
         }
+		@Test
+	public void deve_retornar_os_ataques_por_pagina() throws Exception {
+		cadastrarDezAtaques();
+		int quantidadePorPagina = 3;
+		int totalPaginasEsperada = 4;
+
+		MvcResult mvcResult = mvc.perform(get("/api/v1/ataques?pagina=0&tamanho=" + quantidadePorPagina + "&campoOrdenacao=nome&direcao=ASC")).andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+
+		assertThat(status).isEqualTo(200);
+		AtaqueResponsePageDTO pageDTO = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(), AtaqueResponsePageDTO.class);
+		assertThat(pageDTO.getTotalPaginas()).isEqualTo(totalPaginasEsperada);
+	}
+
+	private void cadastrarDezAtaques() throws Exception {
+		for(int i = 0; i <= 10; i++) {
+			ataqueRepository.save(new AtaqueBuilder().construir());
+		}
+	}
 }
