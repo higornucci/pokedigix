@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collection;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +20,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import br.com.digix.pokedigix.utils.JsonUtil;
-
-import br.com.digix.pokedigix.tipo.TipoRepository;
-
-
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import br.com.digix.pokedigix.PokedigixApplication;
 import br.com.digix.pokedigix.tipo.Tipo;
+import br.com.digix.pokedigix.tipo.TipoRepository;
+import br.com.digix.pokedigix.utils.JsonUtil;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = PokedigixApplication.class)
 @AutoConfigureMockMvc
@@ -166,49 +165,71 @@ class AtaqueControllerTest {
 		int status = resultado.getResponse().getStatus();
 		assertEquals(HttpStatus.OK.value(), status);
 
-                Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
-                assertThat(ataquesEncontrados).extracting(Ataque::getNome)
-                                .containsOnly(novoAtaque);
-        }
+		Iterable<Ataque> ataquesEncontrados = ataqueRepository.findAll();
+		assertThat(ataquesEncontrados).extracting(Ataque::getNome)
+				.containsOnly(novoAtaque);
+	}
 
-        @Test
-        void deve_buscar_um_ataque_pelo_id() throws Exception {
-                Ataque ataque = new AtaqueBuilder().construir();
-                ataqueRepository.save(ataque);
+	@Test
+	void deve_buscar_um_ataque_pelo_id() throws Exception {
+		Ataque ataque = new AtaqueBuilder().construir();
+		ataqueRepository.save(ataque);
 
-                // Action
-                MvcResult mvcResult = mvc.perform(get("/api/v1/ataques/" + ataque.getId())).andReturn();
+		// Action
+		MvcResult mvcResult = mvc.perform(get("/api/v1/ataques/" + ataque.getId())).andReturn();
 
-                // Assert
-                int status = mvcResult.getResponse().getStatus();
-                assertEquals(HttpStatus.OK.value(), status);
+		// Assert
+		int status = mvcResult.getResponse().getStatus();
+		assertEquals(HttpStatus.OK.value(), status);
 
-                String content = mvcResult.getResponse().getContentAsString();
-                AtaqueResponseDTO ataqueDTO = JsonUtil.mapFromJson(content, AtaqueResponseDTO.class);
+		String content = mvcResult.getResponse().getContentAsString();
+		AtaqueResponseDTO ataqueDTO = JsonUtil.mapFromJson(content, AtaqueResponseDTO.class);
 
-                assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
-        }
+		assertThat(ataqueDTO.getId()).isEqualTo(ataque.getId());
+	}
 
-		@Test
-        void deve_buscar_pelo_nome_parcial_ou_completo() throws Exception{
-                //arange
-                String tipo = "Fairy";
-                String nome = "Beijo Dranante";
-                Tipo tipoEsperado = new Tipo(tipo);
-                Ataque ataque = new AtaqueBuilder().comNome(nome).comTipo(tipoEsperado).construir();
-                ataqueRepository.save(ataque);
+	@Test
+	void deve_buscar_pelo_nome_parcial_ou_completo() throws Exception {
+		// arange
+		String tipo = "Fairy";
+		String nome = "Beijo Dranante";
+		Tipo tipoEsperado = new Tipo(tipo);
+		Ataque ataque = new AtaqueBuilder().comNome(nome).comTipo(tipoEsperado).construir();
+		ataqueRepository.save(ataque);
 
-                MvcResult mvcResult = mvc.perform(get("/api/v1/ataques")).andReturn();
+		MvcResult mvcResult = mvc.perform(get("/api/v1/ataques?termo=" + nome)).andReturn();
 
-                int status = mvcResult.getResponse().getStatus();
-                assertEquals(HttpStatus.OK.value(), status);
+		int status = mvcResult.getResponse().getStatus();
+		assertEquals(HttpStatus.OK.value(), status);
 
-                AtaqueResponseDTO[] ataquesRetornados = JsonUtil.mapFromJson(
-                        mvcResult.getResponse().getContentAsString(),
-                        AtaqueResponseDTO[].class);
+		Collection<AtaqueResponseDTO> ataquesRetornados = JsonUtil.mapFromJson(
+				mvcResult.getResponse().getContentAsString(),
+				AtaqueResponsePageDTO.class).getAtaques();
 
-                assertThat(ataquesRetornados).extracting(AtaqueResponseDTO::getNome).containsOnly(nome);
-               
-                
-        }
+		assertThat(ataquesRetornados).extracting(AtaqueResponseDTO::getNome).containsOnly(nome);
+	}
+
+	@Test
+	void deve_retornar_os_ataques_por_pagina() throws Exception {
+		cadastrarDezAtaques();
+		int quantidadePorPagina = 3;
+		int totalPaginasEsperada = 4;
+
+		MvcResult mvcResult = mvc.perform(
+				get("/api/v1/ataques?pagina=0&tamanho=" + quantidadePorPagina + "&campoOrdenacao=nome&direcao=ASC"))
+				.andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+
+		assertThat(status).isEqualTo(200);
+		AtaqueResponsePageDTO pageDTO = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(),
+				AtaqueResponsePageDTO.class);
+		assertThat(pageDTO.getTotalPaginas()).isEqualTo(totalPaginasEsperada);
+	}
+
+	private void cadastrarDezAtaques() throws Exception {
+		for (int i = 0; i <= 10; i++) {
+			ataqueRepository.save(new AtaqueBuilder().construir());
+		}
+	}
 }

@@ -6,10 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import br.com.digix.pokedigix.ataque.Ataque;
@@ -52,8 +52,7 @@ public class PokemonService {
         return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
     }
 
-    public PokemonResponseDTO atualizar(PokemonRequestDTO pokemonRequestDTO, long id)
-            throws LimiteDeAtaquePokemonException, LimiteDeTipoPokemonException {
+    public PokemonResponseDTO atualizar(PokemonRequestDTO pokemonRequestDTO, long id) throws LimiteDeAtaquePokemonException, LimiteDeTipoPokemonException {
         Collection<Tipo> tipos = new ArrayList<>();
         Collection<Ataque> ataques = new ArrayList<>();
 
@@ -78,7 +77,7 @@ public class PokemonService {
         if (pokemonOptional.isEmpty()) {
             throw new NoSuchElementException();
         }
-
+        
         Pokemon alterarPokemon = pokemonOptional.get();
         alterarPokemon.setNome(pokemonRequestDTO.getNome());
         alterarPokemon.setAltura(pokemonRequestDTO.getAltura());
@@ -95,24 +94,7 @@ public class PokemonService {
 
     }
 
-    public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao,
-            String direcao) {
-        Collection<Pokemon> pokemons;
-        Pageable pageable = null;
-        if (direcao.equals("ASC"))
-            pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).ascending());
-        else
-            pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).descending());
-        if (nome != null) {
-            pokemons = pokemonRepository.findByNomeContaining(nome, pageable).toList();
-        } else {
-            pokemons = pokemonRepository.findAll(pageable).toList();
-        }
-        return pokemonMapper.pokemonsParaPokemonsResponses(pokemons);
-    }
-
-    public PokemonResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao,
-            String nome) {
+    public PokemonResponsePageDTO buscarPeloNome(String campoOrdenacao, int tamanho, int pagina, String direcao, String nome) {
         Pageable pageable = criarPaginaOrdenada(pagina, tamanho, campoOrdenacao, direcao);
         return mapearResposta(nome, pageable);
     }
@@ -124,14 +106,15 @@ public class PokemonService {
         } else {
             pokemons = pokemonRepository.findAll(pageable);
         }
-        return pokemonMapper.pokemonsParaPokemonsResponsesPaginadoOrdenado(pokemons.getContent(),
-                pokemons.getTotalPages());
+        return pokemonMapper.pokemonsParaPokemonsResponsesPaginadoOrdenado(pokemons.getContent(), pokemons.getTotalPages());
     }
 
     private Pageable criarPaginaOrdenada(int pagina, int tamanho, String campoOrdenacao, String direcao) {
-        if (direcao.equals("ASC"))
+        if(direcao.equals("ASC"))
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
         else
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
     }
+
+   
 }
