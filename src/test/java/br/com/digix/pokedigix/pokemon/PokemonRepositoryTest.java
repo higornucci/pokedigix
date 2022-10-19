@@ -91,6 +91,15 @@ class PokemonRepositoryTest {
 		assertTrue(pokemonsRetornados.contains(pokemon));
 	}
 
+	// @Test
+	// void deve_buscar_pokemons_selvagens() throws Exception {
+	// 	Pokemon pokemon = new PokemonBuilder().construir();
+	// 	pokemonRepository.save(pokemon);
+
+	// 	Collection<Pokemon> pokemonsRetornados = pokemonRepository.buscarPokemonsSelvagens();
+	// 	assertTrue(pokemonsRetornados.contains(pokemon));
+	// }
+
 	@Test
 	void deve_buscar_um_pokemon_por_nome() throws Exception {
 		Pokemon pokemon = new PokemonBuilder().comNome("Gastly").construir();
