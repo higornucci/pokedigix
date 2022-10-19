@@ -10,7 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PokemonRepository extends PagingAndSortingRepository<Pokemon, Long>, TesteCachePokemonRepository {
+public interface PokemonRepository extends PagingAndSortingRepository<Pokemon, Long> {
 	Long deleteByNomeContaining(String nome);
 
 	@Query("SELECT p FROM Pokemon p JOIN p.tipos t WHERE t.id = :tipoId") // jpql
