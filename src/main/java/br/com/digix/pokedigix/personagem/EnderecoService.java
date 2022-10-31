@@ -79,8 +79,8 @@ public class EnderecoService {
 		return enderecoMapper.enderecoParaEnderecoResponseDTO(endereco);
 	}
 
-	public Collection<EnderecoResponseDTO> buscarTodos() {
-		return enderecoMapper.enderecosParaEnderecoResponseDTOs((Collection<Endereco>) enderecoRepository.findAll());
-	}
+    public Collection<EnderecoResponseDTO> buscarTodos() {
+        return enderecoMapper.enderecosParaEnderecoResponseDTOs((Collection<Endereco>) enderecoRepository.findAll());
+    }
 
 }

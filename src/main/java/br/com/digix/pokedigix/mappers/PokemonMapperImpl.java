@@ -17,6 +17,7 @@ import br.com.digix.pokedigix.pokemon.NivelPokemonInvalidoException;
 import br.com.digix.pokedigix.pokemon.Pokemon;
 import br.com.digix.pokedigix.pokemon.PokemonRequestDTO;
 import br.com.digix.pokedigix.pokemon.PokemonResponseDTO;
+import br.com.digix.pokedigix.pokemon.PokemonResponsePageDTO;
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRepository;
 
@@ -83,12 +84,18 @@ public class PokemonMapperImpl implements PokemonMapper {
 				tipoMapper.tiposParaTiposResponses(pokemon.getTipos()));
 	}
 
-	@Override
-	public Collection<PokemonResponseDTO> pokemonsParaPokemonsResponses(Collection<Pokemon> pokemons) {
-		Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
-		for (Pokemon pokemon : pokemons) {
-			pokemonsRetornados.add(this.pokemonParaPokemonResponse(pokemon));
-		}
-		return pokemonsRetornados;
-	}
+    @Override
+    public Collection<PokemonResponseDTO> pokemonsParaPokemonsResponses(Collection<Pokemon> pokemons) {
+        Collection<PokemonResponseDTO> pokemonsRetornados = new ArrayList<>();
+        for (Pokemon pokemon : pokemons) {
+            pokemonsRetornados.add(this.pokemonParaPokemonResponse(pokemon));
+        }
+        return pokemonsRetornados;
+    }
+
+    @Override
+    public PokemonResponsePageDTO pokemonsParaPokemonsResponsesPaginadoOrdenado(Collection<Pokemon> pokemons,
+            int quantidadeDePaginas) {
+        return new PokemonResponsePageDTO(this.pokemonsParaPokemonsResponses(pokemons), quantidadeDePaginas);
+    }
 }
