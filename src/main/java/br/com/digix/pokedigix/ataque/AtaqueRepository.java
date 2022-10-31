@@ -18,3 +18,4 @@ public interface AtaqueRepository extends PagingAndSortingRepository<Ataque, Lon
 
 	Page<Ataque> findByNomeContaining(String nome, Pageable pageable);
 }
+
