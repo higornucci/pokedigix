@@ -63,10 +63,10 @@ public class AtaqueController {
   @ApiResponse(responseCode = "200")
   @GetMapping
   public ResponseEntity<AtaqueResponsePageDTO> buscar(
-      @RequestParam(required = false, name = "pagina", defaultValue = "0") int pagina,
-      @RequestParam(required = false, name = "tamanho", defaultValue = "5") int tamanho,
-      @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome") String campoOrdenacao,
-      @RequestParam(required = false, name = "direcao", defaultValue = "ASC") String direcao,
+      @RequestParam(required = false, name = "pagina") int pagina,
+      @RequestParam(required = false, name = "tamanho") int tamanho,
+      @RequestParam(required = false, name = "campoOrdenacao") String campoOrdenacao,
+      @RequestParam(required = false, name = "direcao") String direcao,
       @RequestParam(required = false, name = "termo") String nome) {
 
     return ResponseEntity.ok(ataqueService.buscar(pagina, tamanho, campoOrdenacao, direcao, nome));
