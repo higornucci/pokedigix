@@ -1,5 +1,6 @@
 package br.com.digix.pokedigix.ataque;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -83,6 +84,16 @@ public class AtaqueService {
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
         else
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
+    }
+
+    public Collection<AtaqueResponseDTO> buscarTodos(String nome) {
+        Collection<Ataque> ataques;
+        if (nome != null) {
+            ataques = ataqueRepository.findByNomeContaining(nome);
+        } else {
+            ataques = (Collection<Ataque>) ataqueRepository.findAll();
+        }
+        return ataqueMapper.ataquesParaAtaquesResponses(ataques);
     }
 
 }

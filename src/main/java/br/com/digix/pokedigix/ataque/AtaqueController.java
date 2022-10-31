@@ -1,5 +1,7 @@
 package br.com.digix.pokedigix.ataque;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +71,13 @@ public class AtaqueController {
       @RequestParam(required = false, name = "termo") String nome) {
 
     return ResponseEntity.ok(ataqueService.buscar(pagina, tamanho, campoOrdenacao, direcao, nome));
+  }
+
+  @Operation(summary = "Buscar todos os tipos sem ordem")
+  @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
+  @GetMapping(path = "/todos")
+  public ResponseEntity<Collection<AtaqueResponseDTO>> buscarTodos(
+      @RequestParam(required = false, name = "termo") String nome) {
+    return ResponseEntity.ok(ataqueService.buscarTodos(nome));
   }
 }
