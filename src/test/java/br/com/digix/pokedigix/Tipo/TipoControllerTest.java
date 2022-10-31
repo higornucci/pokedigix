@@ -229,4 +229,27 @@ class TipoControllerTest {
 
         assertThat(tiposEncontrados).extracting(Tipo::getNome).containsOnly(agua);
     }
+
+    @Test
+    void deve_retornar_os_tipos_por_pagina()throws Exception {
+        cadastrarQuinzeTipos();
+        int quantidadePorPagina = 5;
+        int totalPaginasEsperada = 3;
+
+        MvcResult mvcResult = mvc.perform(get("/api/v1/tipos?pagina=0&tamanho=" + quantidadePorPagina + "&campoOrdenacao=nome&direcao=ASC")).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+
+        assertThat(status).isEqualTo(200);
+
+        TipoResponsePageDTO pageDTO = JsonUtil.mapFromJson(mvcResult.getResponse().getContentAsString(), TipoResponsePageDTO.class);
+        assertThat(pageDTO.getTotalPaginas()).isEqualTo(totalPaginasEsperada);
+    }
+
+    private void cadastrarQuinzeTipos() {
+        for(int i =0; i < 15; i++){
+            Tipo tipo = new Tipo("Rocha");
+            tipoRepository.save(tipo);
+        }
+    }
 }

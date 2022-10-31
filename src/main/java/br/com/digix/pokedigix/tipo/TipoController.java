@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@CrossOrigin(origins= "*")
+@CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/tipos" }, produces = { "application/json" })
 public class TipoController {
 
@@ -38,14 +38,7 @@ public class TipoController {
         .body(tipoService.criar(novoTipo));
   }
 
-  @Operation(summary = "Buscar todos os tipos sem ordem")
-  @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
-  @GetMapping
-  public ResponseEntity<Collection<TipoResponseDTO>> buscarTodos(
-      @RequestParam(required = false, name = "termo") String nome) {
-    return ResponseEntity.ok(tipoService.buscarTodos(nome));
-  }
-
+  
   @Operation(summary = "Buscar um Tipo pelo seu id")
   @ApiResponse(responseCode = "200")
   @GetMapping(path = "/{id}")
@@ -78,4 +71,17 @@ public class TipoController {
       @PathVariable Long id) {
     return ResponseEntity.ok(tipoService.alterar(tipoRequestDTO, id));
   }
+
+  @Operation(summary = "Buscar todos os tipos sem ordem")
+  @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
+  @GetMapping
+  public ResponseEntity<TipoResponsePageDTO> buscarPeloNome(
+      @RequestParam(required =false, name="pagina", defaultValue ="0" ) int pagina, 
+      @RequestParam(required = false, name ="tamanho", defaultValue ="10" ) int tamanho,
+      @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome")String campoOrdenacao,
+      @RequestParam(required = false, name="direcao", defaultValue = "ASC") String direcao,
+      @RequestParam(required = false, name = "termo") String nome) {
+    return ResponseEntity.ok(tipoService.buscarPeloNome(pagina, tamanho, campoOrdenacao, direcao, nome));
+  }
+
 }

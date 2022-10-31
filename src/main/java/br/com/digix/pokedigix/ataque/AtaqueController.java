@@ -1,7 +1,6 @@
 package br.com.digix.pokedigix.ataque;
 
 
-import java.util.Collection;
 import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,14 +70,13 @@ public class AtaqueController {
   @Operation(summary = "Lista todos os ataques recebendo seu nome ou parcial")
   @ApiResponse(responseCode = "200")
   @GetMapping
-  public ResponseEntity<Collection<AtaqueResponseDTO>> buscarPelonome(
+  public ResponseEntity<AtaqueResponsePageDTO> buscarPeloNome(
+    @RequestParam (required = false, name= "pagina", defaultValue = "0") int pagina,
+    @RequestParam(required = false, name ="tamanho", defaultValue = "4") int tamanho,
+    @RequestParam(required = false, name = "campoOrdenacao", defaultValue = "nome") String campoOrdenacao,
+    @RequestParam(required = false, name="direcao", defaultValue = "ASC") String direcao,
     @RequestParam(required = false, name = "termo") String nome){
-  Collection<Ataque> ataques;
-  if(nome != null){
-    ataques = ataqueRepository.findByNomeContaining(nome);
-  }else {
-    ataques = (Collection<Ataque>) ataqueRepository.findAll();
-  }
-  return ResponseEntity.ok(ataqueMapper.ataquesParaAtaquesResponses(ataques));
+  
+  return ResponseEntity.ok(ataqueService.buscarPeloNome(pagina, tamanho, campoOrdenacao, direcao, nome));
   }
 }

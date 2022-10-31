@@ -2,12 +2,14 @@ package br.com.digix.pokedigix.mappers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import br.com.digix.pokedigix.tipo.Tipo;
 import br.com.digix.pokedigix.tipo.TipoRequestDTO;
 import br.com.digix.pokedigix.tipo.TipoResponseDTO;
+import br.com.digix.pokedigix.tipo.TipoResponsePageDTO;
 
 @Component
 public class TipoMapperImpl implements TipoMapper {
@@ -29,6 +31,11 @@ public class TipoMapperImpl implements TipoMapper {
             tiposDTOs.add(this.tipoParaTipoResponse(tipo));
         }
         return tiposDTOs;
+    }
+
+    @Override
+    public TipoResponsePageDTO tiposParaTiposResponsesPaginadoOrdenado(List<Tipo> tipos, int quantidadeDePaginas) {
+        return new TipoResponsePageDTO(this.tiposParaTiposResponses(tipos), quantidadeDePaginas);
     }
     
 }

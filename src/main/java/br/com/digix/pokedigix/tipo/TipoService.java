@@ -5,6 +5,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import br.com.digix.pokedigix.mappers.TipoMapper;
@@ -60,4 +64,30 @@ public class TipoService {
         }
         return tipoOptional.get();
     }
+
+    public TipoResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
+        Pageable pageable = criarPaginaOrdenada(pagina, tamanho,campoOrdenacao, direcao, nome);
+
+        return mapearResposta(nome, pageable);
+    }
+
+    private TipoResponsePageDTO mapearResposta(String nome, Pageable pageable) {
+        Page<Tipo> tipos;
+        if(nome != null && !nome.isEmpty()){
+            tipos = tipoRepository.findByNomeContaining(nome, pageable);
+        }else{
+            tipos = tipoRepository.findAll(pageable);
+        }
+        return tipoMapper.tiposParaTiposResponsesPaginadoOrdenado(
+            tipos.getContent(), tipos.getTotalPages());
+    }
+
+    private Pageable criarPaginaOrdenada(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
+        if (direcao.equals("ASC"))
+        return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
+    else
+        return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
+    }
+
+   
 }

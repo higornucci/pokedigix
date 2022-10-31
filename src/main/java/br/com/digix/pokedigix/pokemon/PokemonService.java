@@ -116,5 +116,4 @@ public class PokemonService {
         else
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
     }
-
 }
