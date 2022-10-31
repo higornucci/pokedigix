@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @CrossOrigin(origins = "*")
 @RequestMapping(path = { "/api/v1/enderecos" }, produces = { "application/json" })
 public class EnderecoController {
-
 	@Autowired
 	private EnderecoService enderecoService;
 
@@ -66,16 +65,16 @@ public class EnderecoController {
 		return ResponseEntity.ok(enderecoService.buscarPorRegiao(regiao));
 	}
 
-	@Operation(summary = "Atualizar o Endereço")
-	@ApiResponse(responseCode = "200")
-	@PutMapping(path = "/{id}", consumes = "application/json")
-	public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoRequestDTO enderecoRequestDTO,
-			@PathVariable Long id) {
+    @Operation(summary = "Atualizar o Endereço")
+    @ApiResponse(responseCode = "200")
+    @PutMapping(path = "/{id}", consumes = "application/json")
+    public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(@RequestBody EnderecoRequestDTO enderecoRequestDTO,
+            @PathVariable Long id) {
 
-		return ResponseEntity.ok(enderecoService.alterar(enderecoRequestDTO, id));
-	}
+        return ResponseEntity.ok(enderecoService.alterar(enderecoRequestDTO, id));
+    }
 
-	@Operation(summary = "Lista todos os endereços")
+    @Operation(summary = "Lista todos os endereços")
 	@ApiResponse(responseCode = "200")
 	@GetMapping
 	public ResponseEntity<Collection<EnderecoResponseDTO>> buscarTodos() {

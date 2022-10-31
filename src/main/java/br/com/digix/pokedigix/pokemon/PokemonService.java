@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -120,14 +119,14 @@ public class PokemonService {
 			return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
 	}
 
-	public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int quantidade, String campoOrdenacao,
+	public Collection<PokemonResponseDTO> buscarPeloNome(String nome, int pagina, int tamanho, String campoOrdenacao,
 			String direcao) {
 		Collection<Pokemon> pokemons;
 		Pageable pageable = null;
 		if (direcao.equals("ASC")) {
-			pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).ascending());
+			pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
 		} else {
-			pageable = PageRequest.of(pagina, quantidade, Sort.by(campoOrdenacao).descending());
+			pageable = PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
 		}
 		if (nome != null) {
 			pokemons = pokemonRepository.findByNomeContaining(nome, pageable).toList();
