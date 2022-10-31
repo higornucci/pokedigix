@@ -14,6 +14,8 @@ public interface AtaqueRepository extends PagingAndSortingRepository <Ataque, Lo
 
 	Collection<Ataque> findByTipo(Tipo tipo);
 	Collection<Ataque> findByCategoria(Categoria categoria);
+	
+	@Cacheable("ataques")
 	Collection<Ataque> findByNomeContaining(String nome);
 
 	@Cacheable("buscarAtaques")
