@@ -68,6 +68,14 @@ public class AtaqueController {
     return ResponseEntity.noContent().build();
   }
 
+  @Operation(summary = "Buscar todos os tipos sem ordem")
+  @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
+  @GetMapping(path = "/todos")
+  public ResponseEntity<Collection<AtaqueResponseDTO>> buscarTodos(
+      @RequestParam(required = false, name = "termo") String nome) {
+    return ResponseEntity.ok(ataqueService.buscarTodos(nome));
+  }
+
   @Operation(summary = "Lista todos os ataques recebendo seu nome ou parcial")
   @ApiResponse(responseCode = "200")
   @GetMapping

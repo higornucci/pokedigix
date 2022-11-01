@@ -1,4 +1,6 @@
 package br.com.digix.pokedigix.ataque;
+
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.digix.pokedigix.mappers.AtaqueMapper;
 import br.com.digix.pokedigix.tipo.TipoRepository;
-
 
 @Service
 public class AtaqueService {
@@ -31,17 +32,18 @@ public class AtaqueService {
     private Ataque buscarAtaquePeloId(Long id) {
         Optional<Ataque> ataqueOptional = ataqueRepository.findById(id);
         if (ataqueOptional.isEmpty()) {
-          throw new NoSuchElementException();
+            throw new NoSuchElementException();
         }
         return ataqueOptional.get();
     }
 
-    public AtaqueResponseDTO criar(AtaqueRequestDTO ataqueRequestDTO) throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
+    public AtaqueResponseDTO criar(AtaqueRequestDTO ataqueRequestDTO)
+            throws AcuraciaInvalidaException, ForcaInvalidaParaCategoriaException, TipoInvalidoParaCategoriaException {
         Ataque ataque = ataqueMapper.ataqueRequestParaAtaque(ataqueRequestDTO);
         ataqueRepository.save(ataque);
         return ataqueMapper.ataqueParaAtaqueResponseDTO(ataque);
-    } 
-    
+    }
+
     public AtaqueResponseDTO alterar(AtaqueRequestDTO ataqueRequestDTO, Long id) {
         Ataque ataqueParaAlterar = buscarAtaquePeloId(id);
         ataqueParaAlterar.setNome(ataqueRequestDTO.getNome());
@@ -51,9 +53,9 @@ public class AtaqueService {
         ataqueParaAlterar.setForca(ataqueRequestDTO.getForca());
         ataqueParaAlterar.setPontosDePoder(ataqueRequestDTO.getPontosDePoder());
         ataqueParaAlterar.setTipo(tipoRepository.findById(ataqueRequestDTO.getTipoId()).get());
-        
+
         ataqueRepository.save(ataqueParaAlterar);
-        
+
         return ataqueMapper.ataqueParaAtaqueResponseDTO(ataqueParaAlterar);
     }
 
@@ -61,7 +63,8 @@ public class AtaqueService {
         ataqueRepository.deleteById(id);
     }
 
-    public AtaqueResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao, String nome) {
+    public AtaqueResponsePageDTO buscarPeloNome(int pagina, int tamanho, String campoOrdenacao, String direcao,
+            String nome) {
         Pageable pageable = criarPaginaOrdenada(pagina, tamanho, campoOrdenacao, direcao);
         return mapearResposta(nome, pageable);
     }
@@ -76,8 +79,18 @@ public class AtaqueService {
         return ataqueMapper.ataquesParaAtaquesResponsesPaginadoOrdenado(ataques.getContent(), ataques.getTotalPages());
     }
 
+    public Collection<AtaqueResponseDTO> buscarTodos(String nome) {
+        Collection<Ataque> ataques;
+        if (nome != null) {
+            ataques = ataqueRepository.findByNomeContaining(nome);
+        } else {
+            ataques = (Collection<Ataque>) ataqueRepository.findAll();
+        }
+        return ataqueMapper.ataquesParaAtaquesResponses(ataques);
+    }
+
     private Pageable criarPaginaOrdenada(int pagina, int tamanho, String campoOrdenacao, String direcao) {
-        if(direcao.equals("ASC"))
+        if (direcao.equals("ASC"))
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).ascending());
         else
             return PageRequest.of(pagina, tamanho, Sort.by(campoOrdenacao).descending());
