@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(path = { "/api/v1/tipos" }, produces = { "application/json" })
 public class TipoController {
 
@@ -41,6 +42,7 @@ public class TipoController {
   @Operation(summary = "Buscar todos os tipos sem ordem")
   @ApiResponse(responseCode = "200", description = "Lista de tipos cadastrados")
   @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Collection<TipoResponseDTO>> buscarTodos(
       @RequestParam(required = false, name = "termo") String nome) {
     return ResponseEntity.ok(tipoService.buscarTodos(nome));
