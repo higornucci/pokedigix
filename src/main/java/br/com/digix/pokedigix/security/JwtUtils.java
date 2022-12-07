@@ -1,5 +1,6 @@
 package br.com.digix.pokedigix.security;
 
+import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.Date;
 
@@ -33,10 +34,10 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
-                .setIssuedAt(new Date()) // dia que foi criado
+                .setSubject((userPrincipal.getUsername()))
+                .setIssuedAt(new Date())
                 .setExpiration(getExpirationDate())
-                .signWith(getSecretKey(), SignatureAlgorithm.HS512)
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -48,7 +49,8 @@ public class JwtUtils {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parseClaimsJws(authToken);
+            Jwts.parserBuilder().setSigningKey(getSecretKey())
+                    .build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
@@ -57,8 +59,7 @@ public class JwtUtils {
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unssupported: {}", e.getMessage());
-
+            logger.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
@@ -66,7 +67,7 @@ public class JwtUtils {
     }
 
     private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(Charset.forName("UTF-8")));
     }
 
     private Date getExpirationDate() {
