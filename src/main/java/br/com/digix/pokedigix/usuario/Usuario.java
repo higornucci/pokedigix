@@ -14,30 +14,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class Usuario extends EntidadeBase {
-    @Column(length = 20, nullable = false, unique = true)
-    private String username;
-    
-    @Column(length = 50, nullable = false, unique = true)
-    private String email;
+public class Usuario extends EntidadeBase{
 
-    @Column(length = 120, nullable = false)
-    private String password;
+	@Column(length = 20, nullable = false, unique = true)
+	private String username;
 
-    @ManyToMany
-    @JoinTable(name = "usuario_role",
-        joinColumns = @JoinColumn(name = "usuario_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+	@Column(length = 50, nullable = false, unique = true)
+	private String email;
 
-    public Usuario(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
+	@Column(length = 120, nullable = false)
+	private String password;
 
+	@ManyToMany
+	@JoinTable(	name = "usuario_role", 
+				joinColumns = @JoinColumn(name = "usuario_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	public Usuario(String username, String email, String password) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
 }
