@@ -34,19 +34,19 @@ import br.com.digix.pokedigix.usuario.Usuario;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@Autowired
-	RoleRepository roleRepository;
+	private RoleRepository roleRepository;
 
 	@Autowired
-	PasswordEncoder encoder;
+	private PasswordEncoder encoder;
 
 	@Autowired
-	JwtUtils jwtUtils;
+	private JwtUtils jwtUtils;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDTO loginRequest) {

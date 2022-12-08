@@ -8,20 +8,19 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 
-@Component
 public class UserDetailsImpl implements UserDetails {
-	private static final long serialVersionUID = 1l;
+	private static final long serialVersionUID = 1L;
 
 	@Getter
-	private long id;
+	private Long id;
 
 	private String username;
+
 	@Getter
 	private String email;
 
@@ -41,9 +40,15 @@ public class UserDetailsImpl implements UserDetails {
 
 	public static UserDetailsImpl build(Usuario user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+				.collect(Collectors.toList());
 
-		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), authorities);
+		return new UserDetailsImpl(
+				user.getId(),
+				user.getUsername(),
+				user.getEmail(),
+				user.getPassword(),
+				authorities);
 	}
 
 	@Override
@@ -88,7 +93,6 @@ public class UserDetailsImpl implements UserDetails {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		UserDetailsImpl user = (UserDetailsImpl) o;
-
 		return Objects.equals(id, user.id);
 	}
 }
